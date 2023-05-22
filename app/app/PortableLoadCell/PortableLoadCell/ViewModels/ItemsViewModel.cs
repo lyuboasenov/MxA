@@ -10,20 +10,20 @@ namespace PortableLoadCell.ViewModels
 {
     public class ItemsViewModel : BaseViewModel
     {
-        private Item _selectedItem;
+        private Training _selectedItem;
 
-        public ObservableCollection<Item> Items { get; }
+        public ObservableCollection<Training> Items { get; }
         public Command LoadItemsCommand { get; }
         public Command AddItemCommand { get; }
-        public Command<Item> ItemTapped { get; }
+        public Command<Training> ItemTapped { get; }
 
         public ItemsViewModel()
         {
             Title = "Browse";
-            Items = new ObservableCollection<Item>();
+            Items = new ObservableCollection<Training>();
             LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
 
-            ItemTapped = new Command<Item>(OnItemSelected);
+            ItemTapped = new Command<Training>(OnItemSelected);
 
             AddItemCommand = new Command(OnAddItem);
         }
@@ -57,7 +57,7 @@ namespace PortableLoadCell.ViewModels
             SelectedItem = null;
         }
 
-        public Item SelectedItem
+        public Training SelectedItem
         {
             get => _selectedItem;
             set
@@ -72,13 +72,13 @@ namespace PortableLoadCell.ViewModels
             await Shell.Current.GoToAsync(nameof(NewItemPage));
         }
 
-        async void OnItemSelected(Item item)
+        async void OnItemSelected(Training item)
         {
             if (item == null)
                 return;
 
             // This will push the ItemDetailPage onto the navigation stack
-            await Shell.Current.GoToAsync($"{nameof(ItemDetailPage)}?{nameof(ItemDetailViewModel.ItemId)}={item.Id}");
+            await Shell.Current.GoToAsync($"{nameof(TimerPage)}?{nameof(TimerViewModel.TrainingId)}={item.Id}");
         }
     }
 }

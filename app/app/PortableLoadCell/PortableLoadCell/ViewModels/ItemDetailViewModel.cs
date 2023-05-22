@@ -45,8 +45,8 @@ namespace PortableLoadCell.ViewModels
             {
                 var item = await DataStore.GetItemAsync(itemId);
                 Id = item.Id;
-                Text = item.Text;
-                Description = item.Description;
+                //Text = item.Text;
+                //Description = item.Description;
             }
             catch (Exception)
             {

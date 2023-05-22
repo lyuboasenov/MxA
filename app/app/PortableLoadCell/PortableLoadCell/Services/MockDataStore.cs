@@ -6,55 +6,82 @@ using System.Threading.Tasks;
 
 namespace PortableLoadCell.Services
 {
-    public class MockDataStore : IDataStore<Item>
+    public class MockDataStore : IDataStore<Training>
     {
-        readonly List<Item> items;
+        readonly List<Training> _trainings;
 
         public MockDataStore()
         {
-            items = new List<Item>()
+            _trainings = new List<Training>()
             {
-                new Item { Id = Guid.NewGuid().ToString(), Text = "First item", Description="This is an item description." },
-                new Item { Id = Guid.NewGuid().ToString(), Text = "Second item", Description="This is an item description." },
-                new Item { Id = Guid.NewGuid().ToString(), Text = "Third item", Description="This is an item description." },
-                new Item { Id = Guid.NewGuid().ToString(), Text = "Fourth item", Description="This is an item description." },
-                new Item { Id = Guid.NewGuid().ToString(), Text = "Fifth item", Description="This is an item description." },
-                new Item { Id = Guid.NewGuid().ToString(), Text = "Sixth item", Description="This is an item description." }
+                new Training { 
+                    Id = "7_by_3", 
+                    Name = "7/3x6x6", 
+                    PrepTime = 10, 
+                    WorkTime = 7,
+                    RestTime = 3,
+                    RestBwSetsTime = 180,
+                    CooldownTime = 10,
+                    Reps = 6,
+                    Sets = 6,
+                },
+                new Training {
+                    Id = "one_arm_10_sec",
+                    Name = "One arm 10 secs",
+                    PrepTime = 10,
+                    WorkTime = 10,
+                    RestTime = 30,
+                    RestBwSetsTime = 90,
+                    CooldownTime = 10,
+                    Reps = 2,
+                    Sets = 6,
+                },
+                new Training {
+                    Id = "one_arm_5_sec",
+                    Name = "One arm 5 secs",
+                    PrepTime = 10,
+                    WorkTime = 5,
+                    RestTime = 30,
+                    RestBwSetsTime = 90,
+                    CooldownTime = 10,
+                    Reps = 2,
+                    Sets = 6,
+                },
             };
         }
 
-        public async Task<bool> AddItemAsync(Item item)
+        public async Task<bool> AddItemAsync(Training item)
         {
-            items.Add(item);
+            _trainings.Add(item);
 
             return await Task.FromResult(true);
         }
 
-        public async Task<bool> UpdateItemAsync(Item item)
+        public async Task<bool> UpdateItemAsync(Training item)
         {
-            var oldItem = items.Where((Item arg) => arg.Id == item.Id).FirstOrDefault();
-            items.Remove(oldItem);
-            items.Add(item);
+            var oldItem = _trainings.Where((Training arg) => arg.Id == item.Id).FirstOrDefault();
+            _trainings.Remove(oldItem);
+            _trainings.Add(item);
 
             return await Task.FromResult(true);
         }
 
         public async Task<bool> DeleteItemAsync(string id)
         {
-            var oldItem = items.Where((Item arg) => arg.Id == id).FirstOrDefault();
-            items.Remove(oldItem);
+            var oldItem = _trainings.Where((Training arg) => arg.Id == id).FirstOrDefault();
+            _trainings.Remove(oldItem);
 
             return await Task.FromResult(true);
         }
 
-        public async Task<Item> GetItemAsync(string id)
+        public async Task<Training> GetItemAsync(string id)
         {
-            return await Task.FromResult(items.FirstOrDefault(s => s.Id == id));
+            return await Task.FromResult(_trainings.FirstOrDefault(s => s.Id == id));
         }
 
-        public async Task<IEnumerable<Item>> GetItemsAsync(bool forceRefresh = false)
+        public async Task<IEnumerable<Training>> GetItemsAsync(bool forceRefresh = false)
         {
-            return await Task.FromResult(items);
+            return await Task.FromResult(_trainings);
         }
     }
 }

@@ -26,6 +26,9 @@
             </Style>
             <Style TargetType="TabBar" BasedOn="{StaticResource BaseStyle}" />
             <Style TargetType="FlyoutItem" BasedOn="{StaticResource BaseStyle}" />
+            <Style TargetType="Label" BasedOn="{StaticResource BaseStyle}">
+                <Setter Property="TextColor" Value="LightBlue"></Setter>
+            </Style>
 
             <!--
             Default Styles for all Flyout Items
