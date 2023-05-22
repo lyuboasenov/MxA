@@ -4,111 +4,113 @@
              x:Class="PortableLoadCell.Views.TimerPage"
              xmlns:vm="clr-namespace:PortableLoadCell.ViewModels"
              Title="{Binding TrainingName}">
-    
-    <ContentPage.BindingContext>
-        <vm:TimerViewModel />
-    </ContentPage.BindingContext>
-    
-    <ContentPage.Resources>
-        <ResourceDictionary>
-            <Color x:Key="Accent">#96d1ff</Color>
-        </ResourceDictionary>
-    </ContentPage.Resources>
 
-    <Grid BackgroundColor="{Binding Color}">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
+   <ContentPage.BindingContext>
+      <vm:TimerViewModel />
+   </ContentPage.BindingContext>
 
-        <!-- sets/of | reps/of -->
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <Label Grid.Column="0" HorizontalOptions="Center" FontSize="Large">
-                <Label.FormattedText>
-                    <FormattedString>
-                        <Span Text="Reps: " />
-                        <Span Text="{Binding Rep}" />
-                        <Span Text=" / " />
-                        <Span Text="{Binding TotalReps}" />
-                    </FormattedString>
-                </Label.FormattedText>
-            </Label>
-            <Label Grid.Column="1"  HorizontalOptions="Center" FontSize="Large">
-                <Label.FormattedText>
-                    <FormattedString>
-                        <Span Text="Sets: " />
-                        <Span Text="{Binding Set}" />
-                        <Span Text=" / " />
-                        <Span Text="{Binding TotalSets}" />
-                    </FormattedString>
-                </Label.FormattedText>
-            </Label>
-        </Grid>
+   <ContentPage.Resources>
+      <ResourceDictionary>
+         <Color x:Key="Accent">#96d1ff</Color>
+      </ResourceDictionary>
+   </ContentPage.Resources>
 
-        <!-- Counter -->
-        <Grid Grid.Row="1">
-            <Label Text="{Binding Counter}" FontSize="200" HorizontalOptions="Center" VerticalOptions="Center" />
-        </Grid>
+   <Grid BackgroundColor="{Binding Color}">
+      <Grid.RowDefinitions>
+         <RowDefinition Height="Auto" />
+         <RowDefinition Height="*" />
+         <RowDefinition Height="Auto" />
+         <RowDefinition Height="Auto" />
+         <RowDefinition Height="Auto" />
+         <RowDefinition Height="Auto" />
+      </Grid.RowDefinitions>
 
-        <!-- play | load cell value -->
-        <Grid Grid.Row="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
+      <!-- sets/of | reps/of -->
+      <Grid>
+         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+         </Grid.ColumnDefinitions>
+         <Label Grid.Column="0" HorizontalOptions="Center" FontSize="Large">
+            <Label.FormattedText>
+               <FormattedString>
+                  <Span Text="Reps: " />
+                  <Span Text="{Binding Rep}" />
+                  <Span Text=" / " />
+                  <Span Text="{Binding TotalReps}" />
+               </FormattedString>
+            </Label.FormattedText>
+         </Label>
+         <Label Grid.Column="1"  HorizontalOptions="Center" FontSize="Large">
+            <Label.FormattedText>
+               <FormattedString>
+                  <Span Text="Sets: " />
+                  <Span Text="{Binding Set}" />
+                  <Span Text=" / " />
+                  <Span Text="{Binding TotalSets}" />
+               </FormattedString>
+            </Label.FormattedText>
+         </Label>
+      </Grid>
+
+      <!-- Counter -->
+      <Grid Grid.Row="1">
+         <Label Text="{Binding Counter}" FontSize="200" HorizontalOptions="Center" VerticalOptions="Center" />
+      </Grid>
+
+      <!-- play | load cell value -->
+      <Grid Grid.Row="2">
+         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+         </Grid.ColumnDefinitions>
 
 
-            <Button Grid.Column="0" Command="{Binding PlayPauseCommand}" />
-            <Label Grid.Column="1" Text="{Binding Load}" HorizontalOptions="Center" FontSize="50"/>
-        </Grid>
-        
-        <!-- rep progress -->
-        <Grid Grid.Row="3">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
+         <Button Grid.Column="0" Command="{Binding PlayPauseCommand}" Text="|>" />
+         <Label Grid.Column="1" Text="{Binding Load}" HorizontalOptions="Center" FontSize="50"/>
+         <Button Grid.Column="2" Command="{Binding ConnectHangboardCommand}" Text="|_|" />
+      </Grid>
 
-            <Button Grid.Column="0" Command="{Binding MinusSecondCommand}" />
-            <ProgressBar Grid.Column="1" Progress="{Binding RepsProgress}" />
-            <Button Grid.Column="2" Command="{Binding PlusSecondCommand}" />
-        </Grid>
-        
-        <!-- set progress -->
-        <Grid Grid.Row="4">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
+      <!-- rep progress -->
+      <Grid Grid.Row="3">
+         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+         </Grid.ColumnDefinitions>
 
-            <Button Grid.Column="0" Command="{Binding PrevSetCommand}" />
-            <ProgressBar Grid.Column="1" Progress="{Binding OveralProgress}" />
-            <Button Grid.Column="2" Command="{Binding NextSetCommand}" />
-        </Grid>
+         <Button Grid.Column="0" Command="{Binding MinusSecondCommand}" Text="&lt;" />
+         <ProgressBar Grid.Column="1" Progress="{Binding RepsProgress}" />
+         <Button Grid.Column="2" Command="{Binding PlusSecondCommand}" Text="&gt;" />
+      </Grid>
 
-        <!-- next -->
-        <Grid Grid.Row="5" Padding="10" BackgroundColor="{Binding NextColor}">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
+      <!-- set progress -->
+      <Grid Grid.Row="4">
+         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+         </Grid.ColumnDefinitions>
 
-            <Label Text="Next" />
-            <Label Grid.Column="1" Text="{Binding NextPeriod}" />
-            <Label Grid.Column="2"  Text="{Binding NextPeriodTime}" HorizontalOptions="EndAndExpand" />
-        </Grid>
+         <Button Grid.Column="0" Command="{Binding PrevSetCommand}" Text="&lt;&lt;" />
+         <ProgressBar Grid.Column="1" Progress="{Binding OveralProgress}" />
+         <Button Grid.Column="2" Command="{Binding NextSetCommand}" Text="&gt;&gt;" />
+      </Grid>
 
-    </Grid>
+      <!-- next -->
+      <Grid Grid.Row="5" Padding="10" BackgroundColor="{Binding NextColor}">
+         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+         </Grid.ColumnDefinitions>
+
+         <Label Text="Next" />
+         <Label Grid.Column="1" Text="{Binding NextPeriod}" />
+         <Label Grid.Column="2"  Text="{Binding NextPeriodTime}" HorizontalOptions="EndAndExpand" />
+      </Grid>
+
+   </Grid>
 
 </ContentPage>

@@ -43,12 +43,12 @@ namespace PortableLoadCell.ViewModels {
 
          PlayPauseCommand = new Command(OnPlayPauseCommand);
          ExitCommand = new Command(OnExitCommand);
+         ConnectHangboardCommand = new Command(OnConnectHangboardCommand);
 
          MinusSecondCommand = new Command(OnMinusSecondCommand);
          PlusSecondCommand = new Command(OnPlusSecondCommand);
          PrevSetCommand = new Command(OnPrevExerciseCommand);
          NextSetCommand = new Command(OnNextExerciseCommand);
-
       }
 
       private void Timer_Elapsed(object sender, ElapsedEventArgs e) {
@@ -91,6 +91,7 @@ namespace PortableLoadCell.ViewModels {
       public ICommand PlusSecondCommand { get; }
       public ICommand PrevSetCommand { get; }
       public ICommand NextSetCommand { get; }
+      public ICommand ConnectHangboardCommand { get; }
 
       public bool IsRunning {
          get => _isRunning;
@@ -204,15 +205,18 @@ namespace PortableLoadCell.ViewModels {
          // Prefixing with `//` switches to a different navigation stack instead of pushing to the active one
          await Shell.Current.GoToAsync($"//");
       }
-
-      private async void OnMinusSecondCommand(object obj) {
+      
+      private async void OnConnectHangboardCommand(object obj) {
          // Prefixing with `//` switches to a different navigation stack instead of pushing to the active one
-         await Shell.Current.GoToAsync($"//{nameof(AboutPage)}");
+         await Shell.Current.GoToAsync($"{nameof(BleDevicesPage)}");
       }
 
-      private async void OnPlusSecondCommand(object obj) {
-         // Prefixing with `//` switches to a different navigation stack instead of pushing to the active one
-         await Shell.Current.GoToAsync($"//{nameof(AboutPage)}");
+      private void OnMinusSecondCommand(object obj) {
+         _currentTime--;
+      }
+
+      private void OnPlusSecondCommand(object obj) {
+         _currentTime++;
       }
 
       private async void OnPrevExerciseCommand(object obj) {
@@ -220,14 +224,17 @@ namespace PortableLoadCell.ViewModels {
          await Shell.Current.GoToAsync($"//{nameof(AboutPage)}");
       }
 
-      private async void OnLoginClicked(object obj) {
+      private async void OnNextExerciseCommand(object obj) {
          // Prefixing with `//` switches to a different navigation stack instead of pushing to the active one
          await Shell.Current.GoToAsync($"//{nameof(AboutPage)}");
       }
 
-      private async void OnNextExerciseCommand(object obj) {
-         // Prefixing with `//` switches to a different navigation stack instead of pushing to the active one
-         await Shell.Current.GoToAsync($"//{nameof(AboutPage)}");
+      public void OnAppearing() {
+         DeviceDisplay.KeepScreenOn = true;
+      }
+
+      public void OnDisappearing() {
+         DeviceDisplay.KeepScreenOn = false;
       }
    }
 }

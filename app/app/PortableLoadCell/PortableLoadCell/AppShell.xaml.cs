@@ -14,6 +14,7 @@ namespace PortableLoadCell
             Routing.RegisterRoute(nameof(ItemDetailPage), typeof(ItemDetailPage));
             Routing.RegisterRoute(nameof(NewItemPage), typeof(NewItemPage));
             Routing.RegisterRoute(nameof(TimerPage), typeof(TimerPage));
+            Routing.RegisterRoute(nameof(BleDevicesPage), typeof(BleDevicesPage));
         }
 
         private async void OnMenuItemClicked(object sender, EventArgs e)
