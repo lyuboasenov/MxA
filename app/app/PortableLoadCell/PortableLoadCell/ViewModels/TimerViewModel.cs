@@ -1,8 +1,15 @@
-﻿using PortableLoadCell.Models;
+﻿using Plugin.BLE;
+using Plugin.BLE.Abstractions.Contracts;
+using Plugin.SimpleAudioPlayer;
+using PortableLoadCell.Models;
 using PortableLoadCell.Views;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Diagnostics;
+using System.IO;
+using System.Reflection;
+using System.Text;
 using System.Timers;
 using System.Windows.Input;
 using Xamarin.Essentials;
@@ -33,6 +40,13 @@ namespace PortableLoadCell.ViewModels {
       private int _currentPeriod = -1;
       private uint _currentTime;
 
+      private IDevice _ble;
+
+      private ISimpleAudioPlayer _tone1;
+      private ISimpleAudioPlayer _tone2;
+      private ISimpleAudioPlayer _tone3;
+
+
       private Timer Timer { get; set; }
 
       public TimerViewModel() {
@@ -49,6 +63,19 @@ namespace PortableLoadCell.ViewModels {
          PlusSecondCommand = new Command(OnPlusSecondCommand);
          PrevSetCommand = new Command(OnPrevExerciseCommand);
          NextSetCommand = new Command(OnNextExerciseCommand);
+
+         _tone1 = CrossSimpleAudioPlayer.CreateSimpleAudioPlayer();
+         _tone2 = CrossSimpleAudioPlayer.CreateSimpleAudioPlayer();
+         _tone3 = CrossSimpleAudioPlayer.CreateSimpleAudioPlayer();
+
+         var assembly = typeof(App).GetTypeInfo().Assembly;
+         Stream tone1Stream = assembly.GetManifestResourceStream("PortableLoadCell." + "Resources." + "countdown.wav");
+         Stream tone3Stream = assembly.GetManifestResourceStream("PortableLoadCell." + "Resources." + "end_rep.mp3");
+         Stream tone2Stream = assembly.GetManifestResourceStream("PortableLoadCell." + "Resources." + "Tones.ogg");
+
+         _tone1.Load(tone1Stream);
+         _tone2.Load(tone2Stream);
+         _tone3.Load(tone3Stream);
       }
 
       private void Timer_Elapsed(object sender, ElapsedEventArgs e) {
@@ -61,6 +88,18 @@ namespace PortableLoadCell.ViewModels {
                MoveNextPeriod();
             }
             Counter = _periods[_currentPeriod].To - _currentTime;
+
+            PlayTones();
+         }
+      }
+
+      private async void PlayTones() {
+         if (Counter == 0) {
+            _tone3.Play();
+         } else if (Counter <= 3) {
+            _tone1.Play();
+         } else if (Counter <= 6) {
+            _tone2.Play();
          }
       }
 
@@ -93,11 +132,7 @@ namespace PortableLoadCell.ViewModels {
       public ICommand NextSetCommand { get; }
       public ICommand ConnectHangboardCommand { get; }
 
-      public bool IsRunning {
-         get => _isRunning;
-         set => SetProperty(ref _isRunning, value);
-      }
-
+      public bool IsRunning { get => _isRunning; set => SetProperty(ref _isRunning, value); }
       public uint Rep { get => _rep; set => SetProperty(ref _rep, value); }
       public uint TotalReps { get => _totalReps; set => SetProperty(ref _totalReps, value); }
       public uint Set { get => _set; set => SetProperty(ref _set, value); }
@@ -124,6 +159,35 @@ namespace PortableLoadCell.ViewModels {
          } catch (Exception) {
             Debug.WriteLine("Failed to Load Item");
          }
+      }
+
+      public async void ConnectBleDevice() {
+         try {
+            if (Preferences.ContainsKey("BLE_ADDRESS")) {
+               var bleAddress = Preferences.Get("BLE_ADDRESS", "");
+               if (!string.IsNullOrEmpty(bleAddress)) {
+                  _ble = await CrossBluetoothLE.Current.Adapter.
+                     ConnectToKnownDeviceAsync(Guid.Parse(bleAddress));
+
+                  var service = await _ble.GetServiceAsync(Guid.Parse("0000181d-0000-1000-8000-00805f9b34fb"));
+                  if (service != null) {
+                     var characteristic = await service.GetCharacteristicAsync(Guid.Parse("00002a98-0000-1000-8000-00805f9b34fb"));
+                     if (characteristic != null) {
+                        characteristic.ValueUpdated += Characteristic_ValueUpdated;
+                        await characteristic.StartUpdatesAsync();
+                     }
+                  }
+               }
+            }
+         } catch (Exception) {
+            Debug.WriteLine("Connect ble device");
+         }
+      }
+
+      private void Characteristic_ValueUpdated(object sender, Plugin.BLE.Abstractions.EventArgs.CharacteristicUpdatedEventArgs e) {
+         var doubleValue = BitConverter.ToDouble(e.Characteristic.Value, 0);
+         Debug.Write($"Value: {doubleValue}");
+         Load = (uint) doubleValue;
       }
 
       private void ExpandTraining(Training item) {
@@ -212,25 +276,28 @@ namespace PortableLoadCell.ViewModels {
       }
 
       private void OnMinusSecondCommand(object obj) {
-         _currentTime--;
+         _currentTime -= 2;
       }
 
       private void OnPlusSecondCommand(object obj) {
-         _currentTime++;
+         _currentTime += 1;
       }
 
-      private async void OnPrevExerciseCommand(object obj) {
-         // Prefixing with `//` switches to a different navigation stack instead of pushing to the active one
-         await Shell.Current.GoToAsync($"//{nameof(AboutPage)}");
+      private void OnPrevExerciseCommand(object obj) {
+         IsRunning = false;
+         _currentPeriod = Math.Max(0, _currentPeriod - 1);
+         MoveNextPeriod();
       }
 
-      private async void OnNextExerciseCommand(object obj) {
-         // Prefixing with `//` switches to a different navigation stack instead of pushing to the active one
-         await Shell.Current.GoToAsync($"//{nameof(AboutPage)}");
+      private void OnNextExerciseCommand(object obj) {
+         IsRunning = false;
+         _currentPeriod = Math.Min(_periods.Count - 1, _currentPeriod + 1);
+         MoveNextPeriod();
       }
 
       public void OnAppearing() {
          DeviceDisplay.KeepScreenOn = true;
+         ConnectBleDevice();
       }
 
       public void OnDisappearing() {

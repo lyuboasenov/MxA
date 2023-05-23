@@ -60,7 +60,8 @@ bool Ble::connected() {
 }
 
 void Ble::weight_notify(float value) {
-   _weight_characteristics.setValue(value);
+   double double_value = (double) value;
+   _weight_characteristics.setValue(double_value);
    _weight_characteristics.notify();
 }
 

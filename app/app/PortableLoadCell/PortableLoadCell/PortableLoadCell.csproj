@@ -6,8 +6,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\countdown.wav" />
+    <None Remove="Resources\end_rep.mp3" />
+    <None Remove="Resources\Tones.ogg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\countdown.wav" />
+    <EmbeddedResource Include="Resources\end_rep.mp3" />
+    <EmbeddedResource Include="Resources\Tones.ogg" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Plugin.BLE" Version="2.1.3" />
     <PackageReference Include="Plugin.Permissions" Version="6.0.1" />
+    <PackageReference Include="Xam.Plugin.SimpleAudioPlayer" Version="1.6.0" />
     <PackageReference Include="Xamarin.Forms" Version="5.0.0.2012" />  
     <PackageReference Include="Xamarin.Essentials" Version="1.6.1" />
   </ItemGroup>
