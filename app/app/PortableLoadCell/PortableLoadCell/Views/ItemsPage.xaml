@@ -3,9 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="PortableLoadCell.Views.ItemsPage"
              Title="{Binding Title}"
-             xmlns:local="clr-namespace:PortableLoadCell.ViewModels"  
-             xmlns:model="clr-namespace:PortableLoadCell.Models"  
-             x:Name="BrowseItemsPage">
+             xmlns:local="clr-namespace:PortableLoadCell.ViewModels"
+             xmlns:model="clr-namespace:PortableLoadCell.Models"
+             x:Name="BrowseItemsPage"
+             Visual="Material">
 
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Add" Command="{Binding AddItemCommand}" />
@@ -21,14 +22,14 @@
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <StackLayout Padding="10" x:DataType="model:Training">
-                        <Label Text="{Binding Name}" 
-                            LineBreakMode="NoWrap" 
-                            Style="{DynamicResource ListItemTextStyle}" 
+                        <Label Text="{Binding Name}"
+                            LineBreakMode="NoWrap"
+                            Style="{DynamicResource ListItemTextStyle}"
                             FontSize="16" />
                         <StackLayout.GestureRecognizers>
-                            <TapGestureRecognizer 
+                            <TapGestureRecognizer
                                 NumberOfTapsRequired="1"
-                                Command="{Binding Source={RelativeSource AncestorType={x:Type local:ItemsViewModel}}, Path=ItemTapped}"		
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type local:ItemsViewModel}}, Path=ItemTapped}"
                                 CommandParameter="{Binding .}">
                             </TapGestureRecognizer>
                         </StackLayout.GestureRecognizers>

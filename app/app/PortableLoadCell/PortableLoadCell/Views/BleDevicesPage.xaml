@@ -3,9 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="PortableLoadCell.Views.BleDevicesPage"
              Title="{Binding Title}"
-             xmlns:local="clr-namespace:PortableLoadCell.ViewModels"  
-             xmlns:model="clr-namespace:PortableLoadCell.Models"  
-             x:Name="BrowseItemsPage">
+             xmlns:local="clr-namespace:PortableLoadCell.ViewModels"
+             xmlns:model="clr-namespace:PortableLoadCell.Models"
+             x:Name="BrowseItemsPage"
+             Visual="Material">
 
    <ContentPage.ToolbarItems>
       <ToolbarItem Text="Scan" Command="{Binding ScanCommand}" />
@@ -21,18 +22,18 @@
          <CollectionView.ItemTemplate>
             <DataTemplate>
                <StackLayout Padding="10" x:DataType="model:BleDevice">
-                  <Label Text="{Binding Name}" 
-                            LineBreakMode="NoWrap" 
-                            Style="{DynamicResource ListItemTextStyle}" 
+                  <Label Text="{Binding Name}"
+                            LineBreakMode="NoWrap"
+                            Style="{DynamicResource ListItemTextStyle}"
                             FontSize="16" />
-                  <Label Text="{Binding Address}" 
-                            LineBreakMode="NoWrap" 
-                            Style="{DynamicResource ListItemTextStyle}" 
+                  <Label Text="{Binding Address}"
+                            LineBreakMode="NoWrap"
+                            Style="{DynamicResource ListItemTextStyle}"
                             FontSize="10" />
                   <StackLayout.GestureRecognizers>
-                     <TapGestureRecognizer 
+                     <TapGestureRecognizer
                                 NumberOfTapsRequired="1"
-                                Command="{Binding Source={RelativeSource AncestorType={x:Type local:BleDevicesViewModel}}, Path=ItemTapped}"		
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type local:BleDevicesViewModel}}, Path=ItemTapped}"
                                 CommandParameter="{Binding .}">
                      </TapGestureRecognizer>
                   </StackLayout.GestureRecognizers>
