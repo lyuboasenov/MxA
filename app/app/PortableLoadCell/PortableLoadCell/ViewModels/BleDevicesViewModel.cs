@@ -14,7 +14,6 @@ using Xamarin.Forms;
 
 namespace PortableLoadCell.ViewModels {
    public class BleDevicesViewModel : BaseViewModel {
-      private BleDevice _selectedItem;
 
       private readonly IAdapter _adapter;
       private List<IDevice> _gattDevices = new List<IDevice>();
@@ -79,12 +78,10 @@ namespace PortableLoadCell.ViewModels {
          SelectedItem = null;
       }
 
-      public BleDevice SelectedItem {
-         get => _selectedItem;
-         set {
-            SetProperty(ref _selectedItem, value);
-            OnItemSelected(value);
-         }
+      public BleDevice SelectedItem { get; set; }
+
+      public void OnSelectedItemChanged() {
+         OnItemSelected(SelectedItem);
       }
 
       async void OnItemSelected(BleDevice item) {

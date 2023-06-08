@@ -3,115 +3,152 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="PortableLoadCell.Views.TimerPage"
              xmlns:vm="clr-namespace:PortableLoadCell.ViewModels"
+             xmlns:extensions="clr-namespace:PortableLoadCell.Extensions"
+             xmlns:converters="clr-namespace:PortableLoadCell.Converters"
              Title="{Binding TrainingName}"
              Visual="Material">
 
-   <ContentPage.BindingContext>
-      <vm:TimerViewModel />
-   </ContentPage.BindingContext>
+    <ContentPage.BindingContext>
+        <vm:TimerViewModel />
+    </ContentPage.BindingContext>
 
-   <ContentPage.Resources>
-      <ResourceDictionary>
-         <Color x:Key="Accent">#96d1ff</Color>
-      </ResourceDictionary>
-   </ContentPage.Resources>
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:SecondsToStringConverter x:Key="secondsConverter" />
+            <converters:SecondsToFontSizeConverter x:Key="secondsToFontSizeConverter" />
+            <Color x:Key="Accent">#96d1ff</Color>
+            <Style TargetType="ImageButton">
+                <Setter Property="CornerRadius" Value="35"></Setter>
+                <Setter Property="WidthRequest" Value="70"></Setter>
+                <Setter Property="HeightRequest" Value="70"></Setter>
+                <Setter Property="Padding" Value="10"></Setter>
+                <Setter Property="BackgroundColor" Value="#96d1ff"></Setter>
+                <Setter Property="Margin" Value="0 10 0 10"></Setter>
+            </Style>
+            <Style TargetType="ProgressBar">
+                <Setter Property="VerticalOptions" Value="CenterAndExpand"/>
+                <Setter Property="HeightRequest" Value="20"/>
+                <Setter Property="ProgressColor" Value="#96d1ff"/>
 
-   <Grid BackgroundColor="{Binding Color}">
-      <Grid.RowDefinitions>
-         <RowDefinition Height="Auto" />
-         <RowDefinition Height="*" />
-         <RowDefinition Height="Auto" />
-         <RowDefinition Height="Auto" />
-         <RowDefinition Height="Auto" />
-         <RowDefinition Height="Auto" />
-      </Grid.RowDefinitions>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
 
-      <!-- sets/of | reps/of -->
-      <Grid>
-         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-         </Grid.ColumnDefinitions>
-         <Label Grid.Column="0" HorizontalOptions="Center" FontSize="Large">
-            <Label.FormattedText>
-               <FormattedString>
-                  <Span Text="Reps: " />
-                  <Span Text="{Binding Rep}" />
-                  <Span Text=" / " />
-                  <Span Text="{Binding TotalReps}" />
-               </FormattedString>
-            </Label.FormattedText>
-         </Label>
-         <Label Grid.Column="1"  HorizontalOptions="Center" FontSize="Large">
-            <Label.FormattedText>
-               <FormattedString>
-                  <Span Text="Sets: " />
-                  <Span Text="{Binding Set}" />
-                  <Span Text=" / " />
-                  <Span Text="{Binding TotalSets}" />
-               </FormattedString>
-            </Label.FormattedText>
-         </Label>
-      </Grid>
+    <Grid BackgroundColor="{Binding Color}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
 
-      <!-- Counter -->
-      <Grid Grid.Row="1">
-         <Label Text="{Binding Counter}" FontSize="200" HorizontalOptions="Center" VerticalOptions="Center" />
-      </Grid>
+        <!-- sets/of | reps/of -->
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0" HorizontalOptions="Center" FontSize="Large">
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span Text="Reps: " />
+                        <Span Text="{Binding Rep}" />
+                        <Span Text=" / " />
+                        <Span Text="{Binding TotalReps}" />
+                    </FormattedString>
+                </Label.FormattedText>
+            </Label>
+            <Label Grid.Column="1"  HorizontalOptions="Center" FontSize="Large">
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span Text="Sets: " />
+                        <Span Text="{Binding Set}" />
+                        <Span Text=" / " />
+                        <Span Text="{Binding TotalSets}" />
+                    </FormattedString>
+                </Label.FormattedText>
+            </Label>
+        </Grid>
 
-      <!-- play | load cell value -->
-      <Grid Grid.Row="2">
-         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="Auto" />
-         </Grid.ColumnDefinitions>
+        <!-- Counter -->
+        <Grid Grid.Row="1">
+            <Label Text="{Binding Counter, Converter={x:StaticResource secondsConverter}}"
+                   FontSize="{Binding Counter, Converter={x:StaticResource secondsToFontSizeConverter}}"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center" />
+        </Grid>
+
+        <!-- play | load cell value -->
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
 
 
-         <Button Grid.Column="0" Command="{Binding PlayPauseCommand}" Text="|>" />
-         <Label Grid.Column="1" Text="{Binding Load}" HorizontalOptions="Center" FontSize="50"/>
-         <Button Grid.Column="2" Command="{Binding ConnectHangboardCommand}" Text="|_|" />
-      </Grid>
+            <ImageButton Grid.Column="0"
+                      Command="{Binding PlayPauseCommand}"
+                      Source="{Binding PlayPauseImageSource}" />
+            <Label Grid.Column="1" Text="{Binding Load}" HorizontalOptions="Center" FontSize="50"/>
+            <ImageButton Grid.Column="2"
+                      Command="{Binding ConnectHangboardCommand}"
+                      Source="{Binding ConnectHangboardImageSource}" />
+        </Grid>
 
-      <!-- rep progress -->
-      <Grid Grid.Row="3">
-         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="Auto" />
-         </Grid.ColumnDefinitions>
+        <!-- rep progress -->
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
 
-         <Button Grid.Column="0" Command="{Binding MinusSecondCommand}" Text="&lt;" />
-         <ProgressBar Grid.Column="1" Progress="{Binding RepsProgress}" />
-         <Button Grid.Column="2" Command="{Binding PlusSecondCommand}" Text="&gt;" />
-      </Grid>
+            <ImageButton Grid.Column="0"
+                      Command="{Binding MinusSecondCommand}"
+                      Source="{extensions:ImageResource PortableLoadCell.Resources.icons.navigate_before_FILL0_wght400_GRAD0_opsz48.png}" />
+            <StackLayout Grid.Column="1">
+                <ProgressBar Progress="{Binding RepsProgress}" />
+            </StackLayout>
+            <ImageButton Grid.Column="2"
+                      Command="{Binding PlusSecondCommand}"
+                      Source="{extensions:ImageResource PortableLoadCell.Resources.icons.navigate_next_FILL0_wght400_GRAD0_opsz48.png}" />
+        </Grid>
 
-      <!-- set progress -->
-      <Grid Grid.Row="4">
-         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="Auto" />
-         </Grid.ColumnDefinitions>
+        <!-- set progress -->
+        <Grid Grid.Row="4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
 
-         <Button Grid.Column="0" Command="{Binding PrevSetCommand}" Text="&lt;&lt;" />
-         <ProgressBar Grid.Column="1" Progress="{Binding OveralProgress}" />
-         <Button Grid.Column="2" Command="{Binding NextSetCommand}" Text="&gt;&gt;" />
-      </Grid>
+            <ImageButton Grid.Column="0"
+                      Command="{Binding PrevSetCommand}"
+                      Source="{extensions:ImageResource PortableLoadCell.Resources.icons.skip_previous_FILL0_wght400_GRAD0_opsz48.png}" />
+            <StackLayout Grid.Column="1">
+                <ProgressBar Progress="{Binding OveralProgress}" />
+            </StackLayout>
+            <ImageButton Grid.Column="2"
+                 Command="{Binding NextSetCommand}"
+                 Source="{extensions:ImageResource PortableLoadCell.Resources.icons.skip_next_FILL0_wght400_GRAD0_opsz48.png}" />
+        </Grid>
 
-      <!-- next -->
-      <Grid Grid.Row="5" Padding="10" BackgroundColor="{Binding NextColor}">
-         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*" />
-         </Grid.ColumnDefinitions>
+        <!-- next -->
+        <Grid Grid.Row="5" Padding="10" BackgroundColor="{Binding NextColor}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
 
-         <Label Text="Next" />
-         <Label Grid.Column="1" Text="{Binding NextPeriod}" />
-         <Label Grid.Column="2"  Text="{Binding NextPeriodTime}" HorizontalOptions="EndAndExpand" />
-      </Grid>
+            <Label Text="Next" />
+            <Label Grid.Column="1" Text="{Binding NextPeriod}" />
+            <Label Grid.Column="2"  Text="{Binding NextPeriodTime, Converter={x:StaticResource secondsConverter}}" HorizontalOptions="EndAndExpand" />
+        </Grid>
 
-   </Grid>
+    </Grid>
 
 </ContentPage>

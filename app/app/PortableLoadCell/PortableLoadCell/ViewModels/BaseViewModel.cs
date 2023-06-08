@@ -1,54 +1,20 @@
 ﻿using PortableLoadCell.Models;
 using PortableLoadCell.Services;
-using System;
-using System.Collections.Generic;
+using PropertyChanged;
 using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using Xamarin.Forms;
 
-namespace PortableLoadCell.ViewModels
-{
-    public class BaseViewModel : INotifyPropertyChanged
-    {
-        public IDataStore<Training> DataStore => DependencyService.Get<IDataStore<Training>>();
+namespace PortableLoadCell.ViewModels {
 
-        bool isBusy = false;
-        public bool IsBusy
-        {
-            get { return isBusy; }
-            set { SetProperty(ref isBusy, value); }
-        }
+   [AddINotifyPropertyChangedInterface]
+   public class BaseViewModel : INotifyPropertyChanged {
 
-        string title = string.Empty;
-        public string Title
-        {
-            get { return title; }
-            set { SetProperty(ref title, value); }
-        }
+      public IDataStore<Training> DataStore => DependencyService.Get<IDataStore<Training>>();
 
-        protected bool SetProperty<T>(ref T backingStore, T value,
-            [CallerMemberName] string propertyName = "",
-            Action onChanged = null)
-        {
-            if (EqualityComparer<T>.Default.Equals(backingStore, value))
-                return false;
+      public bool IsBusy { get; set; }
 
-            backingStore = value;
-            onChanged?.Invoke();
-            OnPropertyChanged(propertyName);
-            return true;
-        }
+      public string Title { get; set; }
 
-        #region INotifyPropertyChanged
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = "")
-        {
-            var changed = PropertyChanged;
-            if (changed == null)
-                return;
-
-            changed.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-        #endregion
-    }
+      public event PropertyChangedEventHandler PropertyChanged;
+   }
 }
