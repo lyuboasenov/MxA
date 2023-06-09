@@ -158,7 +158,7 @@
                       Command="{Binding PrevSetCommand}"
                       Source="{extensions:ImageResource PortableLoadCell.Resources.icons.skip_previous_FILL0_wght400_GRAD0_opsz48.png}" />
             <StackLayout Grid.Column="1">
-                <ProgressBar Progress="{Binding OveralProgress}" />
+                <ProgressBar Progress="{Binding SetsProgress}" />
             </StackLayout>
             <ImageButton Grid.Column="2"
                  Command="{Binding NextSetCommand}"
