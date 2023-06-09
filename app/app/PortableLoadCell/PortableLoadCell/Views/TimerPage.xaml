@@ -5,7 +5,6 @@
              xmlns:vm="clr-namespace:PortableLoadCell.ViewModels"
              xmlns:extensions="clr-namespace:PortableLoadCell.Extensions"
              xmlns:converters="clr-namespace:PortableLoadCell.Converters"
-             xmlns:system="clr-namespace:System;assembly=mscorlib"
              Title="{Binding TrainingName}"
              Visual="Material">
 

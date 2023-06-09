@@ -14,7 +14,7 @@ namespace PortableLoadCell.ViewModels {
       public Command<Training> ItemTapped { get; }
 
       public ItemsViewModel() {
-         Title = "Browse";
+         Title = "Trainings";
          Items = new ObservableCollection<Training>();
          LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
 
