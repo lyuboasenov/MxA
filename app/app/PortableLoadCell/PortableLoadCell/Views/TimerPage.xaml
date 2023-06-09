@@ -6,7 +6,8 @@
              xmlns:extensions="clr-namespace:PortableLoadCell.Extensions"
              xmlns:converters="clr-namespace:PortableLoadCell.Converters"
              Title="{Binding TrainingName}"
-             Visual="Material">
+             Visual="Material"
+             Shell.NavBarIsVisible="False">
 
     <ContentPage.BindingContext>
         <vm:TimerViewModel />
@@ -17,62 +18,27 @@
             <x:Boolean x:Key="true">True</x:Boolean>
             <converters:SecondsToStringConverter x:Key="secondsConverter" />
             <converters:SecondsToFontSizeConverter x:Key="secondsToFontSizeConverter" />
-            <Color x:Key="ColorAccent">#96d1ff</Color>
-            <Color x:Key="ColorAccentTransparent">#e496d1ff</Color>
-            <Color x:Key="ColorBackgroundDisabled">#a396d1ff</Color>
-            <Thickness x:Key="ImageButtonMargin" Left="10" Right="10" />
-            <Style TargetType="ImageButton">
-                <Setter Property="CornerRadius" Value="35"></Setter>
-                <Setter Property="WidthRequest" Value="70"></Setter>
-                <Setter Property="HeightRequest" Value="70"></Setter>
-                <Setter Property="Padding" Value="10"></Setter>
-                <Setter Property="BackgroundColor" Value="{StaticResource ColorAccent}"></Setter>
-                <Setter Property="Margin" Value="{StaticResource ImageButtonMargin}"></Setter>
-                <Setter Property="VisualStateManager.VisualStateGroups">
-                    <VisualStateGroupList>
-                        <VisualStateGroup x:Name="CommonStates">
-                            <VisualState x:Name="Normal">
-                                <VisualState.Setters>
-                                    <Setter Property="BackgroundColor" Value="{StaticResource ColorAccent}" />
-                                </VisualState.Setters>
-                            </VisualState>
-                            <VisualState x:Name="Pressed">
-                                <VisualState.Setters>
-                                    <Setter Property="BackgroundColor" Value="{StaticResource ColorAccentTransparent}" />
-                                </VisualState.Setters>
-                            </VisualState>
-                            <VisualState x:Name="Focused">
-                                <VisualState.Setters>
-                                    <Setter Property="BackgroundColor" Value="{StaticResource ColorAccentTransparent}" />
-                                </VisualState.Setters>
-                            </VisualState>
-                            <VisualState x:Name="Disabled">
-                                <VisualState.Setters>
-                                    <Setter Property="BackgroundColor" Value="{DynamicResource ColorBackgroundDisabled}" />
-                                </VisualState.Setters>
-                            </VisualState>
-                        </VisualStateGroup>
-                    </VisualStateGroupList>
-                </Setter>
-            </Style>
-            <Style TargetType="ProgressBar">
-                <Setter Property="VerticalOptions" Value="CenterAndExpand"/>
-                <Setter Property="HeightRequest" Value="20"/>
-                <Setter Property="ProgressColor" Value="#96d1ff"/>
-            </Style>
         </ResourceDictionary>
     </ContentPage.Resources>
 
-    <Grid BackgroundColor="{Binding Color}">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
+    <StackLayout BackgroundColor="{Binding Color}">
 
+        <Grid BackgroundColor="#44000000">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <Label Text="{Binding TrainingName}"
+                   FontSize="40" FontAttributes="Italic,Bold"
+                   Margin="20"/>
+
+            <ImageButton Grid.Column="1"
+                      Command="{Binding ExitCommand}"
+                      Source="{extensions:ImageResource PortableLoadCell.Resources.icons.close_FILL0_wght400_GRAD0_opsz48.png}"
+                         BackgroundColor="#cde96565"
+                         WidthRequest="30" HeightRequest="30" VerticalOptions="Center"/>
+        </Grid>
         <!-- sets/of | reps/of -->
         <Grid>
             <Grid.ColumnDefinitions>
@@ -83,9 +49,9 @@
                 <Label.FormattedText>
                     <FormattedString>
                         <Span Text="Reps: " />
-                        <Span Text="{Binding Rep}" />
+                        <Span Text="{Binding Rep}" FontAttributes="Bold" FontSize="30" />
                         <Span Text=" / " />
-                        <Span Text="{Binding TotalReps}" />
+                        <Span Text="{Binding TotalReps}" FontAttributes="Bold" FontSize="30" />
                     </FormattedString>
                 </Label.FormattedText>
             </Label>
@@ -93,81 +59,80 @@
                 <Label.FormattedText>
                     <FormattedString>
                         <Span Text="Sets: " />
-                        <Span Text="{Binding Set}" />
+                        <Span Text="{Binding Set}" FontAttributes="Bold" FontSize="30" />
                         <Span Text=" / " />
-                        <Span Text="{Binding TotalSets}" />
+                        <Span Text="{Binding TotalSets}" FontAttributes="Bold" FontSize="30" />
                     </FormattedString>
                 </Label.FormattedText>
             </Label>
         </Grid>
 
         <!-- Counter -->
-        <Grid Grid.Row="1">
+        <Grid VerticalOptions="CenterAndExpand">
             <Label Text="{Binding Counter, Converter={x:StaticResource secondsConverter}}"
                    FontSize="{Binding Counter, Converter={x:StaticResource secondsToFontSizeConverter}}"
                    HorizontalOptions="Center"
                    VerticalOptions="Center" />
         </Grid>
 
-        <!-- play | load cell value -->
-        <Grid Grid.Row="2">
+        <!-- load cell value -->
+        <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
 
-            <ImageButton Grid.Column="0"
-                      Command="{Binding PlayPauseCommand}"
-                      Source="{Binding PlayPauseImageSource}" />
-            <Label Grid.Column="1" Text="{Binding Load}" HorizontalOptions="Center" FontSize="50"/>
-            <ImageButton Grid.Column="2"
+
+            <Label Grid.Column="0" Text="{Binding Load}" HorizontalOptions="Center" FontSize="50"/>
+            <ImageButton Grid.Column="1"
                       Command="{Binding ConnectHangboardCommand}"
-                      Source="{Binding ConnectHangboardImageSource}" />
+                      Source="{Binding ConnectHangboardImageSource}"
+                         VerticalOptions="Center"/>
         </Grid>
 
         <!-- rep progress -->
-        <Grid Grid.Row="3">
+        <Grid Margin="0, 5, 0, 5">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
-
-            <ImageButton Grid.Column="0"
-                      Command="{Binding PrevRepCommand}"
-                      Source="{extensions:ImageResource PortableLoadCell.Resources.icons.navigate_before_FILL0_wght400_GRAD0_opsz48.png}" />
-            <StackLayout Grid.Column="1">
-                <ProgressBar Progress="{Binding RepsProgress}" />
-            </StackLayout>
-            <ImageButton Grid.Column="2"
-                      Command="{Binding NextRepCommand}"
-                      Source="{extensions:ImageResource PortableLoadCell.Resources.icons.navigate_next_FILL0_wght400_GRAD0_opsz48.png}" />
-        </Grid>
-
-        <!-- set progress -->
-        <Grid Grid.Row="4">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
+
 
             <ImageButton Grid.Column="0"
                       Command="{Binding PrevSetCommand}"
                       Source="{extensions:ImageResource PortableLoadCell.Resources.icons.skip_previous_FILL0_wght400_GRAD0_opsz48.png}" />
-            <StackLayout Grid.Column="1">
+            <ImageButton Grid.Column="1"
+                      Command="{Binding PrevRepCommand}"
+                      Source="{extensions:ImageResource PortableLoadCell.Resources.icons.navigate_before_FILL0_wght400_GRAD0_opsz48.png}" />
+            <StackLayout Grid.Column="2">
+                <ProgressBar Progress="{Binding RepsProgress}" />
                 <ProgressBar Progress="{Binding SetsProgress}" />
             </StackLayout>
-            <ImageButton Grid.Column="2"
+            <ImageButton Grid.Column="3"
+                      Command="{Binding NextRepCommand}"
+                      Source="{extensions:ImageResource PortableLoadCell.Resources.icons.navigate_next_FILL0_wght400_GRAD0_opsz48.png}" />
+            <ImageButton Grid.Column="4"
                  Command="{Binding NextSetCommand}"
                  Source="{extensions:ImageResource PortableLoadCell.Resources.icons.skip_next_FILL0_wght400_GRAD0_opsz48.png}" />
         </Grid>
 
+        <StackLayout Margin="10">
+            <ImageButton Grid.Column="0"
+                         Command="{Binding PlayPauseCommand}"
+                         Source="{Binding PlayPauseImageSource}"
+                         HorizontalOptions="Center"
+                         WidthRequest="80"
+                         HeightRequest="80"
+                         CornerRadius="40"
+                         BackgroundColor="{DynamicResource Triadic2}" />
+        </StackLayout>
+
         <!-- next -->
-        <Grid Grid.Row="5"
-              Padding="10"
+        <Grid Padding="10"
               HeightRequest="50"
               BackgroundColor="{Binding NextColor}">
             <Grid.ColumnDefinitions>
@@ -190,6 +155,6 @@
                    />
         </Grid>
 
-    </Grid>
+    </StackLayout>
 
 </ContentPage>

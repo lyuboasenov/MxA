@@ -8,6 +8,16 @@
     <Application.Resources>
         <ResourceDictionary>
             <Color x:Key="Primary">#2196F3</Color>
+            <Color x:Key="Complementary">#f37f21</Color>
+            <Color x:Key="Analogous">#21f3e9</Color>
+            <Color x:Key="Analogous_100">#9cf7f1</Color>
+            <Color x:Key="Analogous_50">#d9fcfb</Color>
+            <Color x:Key="Analogous2">#212bf3</Color>
+            <Color x:Key="Triadic">#8021f3</Color>
+            <Color x:Key="Triadic2">#f32194</Color>
+            <Color x:Key="Triadic2_200">#f48ac3</Color>
+            <Color x:Key="Triadic2_50">#fce3f1</Color>
+
             <Style TargetType="Button">
                 <Setter Property="TextColor" Value="White"></Setter>
                 <Setter Property="VisualStateManager.VisualStateGroups">
@@ -26,6 +36,39 @@
                         </VisualStateGroup>
                     </VisualStateGroupList>
                 </Setter>
+            </Style>
+            <Style TargetType="ImageButton">
+                <Setter Property="CornerRadius" Value="20"></Setter>
+                <Setter Property="WidthRequest" Value="40"></Setter>
+                <Setter Property="HeightRequest" Value="40"></Setter>
+                <Setter Property="Padding" Value="10"></Setter>
+                <Setter Property="BackgroundColor" Value="{StaticResource Analogous}"></Setter>
+                <Setter Property="VisualStateManager.VisualStateGroups">
+                    <VisualStateGroupList>
+                        <VisualStateGroup x:Name="CommonStates">
+                            <VisualState x:Name="Pressed">
+                                <VisualState.Setters>
+                                    <Setter Property="Opacity" Value="50" />
+                                </VisualState.Setters>
+                            </VisualState>
+                            <VisualState x:Name="Focused">
+                                <VisualState.Setters>
+                                    <Setter Property="Opacity" Value="50" />
+                                </VisualState.Setters>
+                            </VisualState>
+                            <VisualState x:Name="Disabled">
+                                <VisualState.Setters>
+                                    <Setter Property="Opacity" Value="25" />
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </Setter>
+            </Style>
+            <Style TargetType="ProgressBar">
+                <Setter Property="VerticalOptions" Value="CenterAndExpand"/>
+                <Setter Property="HeightRequest" Value="20"/>
+                <Setter Property="ProgressColor" Value="{DynamicResource Triadic2_200}"/>
             </Style>
         </ResourceDictionary>
     </Application.Resources>

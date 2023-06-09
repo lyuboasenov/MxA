@@ -4,7 +4,7 @@ using System.Linq;
 using System.Timers;
 
 namespace PortableLoadCell.Services {
-   class TrainingWorker {
+   class TrainingWorker : IDisposable {
       private Timer _timer;
       private readonly Training _training;
       private Period[] _periods;
@@ -134,6 +134,25 @@ namespace PortableLoadCell.Services {
          } else {
             NextPeriod = null;
          }
+      }
+
+      private bool disposedValue;
+
+      protected virtual void Dispose(bool disposing) {
+         if (!disposedValue) {
+            if (disposing) {
+               _timer.Stop();
+               _timer.Dispose();
+            }
+
+            disposedValue = true;
+         }
+      }
+
+      public void Dispose() {
+         // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+         Dispose(disposing: true);
+         GC.SuppressFinalize(this);
       }
    }
 }

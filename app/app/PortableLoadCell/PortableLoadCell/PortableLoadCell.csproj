@@ -10,6 +10,7 @@
     <None Remove="Resources\end_rep.mp3" />
     <None Remove="Resources\icons\bluetooth_connected_FILL0_wght400_GRAD0_opsz48.png" />
     <None Remove="Resources\icons\bluetooth_FILL0_wght400_GRAD0_opsz48.png" />
+    <None Remove="Resources\icons\close_FILL0_wght400_GRAD0_opsz48.png" />
     <None Remove="Resources\icons\navigate_before_FILL0_wght400_GRAD0_opsz48.png" />
     <None Remove="Resources\icons\navigate_next_FILL0_wght400_GRAD0_opsz48.png" />
     <None Remove="Resources\icons\pause_FILL0_wght400_GRAD0_opsz48.png" />
@@ -20,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Resources\icons\close_FILL0_wght400_GRAD0_opsz48.png" />
     <EmbeddedResource Include="Resources\sounds\countdown.wav" />
     <EmbeddedResource Include="Resources\sounds\end_rep.mp3" />
     <EmbeddedResource Include="Resources\icons\bluetooth_connected_FILL0_wght400_GRAD0_opsz48.png" />

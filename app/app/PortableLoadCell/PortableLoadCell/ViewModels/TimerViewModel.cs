@@ -220,7 +220,10 @@ namespace PortableLoadCell.ViewModels {
 
       private async void OnExitCommand(object obj) {
          // Prefixing with `//` switches to a different navigation stack instead of pushing to the active one
-         await Shell.Current.GoToAsync($"//");
+         _trainingWorker.Dispose();
+         _trainingWorker.WorkerChanged -= _trainingWorker_WorkerChanged;
+         _trainingWorker = null;
+         await Shell.Current.GoToAsync("..");
       }
 
       private async void OnConnectHangboardCommand(object obj) {
