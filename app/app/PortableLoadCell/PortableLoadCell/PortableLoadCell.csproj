@@ -20,8 +20,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Resources\countdown.wav" />
-    <EmbeddedResource Include="Resources\end_rep.mp3" />
+    <EmbeddedResource Include="Resources\sounds\countdown.wav" />
+    <EmbeddedResource Include="Resources\sounds\end_rep.mp3" />
     <EmbeddedResource Include="Resources\icons\bluetooth_connected_FILL0_wght400_GRAD0_opsz48.png" />
     <EmbeddedResource Include="Resources\icons\bluetooth_FILL0_wght400_GRAD0_opsz48.png" />
     <EmbeddedResource Include="Resources\icons\navigate_before_FILL0_wght400_GRAD0_opsz48.png" />
@@ -30,7 +30,7 @@
     <EmbeddedResource Include="Resources\icons\play_arrow_FILL0_wght400_GRAD0_opsz48.png" />
     <EmbeddedResource Include="Resources\icons\skip_next_FILL0_wght400_GRAD0_opsz48.png" />
     <EmbeddedResource Include="Resources\icons\skip_previous_FILL0_wght400_GRAD0_opsz48.png" />
-    <EmbeddedResource Include="Resources\Tones.ogg" />
+    <EmbeddedResource Include="Resources\sounds\Tones.ogg" />
   </ItemGroup>
 
   <ItemGroup>

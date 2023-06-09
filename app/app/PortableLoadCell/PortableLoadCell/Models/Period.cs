@@ -12,5 +12,6 @@ namespace PortableLoadCell.Models {
       public uint To { get; set; }
       public uint Rep { get; set; }
       public uint Set { get; set; }
+      public PeriodType PeriodType { get; set; }
    }
 }
