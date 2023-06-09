@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Text;
+﻿using System.Drawing;
 
 namespace PortableLoadCell.Models {
    public class Period {
@@ -12,6 +9,12 @@ namespace PortableLoadCell.Models {
       public uint To { get; set; }
       public uint Rep { get; set; }
       public uint Set { get; set; }
+      public uint RepIndex { get; set; }
+      public uint SetIndex { get; set; }
       public PeriodType PeriodType { get; set; }
+
+      public override string ToString() {
+         return $"{PeriodType} {Time} {RepIndex}/{SetIndex}";
+      }
    }
 }

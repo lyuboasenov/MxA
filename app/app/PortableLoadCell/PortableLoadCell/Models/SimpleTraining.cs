@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using Xamarin.Forms;
 
 namespace PortableLoadCell.Models {
@@ -55,17 +53,19 @@ namespace PortableLoadCell.Models {
                }
             }
 
-            _periods.Add(new Period {
-               Color = Color.DarkRed,
-               Name = "Long Rest",
-               Time = RestBwSetsTime,
-               From = totalTime,
-               To = RestBwSetsTime + totalTime,
-               Rep = Reps,
-               Set = set + 1,
-               PeriodType = PeriodType.Rest
-            });
-            totalTime += RestBwSetsTime;
+            if (set == Sets - 1) {
+               _periods.Add(new Period {
+                  Color = Color.DarkRed,
+                  Name = "Long Rest",
+                  Time = RestBwSetsTime,
+                  From = totalTime,
+                  To = RestBwSetsTime + totalTime,
+                  Rep = Reps,
+                  Set = set + 1,
+                  PeriodType = PeriodType.Rest
+               });
+               totalTime += RestBwSetsTime;
+            }
          }
 
          _periods.Add(new Period {

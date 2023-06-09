@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Xamarin.Forms;
+﻿using System.Collections.Generic;
 
 namespace PortableLoadCell.Models {
    public abstract class Training {
@@ -12,6 +9,5 @@ namespace PortableLoadCell.Models {
       public uint Sets { get; set; }
 
       public abstract IEnumerable<Period> Expand();
-
    }
 }

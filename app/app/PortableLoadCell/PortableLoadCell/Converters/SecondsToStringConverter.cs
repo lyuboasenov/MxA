@@ -7,9 +7,10 @@ using Xamarin.Forms;
 namespace PortableLoadCell.Converters {
    public class SecondsToStringConverter : IValueConverter {
       public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
+         bool minSecStr = parameter != null && parameter is bool b && b;
          if (value is uint seconds) {
-            if (seconds < 60) {
-               return $"{seconds:00}";
+            if (seconds < 60 && !minSecStr) {
+               return $"{seconds}";
             } else {
                var mins = seconds / 60;
                var secs = seconds % 60;

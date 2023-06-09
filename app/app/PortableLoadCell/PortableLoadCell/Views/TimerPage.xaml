@@ -5,6 +5,7 @@
              xmlns:vm="clr-namespace:PortableLoadCell.ViewModels"
              xmlns:extensions="clr-namespace:PortableLoadCell.Extensions"
              xmlns:converters="clr-namespace:PortableLoadCell.Converters"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
              Title="{Binding TrainingName}"
              Visual="Material">
 
@@ -14,23 +15,51 @@
 
     <ContentPage.Resources>
         <ResourceDictionary>
+            <x:Boolean x:Key="true">True</x:Boolean>
             <converters:SecondsToStringConverter x:Key="secondsConverter" />
             <converters:SecondsToFontSizeConverter x:Key="secondsToFontSizeConverter" />
-            <Color x:Key="Accent">#96d1ff</Color>
+            <Color x:Key="ColorAccent">#96d1ff</Color>
+            <Color x:Key="ColorAccentTransparent">#e496d1ff</Color>
+            <Color x:Key="ColorBackgroundDisabled">#a396d1ff</Color>
             <Thickness x:Key="ImageButtonMargin" Left="10" Right="10" />
             <Style TargetType="ImageButton">
                 <Setter Property="CornerRadius" Value="35"></Setter>
                 <Setter Property="WidthRequest" Value="70"></Setter>
                 <Setter Property="HeightRequest" Value="70"></Setter>
                 <Setter Property="Padding" Value="10"></Setter>
-                <Setter Property="BackgroundColor" Value="#96d1ff"></Setter>
+                <Setter Property="BackgroundColor" Value="{StaticResource ColorAccent}"></Setter>
                 <Setter Property="Margin" Value="{StaticResource ImageButtonMargin}"></Setter>
+                <Setter Property="VisualStateManager.VisualStateGroups">
+                    <VisualStateGroupList>
+                        <VisualStateGroup x:Name="CommonStates">
+                            <VisualState x:Name="Normal">
+                                <VisualState.Setters>
+                                    <Setter Property="BackgroundColor" Value="{StaticResource ColorAccent}" />
+                                </VisualState.Setters>
+                            </VisualState>
+                            <VisualState x:Name="Pressed">
+                                <VisualState.Setters>
+                                    <Setter Property="BackgroundColor" Value="{StaticResource ColorAccentTransparent}" />
+                                </VisualState.Setters>
+                            </VisualState>
+                            <VisualState x:Name="Focused">
+                                <VisualState.Setters>
+                                    <Setter Property="BackgroundColor" Value="{StaticResource ColorAccentTransparent}" />
+                                </VisualState.Setters>
+                            </VisualState>
+                            <VisualState x:Name="Disabled">
+                                <VisualState.Setters>
+                                    <Setter Property="BackgroundColor" Value="{DynamicResource ColorBackgroundDisabled}" />
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </Setter>
             </Style>
             <Style TargetType="ProgressBar">
                 <Setter Property="VerticalOptions" Value="CenterAndExpand"/>
                 <Setter Property="HeightRequest" Value="20"/>
                 <Setter Property="ProgressColor" Value="#96d1ff"/>
-
             </Style>
         </ResourceDictionary>
     </ContentPage.Resources>
@@ -138,16 +167,28 @@
         </Grid>
 
         <!-- next -->
-        <Grid Grid.Row="5" Padding="10" BackgroundColor="{Binding NextColor}">
+        <Grid Grid.Row="5"
+              Padding="10"
+              HeightRequest="50"
+              BackgroundColor="{Binding NextColor}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <Label Text="Next" />
-            <Label Grid.Column="1" Text="{Binding NextPeriod}" />
-            <Label Grid.Column="2"  Text="{Binding NextPeriodTime, Converter={x:StaticResource secondsConverter}}" HorizontalOptions="EndAndExpand" />
+            <Label Text="Up Next:"
+                    FontSize="20"
+                    Margin="5"/>
+            <Label Grid.Column="1"
+                Text="{Binding NextPeriod}"
+                FontSize="30"
+                FontAttributes="Bold"/>
+            <Label Grid.Column="2"
+                   Text="{Binding NextPeriodTime, Converter={x:StaticResource secondsConverter}, ConverterParameter={StaticResource true}}"
+                   HorizontalOptions="EndAndExpand"
+                   FontSize="30"
+                   />
         </Grid>
 
     </Grid>

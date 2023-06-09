@@ -2,6 +2,7 @@
 using Plugin.BLE.Abstractions.Contracts;
 using Plugin.SimpleAudioPlayer;
 using PortableLoadCell.Models;
+using PortableLoadCell.Services;
 using PortableLoadCell.Views;
 using System;
 using System.Diagnostics;
@@ -30,14 +31,8 @@ namespace PortableLoadCell.ViewModels {
       private static ImageSource _btImage;
       private static ImageSource _btConnectedImage;
 
-      private Period[] _periods;
-
-      private int _currentPeriod = -1;
-      private uint _currentTime;
-
       private IDevice _ble;
-
-      private Timer Timer { get; set; }
+      private TrainingWorker _trainingWorker;
       #endregion
 
       #region commands
@@ -75,29 +70,13 @@ namespace PortableLoadCell.ViewModels {
       }
 
       public TimerViewModel() {
-         InitializeTimer();
-
          InitializeCommands();
 
+         Title = "Timer";
          PlayPauseImageSource = _playImage;
          ConnectHangboardImageSource = _btImage;
       }
       #endregion
-
-      private void Timer_Elapsed(object sender, ElapsedEventArgs e) {
-         if (IsRunning) {
-            if (_currentPeriod < 0) {
-               MoveNextPeriod();
-            }
-            _currentTime++;
-            if (_periods[_currentPeriod].To < _currentTime) {
-               MoveNextPeriod();
-            }
-            Counter = _periods[_currentPeriod].To - _currentTime;
-
-            PlayTones();
-         }
-      }
 
       private void PlayTones() {
          if (Counter == 0) {
@@ -110,52 +89,38 @@ namespace PortableLoadCell.ViewModels {
       }
 
       private void MoveNextPeriod() {
-         if (_periods?.Length > 0 && _currentPeriod + 1 < _periods?.Length) {
-            _currentPeriod++;
-            SetCurrentPeriod();
-         }
+         //if (_periods?.Length > 0 && _currentPeriod + 1 < _periods?.Length) {
+         //   _currentPeriod++;
+         //   SetCurrentPeriod();
+         //}
       }
 
       private void MovePrevPeriod() {
-         if (_periods?.Length > 0 && _currentPeriod - 1 >= 0) {
-            _currentPeriod--;
-            SetCurrentPeriod();
-         }
+         //if (_periods?.Length > 0 && _currentPeriod - 1 >= 0) {
+         //   _currentPeriod--;
+         //   SetCurrentPeriod();
+         //}
       }
 
       private void MovePrevSet() {
-         if (_periods?.Length > 0) {
-            while (_periods[_currentPeriod--].Rep > 1) { }
-            SetCurrentPeriod();
-         }
+         //if (_periods?.Length > 0) {
+         //   var currentSet = _periods[_currentPeriod].Set;
+
+         //   while (_currentPeriod > 0 && _periods[_currentPeriod--].Set > currentSet - 2) { }
+         //   _currentPeriod++;
+
+         //   SetCurrentPeriod();
+         //}
       }
 
       private void MoveNextSet() {
-         if (_periods?.Length > 0) {
-            while (_currentPeriod + 1 < _periods.Length && _periods[_currentPeriod++].Rep > 1) { }
-            SetCurrentPeriod();
-         }
-      }
+         //if (_periods?.Length > 0) {
+         //   var currentSet = _periods[_currentPeriod].Set;
 
-      private void SetCurrentPeriod() {
-         Rep = _periods[_currentPeriod].Rep;
-         Set = _periods[_currentPeriod].Set;
-         Counter = _periods[_currentPeriod].To - _periods[_currentPeriod].From;
-         Color = _periods[_currentPeriod].Color;
+         //   while (_currentPeriod + 1 < _periods.Length && _periods[_currentPeriod++].Set < currentSet + 1) { }
 
-         RepsProgress = (float) _periods[_currentPeriod].Rep / TotalReps;
-         SetsProgress = (float) _periods[_currentPeriod].Rep / TotalSets;
-
-         if (_periods?.Length > _currentPeriod + 1) {
-            NextColor = _periods[_currentPeriod + 1].Color;
-            NextPeriod = _periods[_currentPeriod + 1].Name;
-            NextPeriodTime = _periods[_currentPeriod + 1].Time;
-         } else {
-            NextColor = Color.AliceBlue;
-            NextPeriod = "";
-            NextPeriodTime = 0;
-         }
-         UpdateCommands();
+         //   SetCurrentPeriod();
+         //}
       }
 
       public async void OnTrainingIdChanged() {
@@ -232,13 +197,6 @@ namespace PortableLoadCell.ViewModels {
          _tone3.Load(tone3Stream);
       }
 
-      private void InitializeTimer() {
-         Title = "Timer";
-         Timer = new Timer(1000);
-         Timer.Elapsed += Timer_Elapsed;
-         Timer.Start();
-      }
-
       private void InitializeCommands() {
          PlayPauseCommand = new Command(OnPlayPauseCommand, CanPlayPause);
          ExitCommand = new Command(OnExitCommand);
@@ -252,6 +210,7 @@ namespace PortableLoadCell.ViewModels {
 
       private void OnPlayPauseCommand(object obj) {
          IsRunning = !IsRunning;
+         _trainingWorker.PlayPause();
       }
 
       private bool CanPlayPause(object obj) {
@@ -281,62 +240,79 @@ namespace PortableLoadCell.ViewModels {
       }
 
       private bool CanNextSet(object obj) {
-         return _currentPeriod < _periods?.Length;
+         return _trainingWorker?.CanNextSet ?? false;
       }
 
       private bool CanPrevSet(object obj) {
-         return _currentPeriod > 0;
+         return _trainingWorker?.CanPrevSet ?? false;
       }
 
       private bool CanNextRep(object obj) {
-         return _currentPeriod + 1 < _periods?.Length;
+         return _trainingWorker?.CanNextRep ?? false;
       }
 
       private bool CanPrevRep(object obj) {
-         return _currentPeriod - 1 >= 0;
+         return _trainingWorker?.CanPrevRep ?? false;
       }
 
       private void OnPrevRepCommand(object obj) {
-         IsRunning = false;
-         MovePrevPeriod();
-         _currentTime = _periods[_currentPeriod].From;
+         _trainingWorker.PrevRep();
       }
 
       private void OnNextRepCommand(object obj) {
-         IsRunning = false;
-         MoveNextPeriod();
-         _currentTime = _periods[_currentPeriod].From;
+         _trainingWorker.NextRep();
       }
 
       private void OnPrevSetCommand(object obj) {
-         IsRunning = false;
-         MovePrevSet();
-         _currentTime = _periods[_currentPeriod].From;
+         _trainingWorker.PrevSet();
 
       }
 
       private void OnNextSetCommand(object obj) {
-         IsRunning = false;
-         MoveNextSet();
-         _currentTime = _periods[_currentPeriod].From;
+         _trainingWorker.NextSet();
       }
 
       private async Task LoadTraining() {
          try {
             var item = await DataStore.GetItemAsync(TrainingId);
+            _trainingWorker = new TrainingWorker(item);
+            _trainingWorker.WorkerChanged += _trainingWorker_WorkerChanged;
+
             TotalReps = item.Reps;
             TotalSets = item.Sets;
             TrainingName = item.Name;
 
-            _periods = item.Expand().ToArray();
-            if (_periods?.Length > _currentPeriod + 1) {
-               NextColor = _periods[_currentPeriod + 1].Color;
-               NextPeriod = _periods[_currentPeriod + 1].Name;
-               NextPeriodTime = _periods[_currentPeriod + 1].Time;
-            }
+            SetCurrentPeriod();
             UpdateCommands();
          } catch (Exception) {
             Debug.WriteLine("Failed to Load Item");
+         }
+      }
+
+      private void _trainingWorker_WorkerChanged(object sender, EventArgs e) {
+         SetCurrentPeriod();
+         PlayTones();
+         UpdateCommands();
+      }
+
+      private void SetCurrentPeriod() {
+         IsRunning = _trainingWorker.IsRunning;
+         Rep = _trainingWorker.CurrentPeriod?.Rep ?? 0;
+         Set = _trainingWorker.CurrentPeriod?.Set ?? 0;
+         Counter = (uint) _trainingWorker.Counter;
+         Color = _trainingWorker.CurrentPeriod?.Color ?? Xamarin.Forms.Color.White;
+
+         RepsProgress = (float) Rep / TotalReps;
+         SetsProgress = (float) Set / TotalSets;
+
+         if (_trainingWorker.NextPeriod != null) {
+            NextColor = _trainingWorker.NextPeriod.Color;
+            NextPeriod = _trainingWorker.NextPeriod.Name;
+            NextPeriodTime = _trainingWorker.NextPeriod.Time;
+         } else {
+            NextColor = Color.White;
+            NextPeriod = "";
+            NextPeriodTime = 0;
          }
       }
    }
