@@ -4,7 +4,9 @@ using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using Xamarin.Essentials;
 using Xamarin.Forms;
+using static Xamarin.Essentials.Permissions;
 
 namespace PortableLoadCell.ViewModels {
    public class ItemsViewModel : BaseViewModel {
@@ -23,10 +25,27 @@ namespace PortableLoadCell.ViewModels {
          AddItemCommand = new Command(OnAddItem);
       }
 
+      private async Task<PermissionStatus> CheckAndRequestPermission<T>() where T : BasePermission, new() {
+         try {
+            var status = await Permissions.CheckStatusAsync<T>();
+            if (status != PermissionStatus.Granted) {
+               status = await Permissions.RequestAsync<T>();
+            }
+
+            return status;
+         } catch { }
+
+         return PermissionStatus.Unknown;
+      }
+
       async Task ExecuteLoadItemsCommand() {
          IsBusy = true;
 
          try {
+            await CheckAndRequestPermission<Permissions.LocationWhenInUse>();
+            await CheckAndRequestPermission<Permissions.StorageRead>();
+            await CheckAndRequestPermission<Permissions.StorageWrite>();
+
             Items.Clear();
             var items = await DataStore.GetItemsAsync(true);
             foreach (var item in items) {

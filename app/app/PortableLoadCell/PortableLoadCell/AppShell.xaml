@@ -2,6 +2,7 @@
 <Shell xmlns="http://xamarin.com/schemas/2014/forms"
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
        xmlns:local="clr-namespace:PortableLoadCell.Views"
+       xmlns:extensions="clr-namespace:PortableLoadCell.Extensions"
        Title="PortableLoadCell"
        x:Class="PortableLoadCell.AppShell">
 
@@ -82,7 +83,10 @@
         https://docs.microsoft.com/dotnet/api/xamarin.forms.shellgroupitem.flyoutdisplayoptions?view=xamarin-forms
     -->
 
-    <FlyoutItem Title="Trainings" Icon="icon_feed.png">
+    <FlyoutItem Title="Trainings" Icon="{extensions:ImageResource PortableLoadCell.Resources.icons.fitness_center_FILL0_wght400_GRAD0_opsz48.png}">
+        <ShellContent Route="ItemsPage" ContentTemplate="{DataTemplate local:ItemsPage}" />
+    </FlyoutItem>
+    <FlyoutItem Title="Training log" Icon="{extensions:ImageResource PortableLoadCell.Resources.icons.fact_check_FILL0_wght400_GRAD0_opsz48.png}">
         <ShellContent Route="ItemsPage" ContentTemplate="{DataTemplate local:ItemsPage}" />
     </FlyoutItem>
    <FlyoutItem Title="About" Icon="icon_about.png">

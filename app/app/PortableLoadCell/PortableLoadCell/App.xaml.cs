@@ -1,4 +1,5 @@
-﻿using PortableLoadCell.Services;
+﻿using PortableLoadCell.Models;
+using PortableLoadCell.Services;
 using PortableLoadCell.Views;
 using System;
 using Xamarin.Forms;
@@ -10,7 +11,7 @@ namespace PortableLoadCell {
       public App() {
          InitializeComponent();
 
-         DependencyService.Register<MockDataStore>();
+         DependencyService.Register<IDataStore<Training>, LocalFileTrainingDataStore>();
          MainPage = new AppShell();
       }
 
