@@ -110,10 +110,37 @@ namespace PortableLoadCell.ViewModels {
       }
 
       private void MoveNextPeriod() {
-         _currentPeriod++;
+         if (_periods?.Length > 0 && _currentPeriod + 1 < _periods?.Length) {
+            _currentPeriod++;
+            SetCurrentPeriod();
+         }
+      }
+
+      private void MovePrevPeriod() {
+         if (_periods?.Length > 0 && _currentPeriod - 1 >= 0) {
+            _currentPeriod--;
+            SetCurrentPeriod();
+         }
+      }
+
+      private void MovePrevSet() {
+         if (_periods?.Length > 0) {
+            while (_periods[_currentPeriod--].Rep > 1) { }
+            SetCurrentPeriod();
+         }
+      }
+
+      private void MoveNextSet() {
+         if (_periods?.Length > 0) {
+            while (_currentPeriod + 1 < _periods.Length && _periods[_currentPeriod++].Rep > 1) { }
+            SetCurrentPeriod();
+         }
+      }
+
+      private void SetCurrentPeriod() {
          Rep = _periods[_currentPeriod].Rep;
          Set = _periods[_currentPeriod].Set;
-         Counter = _periods[_currentPeriod].To - _currentTime;
+         Counter = _periods[_currentPeriod].To - _periods[_currentPeriod].From;
          Color = _periods[_currentPeriod].Color;
 
          RepsProgress = (float) _periods[_currentPeriod].Rep / TotalReps;
@@ -128,6 +155,7 @@ namespace PortableLoadCell.ViewModels {
             NextPeriod = "";
             NextPeriodTime = 0;
          }
+         UpdateCommands();
       }
 
       public async void OnTrainingIdChanged() {
@@ -212,18 +240,23 @@ namespace PortableLoadCell.ViewModels {
       }
 
       private void InitializeCommands() {
-         PlayPauseCommand = new Command(OnPlayPauseCommand);
+         PlayPauseCommand = new Command(OnPlayPauseCommand, CanPlayPause);
          ExitCommand = new Command(OnExitCommand);
          ConnectHangboardCommand = new Command(OnConnectHangboardCommand);
 
-         PrevRepCommand = new Command(OnPrevRepCommand);
-         NextRepCommand = new Command(OnNextRepCommand);
-         PrevSetCommand = new Command(OnPrevSetCommand);
-         NextSetCommand = new Command(OnNextSetCommand);
+         PrevRepCommand = new Command(OnPrevRepCommand, CanPrevRep);
+         NextRepCommand = new Command(OnNextRepCommand, CanNextRep);
+         PrevSetCommand = new Command(OnPrevSetCommand, CanPrevSet);
+         NextSetCommand = new Command(OnNextSetCommand, CanNextSet);
       }
 
       private void OnPlayPauseCommand(object obj) {
          IsRunning = !IsRunning;
+      }
+
+      private bool CanPlayPause(object obj) {
+         // throw new NotImplementedException();
+         return true;
       }
 
       private async void OnExitCommand(object obj) {
@@ -236,24 +269,56 @@ namespace PortableLoadCell.ViewModels {
          await Shell.Current.GoToAsync($"{nameof(BleDevicesPage)}");
       }
 
+      private void UpdateCommands() {
+         ((Command) PlayPauseCommand).ChangeCanExecute();
+         ((Command) ExitCommand).ChangeCanExecute();
+         ((Command) ConnectHangboardCommand).ChangeCanExecute();
+
+         ((Command) PrevRepCommand).ChangeCanExecute();
+         ((Command) NextRepCommand).ChangeCanExecute();
+         ((Command) PrevSetCommand).ChangeCanExecute();
+         ((Command) NextSetCommand).ChangeCanExecute();
+      }
+
+      private bool CanNextSet(object obj) {
+         return _currentPeriod < _periods?.Length;
+      }
+
+      private bool CanPrevSet(object obj) {
+         return _currentPeriod > 0;
+      }
+
+      private bool CanNextRep(object obj) {
+         return _currentPeriod + 1 < _periods?.Length;
+      }
+
+      private bool CanPrevRep(object obj) {
+         return _currentPeriod - 1 >= 0;
+      }
+
       private void OnPrevRepCommand(object obj) {
-         _currentTime -= 2;
+         IsRunning = false;
+         MovePrevPeriod();
+         _currentTime = _periods[_currentPeriod].From;
       }
 
       private void OnNextRepCommand(object obj) {
-         _currentTime += 1;
+         IsRunning = false;
+         MoveNextPeriod();
+         _currentTime = _periods[_currentPeriod].From;
       }
 
       private void OnPrevSetCommand(object obj) {
          IsRunning = false;
-         _currentPeriod = Math.Max(-1, _currentPeriod - 1);
-         MoveNextPeriod();
+         MovePrevSet();
+         _currentTime = _periods[_currentPeriod].From;
+
       }
 
       private void OnNextSetCommand(object obj) {
          IsRunning = false;
-         _currentPeriod = Math.Min((_periods?.Length ?? 0) - 1, _currentPeriod + 1);
-         MoveNextPeriod();
+         MoveNextSet();
+         _currentTime = _periods[_currentPeriod].From;
       }
 
       private async Task LoadTraining() {
@@ -269,6 +334,7 @@ namespace PortableLoadCell.ViewModels {
                NextPeriod = _periods[_currentPeriod + 1].Name;
                NextPeriodTime = _periods[_currentPeriod + 1].Time;
             }
+            UpdateCommands();
          } catch (Exception) {
             Debug.WriteLine("Failed to Load Item");
          }

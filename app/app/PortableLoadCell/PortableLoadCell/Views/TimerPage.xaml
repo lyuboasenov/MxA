@@ -17,13 +17,14 @@
             <converters:SecondsToStringConverter x:Key="secondsConverter" />
             <converters:SecondsToFontSizeConverter x:Key="secondsToFontSizeConverter" />
             <Color x:Key="Accent">#96d1ff</Color>
+            <Thickness x:Key="ImageButtonMargin" Left="10" Right="10" />
             <Style TargetType="ImageButton">
                 <Setter Property="CornerRadius" Value="35"></Setter>
                 <Setter Property="WidthRequest" Value="70"></Setter>
                 <Setter Property="HeightRequest" Value="70"></Setter>
                 <Setter Property="Padding" Value="10"></Setter>
                 <Setter Property="BackgroundColor" Value="#96d1ff"></Setter>
-                <Setter Property="Margin" Value="0 10 0 10"></Setter>
+                <Setter Property="Margin" Value="{StaticResource ImageButtonMargin}"></Setter>
             </Style>
             <Style TargetType="ProgressBar">
                 <Setter Property="VerticalOptions" Value="CenterAndExpand"/>
@@ -107,13 +108,13 @@
             </Grid.ColumnDefinitions>
 
             <ImageButton Grid.Column="0"
-                      Command="{Binding MinusSecondCommand}"
+                      Command="{Binding PrevRepCommand}"
                       Source="{extensions:ImageResource PortableLoadCell.Resources.icons.navigate_before_FILL0_wght400_GRAD0_opsz48.png}" />
             <StackLayout Grid.Column="1">
                 <ProgressBar Progress="{Binding RepsProgress}" />
             </StackLayout>
             <ImageButton Grid.Column="2"
-                      Command="{Binding PlusSecondCommand}"
+                      Command="{Binding NextRepCommand}"
                       Source="{extensions:ImageResource PortableLoadCell.Resources.icons.navigate_next_FILL0_wght400_GRAD0_opsz48.png}" />
         </Grid>
 
