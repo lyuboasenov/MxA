@@ -12,9 +12,14 @@
 #define BLE_DEBUG(x, y,...)                                              //!< DEBUG null
 #endif
 
-#define SERVICE_UUID 0x181D    // Weight Scale
+#define DEVICE_NAME "[MxA] Portable"
+
+#define WEIGHT_SERVICE_UUID 0x181D                           // Weight Scale
 #define WEIGHT_CHARACTERISTIC_UUID 0x2A98
 #define DEVICE_NAME_CHARACTERISTIC_UUID 0x2A00
+
+#define BATTERY_LEVEL_SERVICE_UUID 0x180F
+#define BATTERY_CHARACTERISTIC_UUID 0x2A19
 
 class Ble {
    public:
@@ -29,6 +34,7 @@ class Ble {
    bool connected();
 
    void weight_notify(float value);
+   void battery_notify(uint16_t value);
 
    private:
    BLEServer * _server = NULL;
@@ -40,6 +46,9 @@ class Ble {
 
    BLECharacteristic _device_name_characteristics;
    BLEDescriptor _device_name_descriptor;
+
+   BLECharacteristic _battery_level_characteristics;
+   BLEDescriptor _battery_level_descriptor;
 };
 
 // Setup callbacks onConnect and onDisconnect

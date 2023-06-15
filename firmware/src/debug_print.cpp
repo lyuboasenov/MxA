@@ -18,7 +18,7 @@ const char * get_level(verbosity_t lvl) {
 }
 
 void debug_print(verbosity_t level, const char *pref, const char *fmt, ...) {
-#ifndef DISABLED_SERIAL && VERBOSITY > 0
+#if !defined(DISABLED_SERIAL) && VERBOSITY > 0
    if (level <= VERBOSITY) {
       #ifdef ESP32
       std::lock_guard<std::mutex> lck(_mutex);
@@ -40,7 +40,7 @@ void debug_print(verbosity_t level, const char *pref, const char *fmt, ...) {
 }
 
 void debug_print_ln(verbosity_t level, const char *pref, const char *fmt, ...) {
-#ifndef DISABLED_SERIAL && VERBOSITY > 0
+#if !defined(DISABLED_SERIAL) && VERBOSITY > 0
    if (level <= VERBOSITY) {
       #ifdef ESP32
       std::lock_guard<std::mutex> lck(_mutex);
@@ -64,7 +64,7 @@ void debug_print_ln(verbosity_t level, const char *pref, const char *fmt, ...) {
 }
 
 void dump_buffer(verbosity_t level, const char *pref, const uint8_t *buffer, size_t size) {
-#ifndef DISABLED_SERIAL && VERBOSITY > 0
+#if !defined(DISABLED_SERIAL) && VERBOSITY > 0
    if (level <= VERBOSITY) {
       #ifdef ESP32
       std::lock_guard<std::mutex> lck(_mutex);

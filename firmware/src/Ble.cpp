@@ -10,32 +10,50 @@ Ble::Ble() :
       BLEUUID((uint16_t) WEIGHT_CHARACTERISTIC_UUID),
       BLECharacteristic::PROPERTY_NOTIFY |
       BLECharacteristic::PROPERTY_WRITE |
+      BLECharacteristic::PROPERTY_READ),
+   _battery_level_descriptor(BLEUUID((uint16_t)0x2901)),
+   _battery_level_characteristics(
+      BLEUUID((uint16_t) BATTERY_CHARACTERISTIC_UUID),
+      BLECharacteristic::PROPERTY_NOTIFY |
       BLECharacteristic::PROPERTY_READ)
     {}
 
 void Ble::begin() {
 
-   BLEDevice::init("Portable scale");
+   BLEDevice::init(DEVICE_NAME);
    _server = BLEDevice::createServer();
    _server->setCallbacks(new MyServerCallbacks(this));
 
-   BLEService *pService = _server->createService(BLEUUID((uint16_t) SERVICE_UUID));
-   pService->addCharacteristic(&_weight_characteristics);
-   _weight_descriptor.setValue("Weight in kg");
+   BLEService *weightService = _server->createService(BLEUUID((uint16_t) WEIGHT_SERVICE_UUID));
+   weightService->addCharacteristic(&_weight_characteristics);
+   _weight_descriptor.setValue("Weight in kilograms measured by the device");
    _weight_characteristics.addDescriptor(&_weight_descriptor);
 
-   pService->addCharacteristic(&_device_name_characteristics);
-   _device_name_descriptor.setValue("Portable scale");
+   BLEService *batteryService = _server->createService(BLEUUID((uint16_t) BATTERY_LEVEL_SERVICE_UUID));
+   batteryService->addCharacteristic(&_battery_level_characteristics);
+   _battery_level_descriptor.setValue("Weight in kilograms measured by the device");
+   _battery_level_characteristics.addDescriptor(&_weight_descriptor);
+
+   weightService->addCharacteristic(&_device_name_characteristics);
+   batteryService->addCharacteristic(&_device_name_characteristics);
+   _device_name_descriptor.setValue(DEVICE_NAME);
    _device_name_characteristics.addDescriptor(&_device_name_descriptor);
 
-   pService->start();
+   weightService->start();
+   batteryService->start();
 
-   // BLEAdvertising *pAdvertising = pServer->getAdvertising();  // this still is working for backward compatibility
-   BLEAdvertising *pAdvertising = BLEDevice::getAdvertising();
-   pAdvertising->addServiceUUID(BLEUUID((uint16_t) SERVICE_UUID));
-   pAdvertising->setScanResponse(true);
-   pAdvertising->setMinPreferred(0x06);  // functions that help with iPhone connections issue
-   pAdvertising->setMinPreferred(0x12);
+   BLEAdvertising *weightAdvertising = BLEDevice::getAdvertising();
+   weightAdvertising->addServiceUUID(BLEUUID((uint16_t) WEIGHT_SERVICE_UUID));
+   weightAdvertising->setScanResponse(true);
+   weightAdvertising->setMinPreferred(0x06);  // functions that help with iPhone connections issue
+   weightAdvertising->setMinPreferred(0x12);
+
+   BLEAdvertising *weightAdvertising = BLEDevice::getAdvertising();
+   weightAdvertising->addServiceUUID(BLEUUID((uint16_t) BATTERY_LEVEL_SERVICE_UUID));
+   weightAdvertising->setScanResponse(true);
+   weightAdvertising->setMinPreferred(0x06);  // functions that help with iPhone connections issue
+   weightAdvertising->setMinPreferred(0x12);
+
    BLEDevice::startAdvertising();
 }
 
@@ -63,6 +81,11 @@ void Ble::weight_notify(float value) {
    double double_value = (double) value;
    _weight_characteristics.setValue(double_value);
    _weight_characteristics.notify();
+}
+
+void Ble::battery_notify(uint16_t value) {
+   _battery_level_characteristics.setValue(value);
+   _battery_level_characteristics.notify();
 }
 
 void Ble::on_connect(BLEServer * server) {
