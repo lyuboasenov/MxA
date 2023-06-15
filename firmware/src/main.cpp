@@ -2,10 +2,12 @@
 
 #include "Ble.h"
 #include "LoadCell.h"
+#include "BatteryLevel.h"
 #include "debug_print.h"
 
 Ble _ble;
 LoadCell _load_cell;
+BatteryLevel _battery;
 
 void setup() {
    #ifdef DEBUG_OUTPUT_ENABLED
@@ -14,17 +16,16 @@ void setup() {
 
    DEBUG_OUTPUT(verbosity_t::info, "MAIN", "  _________________________________");
    DEBUG_OUTPUT(verbosity_t::info, "MAIN", "((                                  ))");
-   DEBUG_OUTPUT(verbosity_t::info, "MAIN", " ))   F = MxA v. %s (( ", VERSION);
+   DEBUG_OUTPUT(verbosity_t::info, "MAIN", " ))       MxA v. %s (( ", VERSION);
    DEBUG_OUTPUT(verbosity_t::info, "MAIN", "((                                  ))");
    DEBUG_OUTPUT(verbosity_t::info, "MAIN", "  ----------------------------------  ");
 
    _load_cell.begin();
    _ble.begin();
-
-   pinMode(16, OUTPUT);
-   digitalWrite(16, HIGH);
+   _battery.begin();
 }
 
+uint32_t last_battery_checked_at = 0;
 float units;
 void loop() {
 
@@ -34,6 +35,10 @@ void loop() {
 
    if (_ble.connected()) {
       _ble.weight_notify(units);
+
+      if (millis() - last_battery_checked_at > BATTERY_LEVEL_CHECK_INTERVAL_MILLIS) {
+         _ble.battery_notify(_battery.get_level());
+      }
 
       DEBUG_OUTPUT(verbosity_t::debug, "MAIN", "%d %d", millis(), units);
    } else {

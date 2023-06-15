@@ -31,7 +31,7 @@ void Ble::begin() {
 
    BLEService *batteryService = _server->createService(BLEUUID((uint16_t) BATTERY_LEVEL_SERVICE_UUID));
    batteryService->addCharacteristic(&_battery_level_characteristics);
-   _battery_level_descriptor.setValue("Weight in kilograms measured by the device");
+   _battery_level_descriptor.setValue("Device battery level measured in per cent");
    _battery_level_characteristics.addDescriptor(&_weight_descriptor);
 
    weightService->addCharacteristic(&_device_name_characteristics);
@@ -48,11 +48,11 @@ void Ble::begin() {
    weightAdvertising->setMinPreferred(0x06);  // functions that help with iPhone connections issue
    weightAdvertising->setMinPreferred(0x12);
 
-   BLEAdvertising *weightAdvertising = BLEDevice::getAdvertising();
-   weightAdvertising->addServiceUUID(BLEUUID((uint16_t) BATTERY_LEVEL_SERVICE_UUID));
-   weightAdvertising->setScanResponse(true);
-   weightAdvertising->setMinPreferred(0x06);  // functions that help with iPhone connections issue
-   weightAdvertising->setMinPreferred(0x12);
+   BLEAdvertising *batteryAdvertising = BLEDevice::getAdvertising();
+   batteryAdvertising->addServiceUUID(BLEUUID((uint16_t) BATTERY_LEVEL_SERVICE_UUID));
+   batteryAdvertising->setScanResponse(true);
+   batteryAdvertising->setMinPreferred(0x06);  // functions that help with iPhone connections issue
+   batteryAdvertising->setMinPreferred(0x12);
 
    BLEDevice::startAdvertising();
 }
