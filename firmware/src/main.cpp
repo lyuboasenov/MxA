@@ -31,6 +31,11 @@ void loop() {
 
    _ble.check_to_reconnect();
 
+   if (_ble.had_received_weight()) {
+      float received_weight = _ble.read_received_weight();
+      _load_cell.set_units(received_weight);
+   }
+
    units = _load_cell.get_units(5);
 
    if (_ble.connected()) {

@@ -33,6 +33,9 @@ class Ble {
 
    bool connected();
 
+   void on_set_weight(float value);
+   float read_received_weight();
+   bool had_received_weight();
    void weight_notify(float value);
    void battery_notify(uint16_t value);
 
@@ -40,6 +43,9 @@ class Ble {
    BLEServer * _server = NULL;
    bool _device_connected = false;
    bool _old_device_connected = false;
+
+   bool _received_weight = false;
+   float _received_weight_value = .0f;
 
    BLECharacteristic _weight_characteristics;
    BLEDescriptor _weight_descriptor;
@@ -63,6 +69,18 @@ class MyServerCallbacks : public BLEServerCallbacks {
 
    public:
    MyServerCallbacks(Ble* ble) : _ble(ble) { }
+
+   private:
+   Ble * _ble;
+};
+
+class WeightCharacteristicCallback : public BLECharacteristicCallbacks {
+   void onWrite(BLECharacteristic* pCharacteristic) {
+      double doubleValue = (double) pCharacteristic->getData();
+      _ble->on_set_weight((float) doubleValue);
+   }
+
+   WeightCharacteristicCallback(Ble* ble) : _ble(ble) { }
 
    private:
    Ble * _ble;

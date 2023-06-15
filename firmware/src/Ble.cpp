@@ -28,6 +28,7 @@ void Ble::begin() {
    weightService->addCharacteristic(&_weight_characteristics);
    _weight_descriptor.setValue("Weight in kilograms measured by the device");
    _weight_characteristics.addDescriptor(&_weight_descriptor);
+   _weight_characteristics.setCallbacks(new WeightCharacteristicCallback(this));
 
    BLEService *batteryService = _server->createService(BLEUUID((uint16_t) BATTERY_LEVEL_SERVICE_UUID));
    batteryService->addCharacteristic(&_battery_level_characteristics);
@@ -98,4 +99,18 @@ void Ble::on_disconnect(BLEServer * server) {
    if (server == _server) {
       _device_connected = false;
    }
+}
+
+void Ble::on_set_weight(float value) {
+   _received_weight = true;
+   _received_weight_value = value;
+}
+
+float Ble::read_received_weight() {
+   _received_weight = false;
+   return _received_weight_value;
+}
+
+bool Ble::had_received_weight() {
+   return _received_weight;
 }
