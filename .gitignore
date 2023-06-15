@@ -7,3 +7,8 @@
 bin/
 obj/
 .vs/
+schematic/electronic-hangboard/fp-info-cache
+schematic/electronic-hangboard/electronic-hangboard-backups/
+schematic/electronic-hangboard-panelize/
+schematic/electronic-hangboard/fp-info-cache
+app/app/PortableLoadCell/PortableLoadCell.Android/PortableLoadCell.Android.csproj.user

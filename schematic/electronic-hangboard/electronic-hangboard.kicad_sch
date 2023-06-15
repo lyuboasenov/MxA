@@ -1313,58 +1313,6 @@
         )
       )
     )
-    (symbol "pkl_power:VBAT" (power) (pin_names (offset 0)) (in_bom yes) (on_board yes)
-      (property "Reference" "#PWR" (at 0 -3.81 0)
-        (effects (font (size 1.27 1.27)) hide)
-      )
-      (property "Value" "VBAT" (at 0 3.556 0)
-        (effects (font (size 1.27 1.27)))
-      )
-      (property "Footprint" "" (at 0 0 0)
-        (effects (font (size 1.27 1.27)) hide)
-      )
-      (property "Datasheet" "" (at 0 0 0)
-        (effects (font (size 1.27 1.27)) hide)
-      )
-      (property "ki_keywords" "power-flag battery" (at 0 0 0)
-        (effects (font (size 1.27 1.27)) hide)
-      )
-      (property "ki_description" "Power symbol creates a global label with name \"VBAT\"" (at 0 0 0)
-        (effects (font (size 1.27 1.27)) hide)
-      )
-      (symbol "VBAT_0_1"
-        (polyline
-          (pts
-            (xy -0.762 1.27)
-            (xy 0 2.54)
-          )
-          (stroke (width 0) (type default))
-          (fill (type none))
-        )
-        (polyline
-          (pts
-            (xy 0 0)
-            (xy 0 2.54)
-          )
-          (stroke (width 0) (type default))
-          (fill (type none))
-        )
-        (polyline
-          (pts
-            (xy 0 2.54)
-            (xy 0.762 1.27)
-          )
-          (stroke (width 0) (type default))
-          (fill (type none))
-        )
-      )
-      (symbol "VBAT_1_1"
-        (pin power_in line (at 0 0 90) (length 0) hide
-          (name "VBAT" (effects (font (size 1.27 1.27))))
-          (number "1" (effects (font (size 1.27 1.27))))
-        )
-      )
-    )
     (symbol "power:+3V3" (power) (pin_names (offset 0)) (in_bom yes) (on_board yes)
       (property "Reference" "#PWR" (at 0 -3.81 0)
         (effects (font (size 1.27 1.27)) hide)
@@ -3456,36 +3404,6 @@
     )
   )
 
-  (symbol (lib_id "pkl_power:VBAT") (at 246.38 138.43 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
-    (uuid 3c6a0c25-a1a2-40da-b02f-907fbce8b11e)
-    (property "Reference" "#PWR0102" (at 246.38 142.24 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (property "Value" "VBAT" (at 246.38 134.8542 0)
-      (effects (font (size 1.27 1.27)))
-    )
-    (property "Footprint" "" (at 246.38 138.43 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (property "Datasheet" "" (at 246.38 138.43 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (pin "1" (uuid 65fef93c-0d41-45db-9ed3-f90e32ed9b08))
-    (instances
-      (project "meteo_2"
-        (path "/e9908eee-3e97-4614-a5f4-fd4f28d04543"
-          (reference "#PWR0102") (unit 1)
-        )
-      )
-      (project "electronic-hangboard"
-        (path "/ecd16e9a-0fdc-44a0-8eee-a04d668b68f5"
-          (reference "#PWR028") (unit 1)
-        )
-      )
-    )
-  )
-
   (symbol (lib_id "Switch:SW_SPST") (at 162.56 146.05 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 3d267a96-f98a-496f-8d9c-5a2dde029c64)
@@ -3943,6 +3861,31 @@
       (project "electronic-hangboard"
         (path "/ecd16e9a-0fdc-44a0-8eee-a04d668b68f5"
           (reference "J4") (unit 1)
+        )
+      )
+    )
+  )
+
+  (symbol (lib_id "power:+BATT") (at 246.38 138.43 0) (unit 1)
+    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
+    (uuid 81a58472-bdca-4876-ae6f-dd370ba17648)
+    (property "Reference" "#PWR019" (at 246.38 142.24 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Value" "+BATT" (at 246.38 134.9281 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "" (at 246.38 138.43 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "" (at 246.38 138.43 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid 12d51a4a-75f4-4ca1-9b17-1cf09c9b31c6))
+    (instances
+      (project "electronic-hangboard"
+        (path "/ecd16e9a-0fdc-44a0-8eee-a04d668b68f5"
+          (reference "#PWR019") (unit 1)
         )
       )
     )
