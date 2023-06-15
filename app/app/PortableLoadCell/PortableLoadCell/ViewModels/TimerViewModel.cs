@@ -1,5 +1,6 @@
 ﻿using Plugin.BLE;
 using Plugin.BLE.Abstractions.Contracts;
+using Plugin.BLE.Abstractions.EventArgs;
 using Plugin.SimpleAudioPlayer;
 using PortableLoadCell.Models;
 using PortableLoadCell.Services;
@@ -52,6 +53,8 @@ namespace PortableLoadCell.ViewModels {
       public uint TotalSets { get; set; }
       public uint Counter { get; set; }
       public uint Load { get; set; }
+      public uint BatteryLevel { get; set; }
+      public bool BatteryLevelVisible { get; set; } = false;
       public float RepsProgress { get; set; }
       public float SetsProgress { get; set; }
       public Color Color { get; set; }
@@ -143,12 +146,25 @@ namespace PortableLoadCell.ViewModels {
                   _ble = await CrossBluetoothLE.Current.Adapter.
                      ConnectToKnownDeviceAsync(Guid.Parse(bleAddress));
 
-                  var service = await _ble.GetServiceAsync(Guid.Parse("0000181d-0000-1000-8000-00805f9b34fb"));
-                  if (service != null) {
-                     var characteristic = await service.GetCharacteristicAsync(Guid.Parse("00002a98-0000-1000-8000-00805f9b34fb"));
+                  var loadService = await _ble.GetServiceAsync(Guid.Parse("0000181d-0000-1000-8000-00805f9b34fb"));
+                  if (loadService != null) {
+                     var characteristic = await loadService.GetCharacteristicAsync(Guid.Parse("00002a98-0000-1000-8000-00805f9b34fb"));
                      if (characteristic != null) {
-                        characteristic.ValueUpdated += Characteristic_ValueUpdated;
+                        characteristic.ValueUpdated += Load_ValueUpdated;
                         await characteristic.StartUpdatesAsync();
+                     }
+                  }
+
+                  var batteryService = await _ble.GetServiceAsync(Guid.Parse("0000180f-0000-1000-8000-00805f9b34fb"));
+                  if (batteryService != null) {
+                     var characteristic = await batteryService.GetCharacteristicAsync(Guid.Parse("00002a19-0000-1000-8000-00805f9b34fb"));
+                     if (characteristic != null) {
+                        var batteryLevel = await characteristic.ReadAsync();
+
+                        var uIntValue = BitConverter.ToUInt16(batteryLevel, 0);
+                        Debug.Write($"Value: {uIntValue}");
+                        BatteryLevel = (uint) uIntValue;
+                        BatteryLevelVisible = true;
                      }
                   }
 
@@ -161,7 +177,7 @@ namespace PortableLoadCell.ViewModels {
          }
       }
 
-      private void Characteristic_ValueUpdated(object sender, Plugin.BLE.Abstractions.EventArgs.CharacteristicUpdatedEventArgs e) {
+      private void Load_ValueUpdated(object sender, Plugin.BLE.Abstractions.EventArgs.CharacteristicUpdatedEventArgs e) {
          var doubleValue = BitConverter.ToDouble(e.Characteristic.Value, 0);
          Debug.Write($"Value: {doubleValue}");
          Load = (uint) doubleValue;

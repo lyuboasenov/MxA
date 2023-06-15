@@ -8,6 +8,14 @@
   <ItemGroup>
     <None Remove="Resources\countdown.wav" />
     <None Remove="Resources\end_rep.mp3" />
+    <None Remove="Resources\icons\battery_0_bar_FILL0_wght400_GRAD0_opsz48.png" />
+    <None Remove="Resources\icons\battery_1_bar_FILL0_wght400_GRAD0_opsz48.png" />
+    <None Remove="Resources\icons\battery_2_bar_FILL0_wght400_GRAD0_opsz48.png" />
+    <None Remove="Resources\icons\battery_3_bar_FILL0_wght400_GRAD0_opsz48.png" />
+    <None Remove="Resources\icons\battery_4_bar_FILL0_wght400_GRAD0_opsz48.png" />
+    <None Remove="Resources\icons\battery_5_bar_FILL0_wght400_GRAD0_opsz48.png" />
+    <None Remove="Resources\icons\battery_6_bar_FILL0_wght400_GRAD0_opsz48.png" />
+    <None Remove="Resources\icons\battery_full_FILL0_wght400_GRAD0_opsz48.png" />
     <None Remove="Resources\icons\bluetooth_connected_FILL0_wght400_GRAD0_opsz48.png" />
     <None Remove="Resources\icons\bluetooth_FILL0_wght400_GRAD0_opsz48.png" />
     <None Remove="Resources\icons\close_FILL0_wght400_GRAD0_opsz48.png" />
@@ -23,6 +31,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Resources\icons\battery_0_bar_FILL0_wght400_GRAD0_opsz48.png" />
+    <EmbeddedResource Include="Resources\icons\battery_1_bar_FILL0_wght400_GRAD0_opsz48.png" />
+    <EmbeddedResource Include="Resources\icons\battery_2_bar_FILL0_wght400_GRAD0_opsz48.png" />
+    <EmbeddedResource Include="Resources\icons\battery_3_bar_FILL0_wght400_GRAD0_opsz48.png" />
+    <EmbeddedResource Include="Resources\icons\battery_4_bar_FILL0_wght400_GRAD0_opsz48.png" />
+    <EmbeddedResource Include="Resources\icons\battery_5_bar_FILL0_wght400_GRAD0_opsz48.png" />
+    <EmbeddedResource Include="Resources\icons\battery_6_bar_FILL0_wght400_GRAD0_opsz48.png" />
+    <EmbeddedResource Include="Resources\icons\battery_full_FILL0_wght400_GRAD0_opsz48.png" />
     <EmbeddedResource Include="Resources\icons\close_FILL0_wght400_GRAD0_opsz48.png" />
     <EmbeddedResource Include="Resources\icons\fact_check_FILL0_wght400_GRAD0_opsz48.png" />
     <EmbeddedResource Include="Resources\icons\fitness_center_FILL0_wght400_GRAD0_opsz48.png" />

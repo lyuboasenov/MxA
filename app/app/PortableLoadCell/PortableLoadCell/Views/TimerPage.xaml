@@ -18,6 +18,7 @@
             <x:Boolean x:Key="true">True</x:Boolean>
             <converters:SecondsToStringConverter x:Key="secondsConverter" />
             <converters:SecondsToFontSizeConverter x:Key="secondsToFontSizeConverter" />
+            <converters:BatterLevelToImageConverter x:Key="batterLevelToImageConverter" />
         </ResourceDictionary>
     </ContentPage.Resources>
 
@@ -80,15 +81,22 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
 
 
             <Label Grid.Column="0" Text="{Binding Load}" HorizontalOptions="Center" FontSize="50"/>
+
             <ImageButton Grid.Column="1"
-                      Command="{Binding ConnectHangboardCommand}"
-                      Source="{Binding ConnectHangboardImageSource}"
-                         VerticalOptions="Center"/>
+                        Command="{Binding ConnectHangboardCommand}"
+                        Source="{Binding ConnectHangboardImageSource}"
+                            VerticalOptions="Center"/>
+            <Image Grid.Column="2"
+                    Source="{Binding BatteryLevel, Converter={StaticResource batterLevelToImageConverter}}"
+                    IsVisible="{Binding BatteryLevelVisible}"
+                    WidthRequest="30"
+                    HeightRequest="30" />
         </Grid>
 
         <!-- rep progress -->
