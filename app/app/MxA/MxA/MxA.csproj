@@ -14,15 +14,11 @@
     <None Remove="Resources\countdown.wav" />
     <None Remove="Resources\end_rep.mp3" />
     <None Remove="Resources\fonts\materialdesignicons.ttf" />
-    <None Remove="Resources\icons\fact_check_FILL0_wght400_GRAD0_opsz48.png" />
-    <None Remove="Resources\icons\fitness_center_FILL0_wght400_GRAD0_opsz48.png" />
     <None Remove="Resources\Tones.ogg" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Resources\fonts\materialdesignicons.ttf" />
-    <EmbeddedResource Include="Resources\icons\fact_check_FILL0_wght400_GRAD0_opsz48.png" />
-    <EmbeddedResource Include="Resources\icons\fitness_center_FILL0_wght400_GRAD0_opsz48.png" />
     <EmbeddedResource Include="Resources\sounds\countdown.wav" />
     <EmbeddedResource Include="Resources\sounds\end_rep.mp3" />
     <EmbeddedResource Include="Resources\sounds\Tones.ogg" />
@@ -78,5 +74,9 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Resources\icons\" />
   </ItemGroup>
 </Project>

@@ -1,11 +1,12 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Shell xmlns="http://xamarin.com/schemas/2014/forms"
-       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-       xmlns:local="clr-namespace:MxA.Views"
-       xmlns:extensions="clr-namespace:MxA.Extensions"
-       xmlns:icons="clr-namespace:MxA.Icons.Material"
-       Title="MxA"
-       x:Class="MxA.AppShell">
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="MxA.AppShell"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:extensions="clr-namespace:MxA.Extensions"
+    xmlns:icons="clr-namespace:MxA.Icons.Material"
+    xmlns:local="clr-namespace:MxA.Views"
+    Title="MxA">
 
     <!--
         The overall app visual hierarchy is defined here, along with navigation.
@@ -22,20 +23,48 @@
                 <Setter Property="Shell.DisabledColor" Value="#B4FFFFFF" />
                 <Setter Property="Shell.UnselectedColor" Value="#95FFFFFF" />
                 <Setter Property="Shell.TabBarBackgroundColor" Value="{DynamicResource Primary}" />
-                <Setter Property="Shell.TabBarForegroundColor" Value="White"/>
-                <Setter Property="Shell.TabBarUnselectedColor" Value="#95FFFFFF"/>
-                <Setter Property="Shell.TabBarTitleColor" Value="White"/>
+                <Setter Property="Shell.TabBarForegroundColor" Value="White" />
+                <Setter Property="Shell.TabBarUnselectedColor" Value="#95FFFFFF" />
+                <Setter Property="Shell.TabBarTitleColor" Value="White" />
             </Style>
-            <Style TargetType="TabBar" BasedOn="{StaticResource BaseStyle}" />
-            <Style TargetType="FlyoutItem" BasedOn="{StaticResource BaseStyle}" />
-            <Style TargetType="Label" BasedOn="{StaticResource BaseStyle}">
-                <Setter Property="TextColor" Value="LightBlue"></Setter>
+            <Style BasedOn="{StaticResource BaseStyle}" TargetType="TabBar" />
+            <Style BasedOn="{StaticResource BaseStyle}" TargetType="FlyoutItem" />
+            <Style BasedOn="{StaticResource BaseStyle}" TargetType="Label">
+                <Setter Property="TextColor" Value="LightBlue" />
             </Style>
 
             <!--
-            Default Styles for all Flyout Items
-            https://docs.microsoft.com/xamarin/xamarin-forms/app-fundamentals/shell/flyout#flyoutitem-and-menuitem-style-classes
+                Default Styles for all Flyout Items
+                https://docs.microsoft.com/xamarin/xamarin-forms/app-fundamentals/shell/flyout#flyoutitem-and-menuitem-style-classes
             -->
+
+            <FontImage
+                x:Key="IconInfo"
+                FontFamily="MD"
+                Glyph="{Static icons:IconFont.Info}"
+                Size="50"
+                Color="Black" />
+
+            <FontImage
+                x:Key="IconSettings"
+                FontFamily="MD"
+                Glyph="{Static icons:IconFont.Settings}"
+                Size="50"
+                Color="Black" />
+
+            <FontImage
+                x:Key="IconList"
+                FontFamily="MD"
+                Glyph="{Static icons:IconFont.Fitness_center}"
+                Size="50"
+                Color="Black" />
+
+            <FontImage
+                x:Key="IconLogbook"
+                FontFamily="MD"
+                Glyph="{Static icons:IconFont.Library_add_check}"
+                Size="50"
+                Color="Black" />
         </ResourceDictionary>
     </Shell.Resources>
 
@@ -45,20 +74,20 @@
         https://docs.microsoft.com/dotnet/api/xamarin.forms.shellgroupitem.flyoutdisplayoptions?view=xamarin-forms
     -->
 
-    <FlyoutItem Title="Trainings" Icon="{extensions:ImageResource MxA.Resources.icons.fitness_center_FILL0_wght400_GRAD0_opsz48.png}">
-        <ShellContent Route="ItemsPage" ContentTemplate="{DataTemplate local:ItemsPage}" />
+    <FlyoutItem Title="Workouts" Icon="{StaticResource IconList}">
+        <ShellContent ContentTemplate="{DataTemplate local:ItemsPage}" Route="ItemsPage" />
     </FlyoutItem>
-    <FlyoutItem Title="Training log" Icon="{extensions:ImageResource MxA.Resources.icons.fact_check_FILL0_wght400_GRAD0_opsz48.png}">
-        <ShellContent Route="ItemsPage" ContentTemplate="{DataTemplate local:ItemsPage}" />
+    <FlyoutItem Title="Logbook" Icon="{StaticResource IconLogbook}">
+        <ShellContent ContentTemplate="{DataTemplate local:ItemsPage}" Route="ItemsPage" />
     </FlyoutItem>
-    <FlyoutItem Title="Settings" Icon="{Static icons:IconFont.Info}">
-        <ShellContent Route="SettingsPage" ContentTemplate="{DataTemplate local:SettingsPage}" />
+    <FlyoutItem Title="Settings" Icon="{StaticResource IconSettings}">
+        <ShellContent ContentTemplate="{DataTemplate local:SettingsPage}" Route="SettingsPage" />
     </FlyoutItem>
-    <FlyoutItem Title="About" Icon="{Static icons:IconFont.Info}">
-        <ShellContent Route="AboutPage" ContentTemplate="{DataTemplate local:AboutPage}" />
+    <FlyoutItem Title="About" Icon="{StaticResource IconInfo}">
+        <ShellContent ContentTemplate="{DataTemplate local:AboutPage}" Route="AboutPage" />
     </FlyoutItem>
 
-    <!-- When the Flyout is visible this will be a menu item you can tie a click behavior to  -->
+    <!--  When the Flyout is visible this will be a menu item you can tie a click behavior to  -->
     <!--<MenuItem Text="Logout" StyleClass="MenuItemLayoutStyle" Clicked="OnMenuItemClicked">
     </MenuItem>-->
 
@@ -70,7 +99,7 @@
         await Shell.Current.GoToAsync("//LoginPage");
     -->
     <TabBar>
-        <ShellContent Route="TimerPage" ContentTemplate="{DataTemplate local:TimerPage}" />
+        <ShellContent ContentTemplate="{DataTemplate local:TimerPage}" Route="TimerPage" />
     </TabBar>
 
     <!-- Optional Templates
