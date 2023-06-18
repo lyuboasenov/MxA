@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="MxA.Views.SettingsPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:MxA.ViewModels"
+    Title="{Binding Title}"
+    BackgroundColor="{DynamicResource PageBackgroundColor}"
+    Visual="Material">
+
+    <ContentPage.BindingContext>
+        <vm:SettingsViewModel />
+    </ContentPage.BindingContext>
+
+    <StackLayout Padding="15" Spacing="3">
+
+        <Label FontSize="Medium" Text="Theme" />
+        <Picker SelectedItem="{Binding Theme}">
+            <Picker.Items>
+                <x:String>Device default</x:String>
+                <x:String>Light</x:String>
+                <x:String>Dark</x:String>
+            </Picker.Items>
+        </Picker>
+
+    </StackLayout>
+
+</ContentPage>

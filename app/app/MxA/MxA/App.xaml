@@ -1,0 +1,139 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Application
+    x:Class="MxA.App"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+    <!--
+        Define global resources and styles here, that apply to all pages in your app.
+    -->
+    <Application.Resources>
+        <ResourceDictionary Source="Themes/Light.xaml" />
+
+        <Color x:Key="Primary">#607d8b</Color>
+        <Color x:Key="Complementary">#8b6e60</Color>
+        <Color x:Key="Analogous">#608b84</Color>
+        <Color x:Key="Analogous2">#60678b</Color>
+        <Color x:Key="Triadic">#6e608b</Color>
+        <Color x:Key="Triadic2">#8b607d</Color>
+
+        <Color x:Key="Primary_50">#eceff1</Color>
+        <Color x:Key="Primary_100">#cfd8dc</Color>
+        <Color x:Key="Primary_200">#b0bec5</Color>
+        <Color x:Key="Primary_300">#90a4ae</Color>
+        <Color x:Key="Primary_400">#78909c</Color>
+        <Color x:Key="Primary_500">#607d8b</Color>
+        <Color x:Key="Primary_600">#546e7a</Color>
+        <Color x:Key="Primary_700">#455a64</Color>
+        <Color x:Key="Primary_800">#37474f</Color>
+        <Color x:Key="Primary_900">#263238</Color>
+        <Color x:Key="Complementary_50">#efebe8</Color>
+        <Color x:Key="Complementary_100">#d6ccc7</Color>
+        <Color x:Key="Complementary_200">#bbaaa2</Color>
+        <Color x:Key="Complementary_300">#9f887d</Color>
+        <Color x:Key="Complementary_400">#8b6e60</Color>
+        <Color x:Key="Complementary_500">#775644</Color>
+        <Color x:Key="Complementary_600">#6b4c3e</Color>
+        <Color x:Key="Complementary_700">#5b4034</Color>
+        <Color x:Key="Complementary_800">#4d342b</Color>
+        <Color x:Key="Complementary_900">#3d2720</Color>
+        <Color x:Key="Analogous_1_50">#e6f2f2</Color>
+        <Color x:Key="Analogous_1_100">#c1e0dd</Color>
+        <Color x:Key="Analogous_1_200">#9ccdc8</Color>
+        <Color x:Key="Analogous_1_300">#7eb8b2</Color>
+        <Color x:Key="Analogous_1_400">#6ea8a1</Color>
+        <Color x:Key="Analogous_1_500">#679891</Color>
+        <Color x:Key="Analogous_1_600">#608b84</Color>
+        <Color x:Key="Analogous_1_700">#597b74</Color>
+        <Color x:Key="Analogous_1_800">#536a65</Color>
+        <Color x:Key="Analogous_1_900">#484d4b</Color>
+        <Color x:Key="Analogous_2_50">#e8e9ee</Color>
+        <Color x:Key="Analogous_2_100">#c4c8d6</Color>
+        <Color x:Key="Analogous_2_200">#9ea4ba</Color>
+        <Color x:Key="Analogous_2_300">#7b829e</Color>
+        <Color x:Key="Analogous_2_400">#60678b</Color>
+        <Color x:Key="Analogous_2_500">#474e7a</Color>
+        <Color x:Key="Analogous_2_600">#414772</Color>
+        <Color x:Key="Analogous_2_700">#393e66</Color>
+        <Color x:Key="Analogous_2_800">#31355a</Color>
+        <Color x:Key="Analogous_2_900">#232448</Color>
+        <Color x:Key="Triadic_1_50">#eae8ee</Color>
+        <Color x:Key="Triadic_1_100">#cac5d6</Color>
+        <Color x:Key="Triadic_1_200">#a8a0ba</Color>
+        <Color x:Key="Triadic_1_300">#867b9f</Color>
+        <Color x:Key="Triadic_1_400">#6e608b</Color>
+        <Color x:Key="Triadic_1_500">#584879</Color>
+        <Color x:Key="Triadic_1_600">#524273</Color>
+        <Color x:Key="Triadic_1_700">#483b6a</Color>
+        <Color x:Key="Triadic_1_800">#40355f</Color>
+        <Color x:Key="Triadic_1_900">#322952</Color>
+        <Color x:Key="Triadic_2_50">#eee7eb</Color>
+        <Color x:Key="Triadic_2_100">#d6c2d0</Color>
+        <Color x:Key="Triadic_2_200">#bc9bb1</Color>
+        <Color x:Key="Triadic_2_300">#a07892</Color>
+        <Color x:Key="Triadic_2_400">#8b607d</Color>
+        <Color x:Key="Triadic_2_500">#774e69</Color>
+        <Color x:Key="Triadic_2_600">#6d4863</Color>
+        <Color x:Key="Triadic_2_700">#604059</Color>
+        <Color x:Key="Triadic_2_800">#513a4e</Color>
+        <Color x:Key="Triadic_2_900">#3e2d3e</Color>
+
+        <Style TargetType="ContentPage">
+            <Setter Property="BackgroundColor" Value="{DynamicResource PageBackgroundColor}" />
+        </Style>
+
+        <Style TargetType="Label">
+            <Setter Property="TextColor" Value="{DynamicResource PrimaryTextColor}" />
+        </Style>
+
+        <Style TargetType="Button">
+            <Setter Property="TextColor" Value="{DynamicResource TextColor}" />
+            <Setter Property="VisualStateManager.VisualStateGroups">
+                <VisualStateGroupList>
+                    <VisualStateGroup x:Name="CommonStates">
+                        <VisualState x:Name="Normal">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor" Value="{DynamicResource Primary}" />
+                            </VisualState.Setters>
+                        </VisualState>
+                        <VisualState x:Name="Disabled">
+                            <VisualState.Setters>
+                                <Setter Property="Opacity" Value="25" />
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </Setter>
+        </Style>
+
+
+        <Style TargetType="ImageButton">
+            <Setter Property="CornerRadius" Value="20" />
+            <Setter Property="WidthRequest" Value="40" />
+            <Setter Property="HeightRequest" Value="40" />
+            <Setter Property="Padding" Value="10" />
+            <Setter Property="BackgroundColor" Value="Transparent" />
+            <Setter Property="VisualStateManager.VisualStateGroups">
+                <VisualStateGroupList>
+                    <VisualStateGroup x:Name="CommonStates">
+                        <VisualState x:Name="Pressed">
+                            <VisualState.Setters>
+                                <Setter Property="Opacity" Value="50" />
+                            </VisualState.Setters>
+                        </VisualState>
+                        <VisualState x:Name="Focused">
+                            <VisualState.Setters>
+                                <Setter Property="Opacity" Value="50" />
+                            </VisualState.Setters>
+                        </VisualState>
+                        <VisualState x:Name="Disabled">
+                            <VisualState.Setters>
+                                <Setter Property="Opacity" Value="25" />
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </Setter>
+        </Style>
+
+    </Application.Resources>
+</Application>

@@ -1,0 +1,145 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MxA.Views.NewItemPage"
+             Shell.PresentationMode="ModalAnimated"
+             Title="New Training"
+             xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+             ios:Page.UseSafeArea="true"
+             Visual="Material">
+    <ContentPage.Content>
+        <ScrollView>
+            <StackLayout Spacing="3" Padding="15">
+
+                <Label Text="Name" FontSize="Medium" />
+                <Entry Text="{Binding Name, Mode=TwoWay}" FontSize="Medium" />
+
+                <Label Text="Prep time" FontSize="Medium" />
+                <StackLayout Orientation="Horizontal">
+                    <Stepper Value="{Binding PrepMinutes, Mode=TwoWay}"
+                         Maximum="59"
+                         Minimum="0"
+                         Increment="1"
+                         HorizontalOptions="Center" />
+                    <Entry Text="{Binding PrepMinutes, Mode=TwoWay}" FontSize="Medium" Keyboard="Numeric" MaxLength="2" />
+
+                    <Label Text=":" VerticalOptions="CenterAndExpand"/>
+
+                    <Entry Text="{Binding PrepSeconds, Mode=TwoWay}" FontSize="Medium" Keyboard="Numeric" MaxLength="2" />
+
+                    <Stepper Value="{Binding PrepSeconds, Mode=TwoWay}"
+                         Maximum="59"
+                         Minimum="0"
+                         Increment="1"
+                         HorizontalOptions="Center" />
+                </StackLayout>
+
+                <Label Text="Work time" FontSize="Medium" />
+                <StackLayout Orientation="Horizontal">
+                    <Stepper Value="{Binding WorkMinutes, Mode=TwoWay}"
+                         Maximum="59"
+                         Minimum="0"
+                         Increment="1"
+                         HorizontalOptions="Center" />
+                    <Entry Text="{Binding WorkMinutes, Mode=TwoWay}" FontSize="Medium" Keyboard="Numeric" MaxLength="2" />
+
+                    <Label Text=":" VerticalOptions="CenterAndExpand"/>
+
+                    <Entry Text="{Binding WorkSeconds, Mode=TwoWay}" FontSize="Medium" Keyboard="Numeric" MaxLength="2" />
+
+                    <Stepper Value="{Binding WorkSeconds, Mode=TwoWay}"
+                         Maximum="59"
+                         Minimum="0"
+                         Increment="1"
+                         HorizontalOptions="Center" />
+                </StackLayout>
+
+                <Label Text="Rest time" FontSize="Medium" />
+                <StackLayout Orientation="Horizontal">
+                    <Stepper Value="{Binding RestMinutes, Mode=TwoWay}"
+                         Maximum="59"
+                         Minimum="0"
+                         Increment="1"
+                         HorizontalOptions="Center" />
+                    <Entry Text="{Binding RestMinutes, Mode=TwoWay}" FontSize="Medium" Keyboard="Numeric" MaxLength="2" />
+
+                    <Label Text=":" VerticalOptions="CenterAndExpand"/>
+
+                    <Entry Text="{Binding RestSeconds, Mode=TwoWay}" FontSize="Medium" Keyboard="Numeric" MaxLength="2" />
+
+                    <Stepper Value="{Binding RestSeconds, Mode=TwoWay}"
+                         Maximum="59"
+                         Minimum="0"
+                         Increment="1"
+                         HorizontalOptions="Center" />
+                </StackLayout>
+
+                <Label Text="Set rest time" FontSize="Medium" />
+                <StackLayout Orientation="Horizontal">
+                    <Stepper Value="{Binding SetRestMinutes, Mode=TwoWay}"
+                         Maximum="59"
+                         Minimum="0"
+                         Increment="1"
+                         HorizontalOptions="Center" />
+                    <Entry Text="{Binding SetRestMinutes, Mode=TwoWay}" FontSize="Medium" Keyboard="Numeric" MaxLength="2" />
+
+                    <Label Text=":" VerticalOptions="CenterAndExpand"/>
+
+                    <Entry Text="{Binding SetRestSeconds, Mode=TwoWay}" FontSize="Medium" Keyboard="Numeric" MaxLength="2" />
+
+                    <Stepper Value="{Binding SetRestSeconds, Mode=TwoWay}"
+                         Maximum="59"
+                         Minimum="0"
+                         Increment="1"
+                         HorizontalOptions="Center" />
+                </StackLayout>
+
+                <Label Text="Cool down time" FontSize="Medium" />
+                <StackLayout Orientation="Horizontal">
+                    <Stepper Value="{Binding CoolDownMinutes, Mode=TwoWay}"
+                         Maximum="59"
+                         Minimum="0"
+                         Increment="1"
+                         HorizontalOptions="Center" />
+                    <Entry Text="{Binding CoolDownMinutes, Mode=TwoWay}" FontSize="Medium" Keyboard="Numeric" MaxLength="2" />
+
+                    <Label Text=":" VerticalOptions="CenterAndExpand"/>
+
+                    <Entry Text="{Binding CoolDownSeconds, Mode=TwoWay}" FontSize="Medium" Keyboard="Numeric" MaxLength="2" />
+
+                    <Stepper Value="{Binding CoolDownSeconds, Mode=TwoWay}"
+                         Maximum="59"
+                         Minimum="0"
+                         Increment="1"
+                         HorizontalOptions="Center" />
+                </StackLayout>
+
+                <Label Text="Reps" FontSize="Medium" />
+                <StackLayout Orientation="Horizontal">
+                    <Stepper Value="{Binding Reps, Mode=TwoWay}"
+                         Maximum="100"
+                         Minimum="0"
+                         Increment="1"
+                         HorizontalOptions="Center" />
+                    <Entry Text="{Binding Reps, Mode=TwoWay}" FontSize="Medium" Keyboard="Numeric" MaxLength="2" />
+                </StackLayout>
+
+                <Label Text="Sets" FontSize="Medium" />
+                <StackLayout Orientation="Horizontal">
+                    <Stepper Value="{Binding Sets, Mode=TwoWay}"
+                         Maximum="100"
+                         Minimum="0"
+                         Increment="1"
+                         HorizontalOptions="Center" />
+                    <Entry Text="{Binding Sets, Mode=TwoWay}" FontSize="Medium" Keyboard="Numeric" MaxLength="2" />
+                </StackLayout>
+
+                <StackLayout Orientation="Horizontal">
+                    <Button Text="Cancel" Command="{Binding CancelCommand}" HorizontalOptions="FillAndExpand"></Button>
+                    <Button Text="Save" Command="{Binding SaveCommand}" HorizontalOptions="FillAndExpand"></Button>
+                </StackLayout>
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+
+</ContentPage>
