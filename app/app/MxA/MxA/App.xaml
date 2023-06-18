@@ -85,6 +85,11 @@
             <Setter Property="TextColor" Value="{DynamicResource PrimaryTextColor}" />
         </Style>
 
+        <Style TargetType="Entry">
+            <Setter Property="BackgroundColor" Value="{DynamicResource Primary_800}" />
+            <Setter Property="TextColor" Value="{DynamicResource SecondaryTextColor}" />
+        </Style>
+
         <Style TargetType="Button">
             <Setter Property="TextColor" Value="{DynamicResource TextColor}" />
             <Setter Property="VisualStateManager.VisualStateGroups">
@@ -104,7 +109,6 @@
                 </VisualStateGroupList>
             </Setter>
         </Style>
-
 
         <Style TargetType="ImageButton">
             <Setter Property="CornerRadius" Value="20" />

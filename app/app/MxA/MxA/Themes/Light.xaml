@@ -3,6 +3,7 @@
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
 
+    <Color x:Key="Accent">#8b6e60</Color>
     <Color x:Key="PageBackgroundColor">#eceff1</Color>
     <Color x:Key="TextColor">#263238</Color>
     <Color x:Key="AccentTextColor">#eceff1</Color>

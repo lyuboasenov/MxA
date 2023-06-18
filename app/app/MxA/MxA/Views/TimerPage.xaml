@@ -1,13 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="MxA.Views.TimerPage"
-             xmlns:vm="clr-namespace:MxA.ViewModels"
-             xmlns:extensions="clr-namespace:MxA.Extensions"
-             xmlns:converters="clr-namespace:MxA.Converters"
-             xmlns:icons="clr-namespace:MxA.Icons.Material"
-             Title="{Binding TrainingName}"
-             Visual="Material">
+<ContentPage
+    x:Class="MxA.Views.TimerPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:converters="clr-namespace:MxA.Converters"
+    xmlns:extensions="clr-namespace:MxA.Extensions"
+    xmlns:icons="clr-namespace:MxA.Icons.Material"
+    xmlns:vm="clr-namespace:MxA.ViewModels"
+    Title="{Binding TrainingName}"
+    BackgroundColor="{DynamicResource PageBackgroundColor}"
+    Visual="Material">
 
     <ContentPage.BindingContext>
         <vm:TimerViewModel />
@@ -27,44 +29,63 @@
     </ContentPage.Resources>
 
     <StackLayout>
-        <!-- sets/of | reps/of -->
+        <!--  sets/of | reps/of  -->
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <Label Grid.Column="0" HorizontalOptions="Center" FontSize="Large">
+            <Label
+                Grid.Column="0"
+                FontSize="Large"
+                HorizontalOptions="Center">
                 <Label.FormattedText>
                     <FormattedString>
                         <Span Text="Reps: " />
-                        <Span Text="{Binding Rep}" FontAttributes="Bold" FontSize="30" />
+                        <Span
+                            FontAttributes="Bold"
+                            FontSize="30"
+                            Text="{Binding Rep}" />
                         <Span Text=" / " />
-                        <Span Text="{Binding TotalReps}" FontAttributes="Bold" FontSize="30" />
+                        <Span
+                            FontAttributes="Bold"
+                            FontSize="30"
+                            Text="{Binding TotalReps}" />
                     </FormattedString>
                 </Label.FormattedText>
             </Label>
-            <Label Grid.Column="1"  HorizontalOptions="Center" FontSize="Large">
+            <Label
+                Grid.Column="1"
+                FontSize="Large"
+                HorizontalOptions="Center">
                 <Label.FormattedText>
                     <FormattedString>
                         <Span Text="Sets: " />
-                        <Span Text="{Binding Set}" FontAttributes="Bold" FontSize="30" />
+                        <Span
+                            FontAttributes="Bold"
+                            FontSize="30"
+                            Text="{Binding Set}" />
                         <Span Text=" / " />
-                        <Span Text="{Binding TotalSets}" FontAttributes="Bold" FontSize="30" />
+                        <Span
+                            FontAttributes="Bold"
+                            FontSize="30"
+                            Text="{Binding TotalSets}" />
                     </FormattedString>
                 </Label.FormattedText>
             </Label>
         </Grid>
 
-        <!-- Counter -->
+        <!--  Counter  -->
         <Grid VerticalOptions="CenterAndExpand">
-            <Label Text="{Binding Counter, Converter={x:StaticResource secondsConverter}, ConverterParameter={StaticResource true}}"
-                   FontSize="{Binding Counter, Converter={x:StaticResource secondsToFontSizeConverter}, ConverterParameter={StaticResource true}}"
-                   HorizontalOptions="Center"
-                   VerticalOptions="Center"
-                   TextColor="{Binding Color} "/>
+            <Label
+                FontSize="{Binding Counter, Converter={x:StaticResource secondsToFontSizeConverter}, ConverterParameter={StaticResource true}}"
+                HorizontalOptions="Center"
+                Text="{Binding Counter, Converter={x:StaticResource secondsConverter}, ConverterParameter={StaticResource true}}"
+                TextColor="{Binding Color}"
+                VerticalOptions="Center" />
         </Grid>
 
-        <!-- load cell value -->
+        <!--  load cell value  -->
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
@@ -74,117 +95,124 @@
 
 
 
-            <Label Grid.Column="0"
-                   Text="{Binding Load}"
-                   HorizontalOptions="Center"
-                   FontSize="50"
-                    IsVisible="{Binding BleConnected}"
-                   />
+            <Label
+                Grid.Column="0"
+                FontSize="50"
+                HorizontalOptions="Center"
+                IsVisible="{Binding BleConnected}"
+                Text="{Binding Load}" />
 
 
-            <Image Grid.Column="1"
-                    IsVisible="{Binding BleConnected}"
-                    WidthRequest="30"
-                    HeightRequest="30"
-                    VerticalOptions="CenterAndExpand">
+            <Image
+                Grid.Column="1"
+                HeightRequest="30"
+                IsVisible="{Binding BleConnected}"
+                VerticalOptions="CenterAndExpand"
+                WidthRequest="30">
                 <Image.Source>
                     <FontImageSource
                         FontFamily="MD"
-                        Color="{DynamicResource Primary}"
-                        Glyph="{Binding BatteryLevel, Converter={StaticResource batterLevelToImageConverter}}" />
+                        Glyph="{Binding BatteryLevel, Converter={StaticResource batterLevelToImageConverter}}"
+                        Color="{DynamicResource Primary}" />
                 </Image.Source>
             </Image>
 
-            <ImageButton Grid.Column="2"
-                        Command="{Binding ConnectHangboardCommand}"
-                            VerticalOptions="CenterAndExpand">
+            <ImageButton
+                Grid.Column="2"
+                Command="{Binding ConnectHangboardCommand}"
+                VerticalOptions="CenterAndExpand">
                 <ImageButton.Source>
                     <FontImageSource
                         FontFamily="MD"
-                        Color="{DynamicResource Primary}"
-                        Glyph="{Binding ConnectHangboardGlyph}" />
+                        Glyph="{Binding ConnectHangboardGlyph}"
+                        Color="{DynamicResource Primary}" />
                 </ImageButton.Source>
             </ImageButton>
         </Grid>
 
-        <BoxView HeightRequest="1" Color="{DynamicResource Triadic}" Margin="5"/>
+        <BoxView
+            Margin="5"
+            HeightRequest="1"
+            Color="{DynamicResource Primary}" />
 
-        <!-- next -->
-        <Grid Padding="10"
-              HeightRequest="50">
+        <!--  next  -->
+        <Grid Padding="10" HeightRequest="50">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <Label Text="Up Next:"
-                    FontSize="20"
-                    Margin="5"/>
-            <Label Grid.Column="1"
-                   Text="{Binding NextPeriod}"
-                   FontSize="30"
-                   FontAttributes="Bold"
-                   TextColor="{Binding NextColor}" />
-            <Label Grid.Column="2"
-                   Text="{Binding NextPeriodTime, Converter={x:StaticResource secondsConverter}, ConverterParameter={StaticResource true}}"
-                   HorizontalOptions="EndAndExpand"
-                   FontSize="30"
-                   TextColor="{Binding NextColor}" />
+            <Label
+                Margin="5"
+                FontSize="20"
+                Text="Up Next:" />
+
+            <Label
+                Grid.Column="1"
+                FontAttributes="Bold"
+                FontSize="30"
+                Text="{Binding NextPeriod}"
+                TextColor="{Binding NextColor}" />
+
+            <Label
+                Grid.Column="2"
+                FontSize="30"
+                HorizontalOptions="EndAndExpand"
+                Text="{Binding NextPeriodTime, Converter={x:StaticResource secondsConverter}, ConverterParameter={StaticResource true}}"
+                TextColor="{Binding NextColor}" />
         </Grid>
 
-        <BoxView HeightRequest="1" Color="{DynamicResource Complementary}" Margin="5"/>
+        <BoxView
+            Margin="5"
+            HeightRequest="1"
+            Color="{DynamicResource Primary}" />
 
         <StackLayout Margin="10" Orientation="Horizontal">
-            <ImageButton VerticalOptions="CenterAndExpand"
-                         Command="{Binding PrevSetCommand}">
+            <ImageButton Command="{Binding PrevSetCommand}" VerticalOptions="CenterAndExpand">
                 <ImageButton.Source>
                     <FontImageSource
                         FontFamily="MD"
-                        Color="{DynamicResource Primary}"
-                        Glyph="{Static icons:IconFont.Skip_previous}" />
+                        Glyph="{Static icons:IconFont.Skip_previous}"
+                        Color="{DynamicResource Primary}" />
                 </ImageButton.Source>
             </ImageButton>
-            <ImageButton VerticalOptions="CenterAndExpand"
-                         Command="{Binding PrevRepCommand}">
+            <ImageButton Command="{Binding PrevRepCommand}" VerticalOptions="CenterAndExpand">
                 <ImageButton.Source>
                     <FontImageSource
                         FontFamily="MD"
-                        Color="{DynamicResource Primary}"
-                        Glyph="{Static icons:IconFont.Navigate_before}" />
-                </ImageButton.Source>
-            </ImageButton>
-
-            <ImageButton Grid.Column="0"
-                         Command="{Binding PlayPauseCommand}"
-                         WidthRequest="80"
-                         HeightRequest="80"
-                         CornerRadius="40"
-                         BackgroundColor="{DynamicResource Triadic2}"
-                         HorizontalOptions="CenterAndExpand">
-                <ImageButton.Source>
-                    <FontImageSource
-                        FontFamily="MD"
-                        Glyph="{Binding PlayPauseGlyph}" />
+                        Glyph="{Static icons:IconFont.Navigate_before}"
+                        Color="{DynamicResource Primary}" />
                 </ImageButton.Source>
             </ImageButton>
 
-            <ImageButton VerticalOptions="CenterAndExpand"
-                         Command="{Binding NextRepCommand}">
+            <ImageButton
+                Grid.Column="0"
+                BackgroundColor="{DynamicResource Triadic2}"
+                Command="{Binding PlayPauseCommand}"
+                CornerRadius="40"
+                HeightRequest="80"
+                HorizontalOptions="CenterAndExpand"
+                WidthRequest="80">
                 <ImageButton.Source>
-                    <FontImageSource
-                        FontFamily="MD"
-                        Color="{DynamicResource Primary}"
-                        Glyph="{Static icons:IconFont.Navigate_next}" />
+                    <FontImageSource FontFamily="MD" Glyph="{Binding PlayPauseGlyph}" />
                 </ImageButton.Source>
             </ImageButton>
-            <ImageButton VerticalOptions="CenterAndExpand"
-                         Command="{Binding NextSetCommand}">
+
+            <ImageButton Command="{Binding NextRepCommand}" VerticalOptions="CenterAndExpand">
                 <ImageButton.Source>
                     <FontImageSource
                         FontFamily="MD"
-                        Color="{DynamicResource Primary}"
-                        Glyph="{Static icons:IconFont.Skip_next}" />
+                        Glyph="{Static icons:IconFont.Navigate_next}"
+                        Color="{DynamicResource Primary}" />
+                </ImageButton.Source>
+            </ImageButton>
+            <ImageButton Command="{Binding NextSetCommand}" VerticalOptions="CenterAndExpand">
+                <ImageButton.Source>
+                    <FontImageSource
+                        FontFamily="MD"
+                        Glyph="{Static icons:IconFont.Skip_next}"
+                        Color="{DynamicResource Primary}" />
                 </ImageButton.Source>
             </ImageButton>
         </StackLayout>
