@@ -17,4 +17,9 @@
     <Color x:Key="TertiaryTextColor">Gray</Color>
     <Color x:Key="TransparentColor">Transparent</Color>
 
+    <Color x:Key="EntryBackgroundColor">#455a64</Color>
+    <Color x:Key="SelectedItemBackgroundColor">#455a64</Color>
+
+
+
 </ResourceDictionary>

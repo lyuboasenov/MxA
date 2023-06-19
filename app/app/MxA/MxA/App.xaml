@@ -10,6 +10,7 @@
         <ResourceDictionary Source="Themes/Light.xaml" />
 
         <Color x:Key="Primary">#607d8b</Color>
+        <Color x:Key="Accent">#a07892</Color>
         <Color x:Key="Complementary">#8b6e60</Color>
         <Color x:Key="Analogous">#608b84</Color>
         <Color x:Key="Analogous2">#60678b</Color>
@@ -77,6 +78,49 @@
         <Color x:Key="Triadic_2_800">#513a4e</Color>
         <Color x:Key="Triadic_2_900">#3e2d3e</Color>
 
+
+        <Style x:Key="BaseStyle" TargetType="Element">
+            <Setter Property="Shell.BackgroundColor" Value="{DynamicResource Primary}" />
+            <Setter Property="Shell.ForegroundColor" Value="{DynamicResource TextColor}" />
+
+            <Setter Property="Shell.TitleColor" Value="{DynamicResource TextColor}" />
+            <Setter Property="Shell.DisabledColor" Value="Beige" />
+            <Setter Property="Shell.UnselectedColor" Value="Blue" />
+            <Setter Property="Shell.TabBarBackgroundColor" Value="{DynamicResource Primary}" />
+            <Setter Property="Shell.TabBarForegroundColor" Value="{DynamicResource PageBackgroundColor}" />
+            <Setter Property="Shell.TabBarUnselectedColor" Value="Red" />
+            <Setter Property="Shell.TabBarTitleColor" Value="Pink" />
+        </Style>
+        <Style BasedOn="{StaticResource BaseStyle}" TargetType="TabBar" />
+        <Style BasedOn="{StaticResource BaseStyle}" TargetType="FlyoutItem" />
+
+        <Style Class="FlyoutItemLabelStyle" TargetType="Label">
+            <Setter Property="TextColor" Value="{DynamicResource PrimaryTextColor}" />
+        </Style>
+
+        <Style
+            ApplyToDerivedTypes="True"
+            Class="FlyoutItemLayoutStyle"
+            TargetType="Layout">
+            <Setter Property="BackgroundColor" Value="{DynamicResource PageBackgroundColor}" />
+            <Setter Property="VisualStateManager.VisualStateGroups">
+                <VisualStateGroupList>
+                    <VisualStateGroup x:Name="CommonStates">
+                        <VisualState x:Name="Selected">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor" Value="{DynamicResource SelectedItemBackgroundColor}" />
+                            </VisualState.Setters>
+                        </VisualState>
+                        <VisualState x:Name="Normal">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor" Value="{DynamicResource PageBackgroundColor}" />
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </Setter>
+        </Style>
+
         <Style TargetType="ContentPage">
             <Setter Property="BackgroundColor" Value="{DynamicResource PageBackgroundColor}" />
         </Style>
@@ -86,8 +130,13 @@
         </Style>
 
         <Style TargetType="Entry">
-            <Setter Property="BackgroundColor" Value="{DynamicResource Primary_800}" />
-            <Setter Property="TextColor" Value="{DynamicResource SecondaryTextColor}" />
+            <Setter Property="BackgroundColor" Value="{DynamicResource EntryBackgroundColor}" />
+            <Setter Property="TextColor" Value="{DynamicResource PrimaryTextColor}" />
+        </Style>
+
+        <Style TargetType="Picker">
+            <Setter Property="BackgroundColor" Value="{DynamicResource EntryBackgroundColor}" />
+            <Setter Property="TextColor" Value="{DynamicResource PrimaryTextColor}" />
         </Style>
 
         <Style TargetType="Button">
