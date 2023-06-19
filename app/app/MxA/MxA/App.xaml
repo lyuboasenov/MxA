@@ -160,9 +160,9 @@
         </Style>
 
         <Style TargetType="ImageButton">
-            <Setter Property="CornerRadius" Value="20" />
-            <Setter Property="WidthRequest" Value="40" />
-            <Setter Property="HeightRequest" Value="40" />
+            <Setter Property="CornerRadius" Value="25" />
+            <Setter Property="WidthRequest" Value="50" />
+            <Setter Property="HeightRequest" Value="50" />
             <Setter Property="Padding" Value="10" />
             <Setter Property="BackgroundColor" Value="Transparent" />
             <Setter Property="VisualStateManager.VisualStateGroups">

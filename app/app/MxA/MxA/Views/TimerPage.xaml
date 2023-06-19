@@ -4,7 +4,6 @@
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:converters="clr-namespace:MxA.Converters"
-    xmlns:extensions="clr-namespace:MxA.Extensions"
     xmlns:icons="clr-namespace:MxA.Icons.Material"
     xmlns:vm="clr-namespace:MxA.ViewModels"
     Title="{Binding TrainingName}"
@@ -28,146 +27,180 @@
         </ResourceDictionary>
     </ContentPage.Resources>
 
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Command="{Binding ConnectHangboardCommand}">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource
+                    FontFamily="MD"
+                    Glyph="{Binding ConnectHangboardGlyph}"
+                    Color="{DynamicResource PrimaryTextColor}" />
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+        <ToolbarItem Command="{Binding ConnectHangboardCommand}">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource
+                    FontFamily="MD"
+                    Glyph="{Static icons:IconFont.Fact_check}"
+                    Color="{DynamicResource PrimaryTextColor}" />
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+    </ContentPage.ToolbarItems>
+
     <StackLayout>
-        <!--  sets/of | reps/of  -->
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <Label
-                Grid.Column="0"
-                FontSize="Large"
-                HorizontalOptions="Center">
-                <Label.FormattedText>
-                    <FormattedString>
-                        <Span Text="Reps: " />
-                        <Span
-                            FontAttributes="Bold"
-                            FontSize="30"
-                            Text="{Binding Rep}" />
-                        <Span Text=" / " />
-                        <Span
-                            FontAttributes="Bold"
-                            FontSize="30"
-                            Text="{Binding TotalReps}" />
-                    </FormattedString>
-                </Label.FormattedText>
-            </Label>
-            <Label
-                Grid.Column="1"
-                FontSize="Large"
-                HorizontalOptions="Center">
-                <Label.FormattedText>
-                    <FormattedString>
-                        <Span Text="Sets: " />
-                        <Span
-                            FontAttributes="Bold"
-                            FontSize="30"
-                            Text="{Binding Set}" />
-                        <Span Text=" / " />
-                        <Span
-                            FontAttributes="Bold"
-                            FontSize="30"
-                            Text="{Binding TotalSets}" />
-                    </FormattedString>
-                </Label.FormattedText>
-            </Label>
-        </Grid>
+        <StackLayout
+            x:Name="leftRightContainer"
+            Orientation="Horizontal"
+            VerticalOptions="FillAndExpand">
+            <!--  Reps/Sets & Load  -->
+            <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="Start">
+                <!--  sets/of | reps/of  -->
+                <Grid VerticalOptions="Start">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Label
+                        Grid.Column="0"
+                        FontSize="Large"
+                        HorizontalOptions="Center">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="Reps: " />
+                                <Span
+                                    FontAttributes="Bold"
+                                    FontSize="30"
+                                    Text="{Binding Rep}" />
+                                <Span Text=" / " />
+                                <Span
+                                    FontAttributes="Bold"
+                                    FontSize="30"
+                                    Text="{Binding TotalReps}" />
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                    <Label
+                        Grid.Column="1"
+                        FontSize="Large"
+                        HorizontalOptions="Center">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="Sets: " />
+                                <Span
+                                    FontAttributes="Bold"
+                                    FontSize="30"
+                                    Text="{Binding Set}" />
+                                <Span Text=" / " />
+                                <Span
+                                    FontAttributes="Bold"
+                                    FontSize="30"
+                                    Text="{Binding TotalSets}" />
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                </Grid>
 
-        <!--  Counter  -->
-        <Grid VerticalOptions="CenterAndExpand">
-            <Label
-                FontSize="{Binding Counter, Converter={x:StaticResource secondsToFontSizeConverter}, ConverterParameter={StaticResource true}}"
-                HorizontalOptions="Center"
-                Text="{Binding Counter, Converter={x:StaticResource secondsConverter}, ConverterParameter={StaticResource true}}"
-                TextColor="{Binding Color}"
-                VerticalOptions="Center" />
-        </Grid>
+                <BoxView
+                    Margin="5,0,5,0"
+                    HeightRequest="1"
+                    Color="{DynamicResource Primary}" />
 
-        <!--  load cell value  -->
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
+                <!--  load cell value  -->
+                <Grid IsVisible="{Binding BleConnected}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
 
+                    <Label
+                        Margin="5"
+                        FontSize="20"
+                        Text="Load:"
+                        VerticalOptions="CenterAndExpand" />
 
+                    <Label
+                        Grid.Column="1"
+                        FontSize="80"
+                        HorizontalOptions="Center"
+                        Text="{Binding Load}"
+                        TextColor="{Binding Color}" />
 
-            <Label
-                Grid.Column="0"
-                FontSize="50"
-                HorizontalOptions="Center"
-                IsVisible="{Binding BleConnected}"
-                Text="{Binding Load}" />
-
-
-            <Image
-                Grid.Column="1"
-                HeightRequest="30"
-                IsVisible="{Binding BleConnected}"
-                VerticalOptions="CenterAndExpand"
-                WidthRequest="30">
-                <Image.Source>
-                    <FontImageSource
+                    <Label
+                        Grid.Column="2"
                         FontFamily="MD"
-                        Glyph="{Binding BatteryLevel, Converter={StaticResource batterLevelToImageConverter}}"
-                        Color="{DynamicResource Primary}" />
-                </Image.Source>
-            </Image>
+                        FontSize="44"
+                        HeightRequest="44"
+                        Text="{Binding BatteryLevel, Converter={StaticResource batterLevelToImageConverter}}"
+                        TextColor="{DynamicResource Primary}"
+                        VerticalOptions="CenterAndExpand"
+                        WidthRequest="44" />
 
-            <ImageButton
-                Grid.Column="2"
-                Command="{Binding ConnectHangboardCommand}"
-                VerticalOptions="CenterAndExpand">
-                <ImageButton.Source>
-                    <FontImageSource
-                        FontFamily="MD"
-                        Glyph="{Binding ConnectHangboardGlyph}"
+                    <BoxView
+                        Grid.Row="1"
+                        Grid.ColumnSpan="3"
+                        Margin="5,0,5,0"
+                        HeightRequest="1"
                         Color="{DynamicResource Primary}" />
-                </ImageButton.Source>
-            </ImageButton>
-        </Grid>
+                </Grid>
+            </StackLayout>
 
+            <!--  Counter & next  -->
+            <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="FillAndExpand">
+                <!--  Counter  -->
+                <Grid VerticalOptions="CenterAndExpand">
+                    <Label
+                        Margin="0"
+                        FontSize="{Binding Counter, Converter={x:StaticResource secondsToFontSizeConverter}, ConverterParameter={StaticResource true}}"
+                        HorizontalOptions="Center"
+                        Text="{Binding Counter, Converter={x:StaticResource secondsConverter}, ConverterParameter={StaticResource true}}"
+                        TextColor="{Binding Color}"
+                        VerticalOptions="FillAndExpand" />
+                </Grid>
+
+                <BoxView
+                    Margin="5,0,5,0"
+                    HeightRequest="1"
+                    Color="{DynamicResource Primary}" />
+
+                <!--  next  -->
+                <Grid Padding="10" HeightRequest="50">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Label
+                        Margin="5"
+                        FontSize="20"
+                        Text="Up Next:" />
+
+                    <Label
+                        Grid.Column="1"
+                        FontAttributes="Bold"
+                        FontSize="30"
+                        Text="{Binding NextPeriod}"
+                        TextColor="{Binding NextColor}" />
+
+                    <Label
+                        Grid.Column="2"
+                        FontSize="30"
+                        HorizontalOptions="EndAndExpand"
+                        Text="{Binding NextPeriodTime, Converter={x:StaticResource secondsConverter}, ConverterParameter={StaticResource true}}"
+                        TextColor="{Binding NextColor}" />
+                </Grid>
+            </StackLayout>
+        </StackLayout>
         <BoxView
-            Margin="5"
+            Margin="5,0,5,0"
             HeightRequest="1"
             Color="{DynamicResource Primary}" />
 
-        <!--  next  -->
-        <Grid Padding="10" HeightRequest="50">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-
-            <Label
-                Margin="5"
-                FontSize="20"
-                Text="Up Next:" />
-
-            <Label
-                Grid.Column="1"
-                FontAttributes="Bold"
-                FontSize="30"
-                Text="{Binding NextPeriod}"
-                TextColor="{Binding NextColor}" />
-
-            <Label
-                Grid.Column="2"
-                FontSize="30"
-                HorizontalOptions="EndAndExpand"
-                Text="{Binding NextPeriodTime, Converter={x:StaticResource secondsConverter}, ConverterParameter={StaticResource true}}"
-                TextColor="{Binding NextColor}" />
-        </Grid>
-
-        <BoxView
-            Margin="5"
-            HeightRequest="1"
-            Color="{DynamicResource Primary}" />
-
+        <!--  Buttons  -->
         <StackLayout Margin="10" Orientation="Horizontal">
             <ImageButton Command="{Binding PrevSetCommand}" VerticalOptions="CenterAndExpand">
                 <ImageButton.Source>
@@ -187,13 +220,12 @@
             </ImageButton>
 
             <ImageButton
-                Grid.Column="0"
                 BackgroundColor="{DynamicResource Triadic2}"
                 Command="{Binding PlayPauseCommand}"
-                CornerRadius="40"
-                HeightRequest="80"
+                CornerRadius="30"
+                HeightRequest="60"
                 HorizontalOptions="CenterAndExpand"
-                WidthRequest="80">
+                WidthRequest="60">
                 <ImageButton.Source>
                     <FontImageSource FontFamily="MD" Glyph="{Binding PlayPauseGlyph}" />
                 </ImageButton.Source>

@@ -21,5 +21,14 @@ namespace MxA.Views {
            base.OnDisappearing();
          _viewModel.OnDisappearing();
       }
+
+      protected override void OnSizeAllocated(double width, double height) {
+         base.OnSizeAllocated(width, height);
+         if (width > height) {
+            leftRightContainer.Orientation = StackOrientation.Horizontal;
+         } else {
+            leftRightContainer.Orientation = StackOrientation.Vertical;
+         }
+      }
    }
 }
