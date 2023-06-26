@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="MxA.Views.WorkoutPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:MxA.ViewModels"
+    xmlns:models="clr-namespace:MxA.Models"
+    Title="{Binding Title}"
+    BackgroundColor="{DynamicResource PageBackgroundColor}"
+    Visual="Material">
+
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior Command="{Binding ExitCommand}" />
+    </Shell.BackButtonBehavior>
+
+    <ContentPage.Content>
+        <ScrollView>
+            <StackLayout>
+                <Image
+                    Margin="10"
+                    HorizontalOptions="CenterAndExpand"
+                    Source="{Binding Workout.Thumbnail}" />
+                <StackLayout BindableLayout.ItemsSource="{Binding WorkoutRefs}" Orientation="Horizontal">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate>
+                            <Button
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type local:WorkoutViewModel}}, Path=SelectProgressionCommand}"
+                                CommandParameter="{Binding}"
+                                HorizontalOptions="CenterAndExpand"
+                                Text="{Binding Label}" />
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </StackLayout>
+                <StackLayout BindableLayout.ItemsSource="{Binding Activities}">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate>
+                            <Label Text="{Binding ExerciseId}" />
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </StackLayout>
+
+                <Label
+                    FontAttributes="Bold"
+                    FontSize="Header"
+                    Text="Exercises" />
+
+                <BoxView
+                    Margin="2,0,2,0"
+                    BackgroundColor="{DynamicResource PrimaryTextColor}"
+                    HeightRequest="1" />
+
+                <StackLayout BindableLayout.ItemsSource="{Binding Activities}">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="models:ActivityExercise">
+                            <Label Text="{Binding Exercise.Name}" />
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </StackLayout>
+
+                <Label
+                    FontAttributes="Bold"
+                    FontSize="Header"
+                    Text="Description" />
+
+                <BoxView
+                    Margin="2,0,2,0"
+                    BackgroundColor="{DynamicResource PrimaryTextColor}"
+                    HeightRequest="1" />
+
+                <Label Text="{Binding Workout.Notes}" />
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

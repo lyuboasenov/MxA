@@ -15,14 +15,14 @@ namespace MxA.ViewModels {
       public ObservableCollection<Models.WorkoutType> Items { get; }
       public Command LoadItemsCommand { get; }
       public Command AddItemCommand { get; }
-      public Command<Database.Models.Workout> ItemTapped { get; }
+      public Command<Workout> ItemTapped { get; }
 
       public WorkoutsViewModel() {
          Title = "Workouts";
          Items = new ObservableCollection<Models.WorkoutType>();
          LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
 
-         ItemTapped = new Command<Database.Models.Workout>(this.OnItemSelected);
+         ItemTapped = new Command<Workout>(this.OnItemSelected);
 
          AddItemCommand = new Command(OnAddItem);
       }
@@ -81,7 +81,7 @@ namespace MxA.ViewModels {
          SelectedItem = null;
       }
 
-      public Database.Models.Workout SelectedItem { get; set; }
+      public Workout SelectedItem { get; set; }
 
       public void OnSelectedItemChanged() {
          OnItemSelected(SelectedItem);
@@ -91,12 +91,12 @@ namespace MxA.ViewModels {
          await Shell.Current.GoToAsync(nameof(NewItemPage));
       }
 
-      async void OnItemSelected(Database.Models.Workout item) {
+      async void OnItemSelected(Workout item) {
          if (item == null)
             return;
 
          // This will push the ItemDetailPage onto the navigation stack
-         await Shell.Current.GoToAsync($"{nameof(TimerPage)}?{nameof(TimerViewModel.TrainingId)}={item.Id}");
+         await Shell.Current.GoToAsync($"{nameof(WorkoutPage)}?{nameof(WorkoutViewModel.WorkoutId)}={item.Id}");
       }
    }
 }

@@ -49,7 +49,6 @@
 
                                     <Grid
                                         xct:CornerRadiusEffect.CornerRadius="10"
-                                        BackgroundColor="{Binding Color}"
                                         HeightRequest="105"
                                         HorizontalOptions="Start"
                                         VerticalOptions="Center"
