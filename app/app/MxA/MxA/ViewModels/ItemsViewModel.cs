@@ -47,12 +47,12 @@ namespace MxA.ViewModels {
             await CheckAndRequestPermission<Permissions.StorageWrite>();
 
             Items.Clear();
-            var items = await DataStore.GetItemsAsync(true);
-            foreach (var item in items) {
-               Items.Add(item);
-            }
+            //var items = await DataStore.GetItemsAsync(true);
+            //foreach (var item in items) {
+            //   Items.Add(item);
+            //}
          } catch (Exception ex) {
-            Debug.WriteLine(ex);
+            await HandleExceptionAsync(ex);
          } finally {
             IsBusy = false;
          }

@@ -62,7 +62,7 @@ namespace MxA.ViewModels {
             Sets = Sets
          };
 
-         await DataStore.AddItemAsync(newTraining);
+         // await DataStore.AddItemAsync(newTraining);
 
          // This will pop the current page off the navigation stack
          await Shell.Current.GoToAsync("..");

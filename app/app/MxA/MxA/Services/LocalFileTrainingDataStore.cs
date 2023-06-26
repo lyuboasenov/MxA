@@ -5,9 +5,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using MxA.Database.Services;
 
 namespace MxA.Services {
-   public class LocalFileTrainingDataStore : IDataStore<Training> {
+   public class LocalFileTrainingDataStore : IDataStoreEntity<Training> {
       private readonly List<Training> _trainings;
       private readonly string _directory;
 
@@ -67,6 +68,22 @@ namespace MxA.Services {
 
       public async Task<IEnumerable<Training>> GetItemsAsync(bool forceRefresh = false) {
          return await Task.FromResult(_trainings);
+      }
+
+      public Task<bool> AddOrUpdateItemAsync(Training item) {
+         throw new NotImplementedException();
+      }
+
+      Task<Training> IDataStoreEntity<Training>.AddOrUpdateItemAsync(Training item) {
+         throw new NotImplementedException();
+      }
+
+      Task<Training> IDataStoreEntity<Training>.AddItemAsync(Training item) {
+         throw new NotImplementedException();
+      }
+
+      Task<Training> IDataStoreEntity<Training>.UpdateItemAsync(Training item) {
+         throw new NotImplementedException();
       }
    }
 }

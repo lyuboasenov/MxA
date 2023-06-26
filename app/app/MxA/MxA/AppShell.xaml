@@ -58,8 +58,8 @@
         https://docs.microsoft.com/dotnet/api/xamarin.forms.shellgroupitem.flyoutdisplayoptions?view=xamarin-forms
     -->
 
-    <FlyoutItem Title="Workouts" Icon="{StaticResource IconList}">
-        <ShellContent ContentTemplate="{DataTemplate local:ItemsPage}" Route="ItemsPage" />
+    <FlyoutItem Title="Training" Icon="{StaticResource IconList}">
+        <ShellContent ContentTemplate="{DataTemplate local:TrainingPage}" Route="TrainingPage" />
     </FlyoutItem>
     <FlyoutItem Title="Logbook" Icon="{StaticResource IconLogbook}">
         <ShellContent ContentTemplate="{DataTemplate local:ItemsPage}" Route="ItemsPage" />

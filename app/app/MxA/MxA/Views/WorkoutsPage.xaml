@@ -1,0 +1,107 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="MxA.Views.WorkoutsPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:MxA.ViewModels"
+    xmlns:model="clr-namespace:MxA.Models"
+    xmlns:models="clr-namespace:MxA.Database.Models"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+    x:Name="BrowseItemsPage"
+    Title="{Binding Title}"
+    BackgroundColor="{DynamicResource PageBackgroundColor}"
+    Visual="Material">
+
+    <!--
+        x:DataType enables compiled bindings for better performance and compile time validation of binding expressions.
+        https://docs.microsoft.com/xamarin/xamarin-forms/app-fundamentals/data-binding/compiled-bindings
+    -->
+    <RefreshView
+        x:DataType="local:WorkoutsViewModel"
+        Command="{Binding LoadItemsCommand}"
+        IsRefreshing="{Binding IsBusy, Mode=TwoWay}">
+        <CollectionView ItemsSource="{Binding Items}" SelectionMode="None">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="model:WorkoutType">
+                    <xct:Expander>
+                        <xct:Expander.Header>
+                            <StackLayout Padding="0,20,0,0" Orientation="Horizontal">
+                                <Image
+                                    Margin="10"
+                                    HeightRequest="100"
+                                    Source="{Binding Thumbnail}"
+                                    WidthRequest="100" />
+
+                                <Label
+                                    FontAttributes="Bold"
+                                    FontSize="25"
+                                    LineBreakMode="NoWrap"
+                                    Style="{DynamicResource ListItemTextStyle}"
+                                    Text="{Binding Name}"
+                                    VerticalOptions="CenterAndExpand" />
+
+                            </StackLayout>
+                        </xct:Expander.Header>
+
+                        <StackLayout BindableLayout.ItemsSource="{Binding}">
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate x:DataType="model:WorkoutTarget">
+                                    <xct:Expander Padding="10">
+                                        <xct:Expander.Header>
+                                            <StackLayout Padding="0,20,0,0" Orientation="Horizontal">
+                                                <Image
+                                                    Margin="10"
+                                                    HeightRequest="100"
+                                                    Source="{Binding Thumbnail}"
+                                                    WidthRequest="100" />
+
+                                                <StackLayout>
+                                                    <Label
+                                                        FontAttributes="Bold"
+                                                        FontSize="20"
+                                                        LineBreakMode="NoWrap"
+                                                        Style="{DynamicResource ListItemTextStyle}"
+                                                        Text="{Binding Name}"
+                                                        VerticalOptions="Start" />
+
+                                                    <Label
+                                                        FontSize="16"
+                                                        LineBreakMode="WordWrap"
+                                                        Style="{DynamicResource ListItemTextStyle}"
+                                                        Text="{Binding Description}"
+                                                        VerticalOptions="StartAndExpand" />
+                                                </StackLayout>
+
+                                            </StackLayout>
+                                        </xct:Expander.Header>
+                                        <StackLayout BindableLayout.ItemsSource="{Binding}">
+                                            <BindableLayout.ItemTemplate>
+                                                <DataTemplate x:DataType="models:Workout">
+                                                    <StackLayout Padding="10">
+                                                        <Label
+                                                            FontSize="16"
+                                                            LineBreakMode="NoWrap"
+                                                            Style="{DynamicResource ListItemTextStyle}"
+                                                            Text="{Binding Name}" />
+                                                        <StackLayout.GestureRecognizers>
+                                                            <TapGestureRecognizer
+                                                                Command="{Binding Source={RelativeSource AncestorType={x:Type local:WorkoutsViewModel}}, Path=ItemTapped}"
+                                                                CommandParameter="{Binding .}"
+                                                                NumberOfTapsRequired="1" />
+                                                        </StackLayout.GestureRecognizers>
+                                                    </StackLayout>
+                                                </DataTemplate>
+                                            </BindableLayout.ItemTemplate>
+                                        </StackLayout>
+
+                                    </xct:Expander>
+
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                        </StackLayout>
+                    </xct:Expander>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </RefreshView>
+</ContentPage>

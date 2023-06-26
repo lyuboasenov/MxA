@@ -1,4 +1,5 @@
-﻿using MxA.Models;
+﻿using MxA.Database.Services;
+using MxA.Models;
 using MxA.Services;
 using MxA.Themes;
 using Xamarin.Essentials;
@@ -9,8 +10,8 @@ namespace MxA {
 
       public App() {
          InitializeComponent();
-
-         DependencyService.Register<IDataStore<Training>, LocalFileTrainingDataStore>();
+         DependencyService.Register<IDataStoreEntity<Training>, LocalFileTrainingDataStore>();
+         DependencyService.Register<IDataStore, DataStore>();
          MainPage = new AppShell();
       }
 

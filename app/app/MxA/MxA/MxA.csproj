@@ -14,11 +14,15 @@
     <None Remove="Resources\countdown.wav" />
     <None Remove="Resources\end_rep.mp3" />
     <None Remove="Resources\fonts\materialdesignicons.ttf" />
+    <None Remove="Resources\fonts\MaterialIconsRound-Regular.otf" />
+    <None Remove="Resources\fonts\MaterialSymbolsRounded[FILL,GRAD,opsz,wght].ttf" />
     <None Remove="Resources\Tones.ogg" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Resources\fonts\materialdesignicons.ttf" />
+    <EmbeddedResource Include="Resources\fonts\MaterialIconsRound-Regular.otf" />
+    <EmbeddedResource Include="Resources\fonts\MaterialSymbolsRounded[FILL,GRAD,opsz,wght].ttf" />
     <EmbeddedResource Include="Resources\sounds\countdown.wav" />
     <EmbeddedResource Include="Resources\sounds\end_rep.mp3" />
     <EmbeddedResource Include="Resources\sounds\Tones.ogg" />
@@ -33,7 +37,10 @@
     <PackageReference Include="Plugin.BLE" Version="2.1.3" />
     <PackageReference Include="Plugin.Permissions" Version="6.0.1" />
     <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" />
+    <PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
     <PackageReference Include="Xam.Plugin.SimpleAudioPlayer" Version="1.6.0" />
+    <PackageReference Include="Xamarin.CommunityToolkit" Version="2.0.6" />
+    <PackageReference Include="Xamarin.CommunityToolkit.Markup" Version="2.0.6" />
     <PackageReference Include="Xamarin.Forms" Version="5.0.0.2578" />
     <PackageReference Include="Xamarin.Essentials" Version="1.7.5" />
   </ItemGroup>
@@ -48,6 +55,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Views\ExercisesPage.xaml.cs">
+      <DependentUpon>ExercisesPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\WorkoutsPage.xaml.cs">
+      <DependentUpon>WorkoutsPage.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
     </Compile>
@@ -57,6 +70,9 @@
     <Compile Update="Views\TimerPage.xaml.cs">
       <SubType>Code</SubType>
       <DependentUpon>TimerPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\TrainingPage.xaml.cs">
+      <DependentUpon>TrainingPage.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
 
@@ -72,6 +88,9 @@
     </EmbeddedResource>
     <EmbeddedResource Update="Views\TimerPage.xaml">
       <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\TrainingPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>

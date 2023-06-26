@@ -170,8 +170,8 @@ namespace MxA.ViewModels {
                   ConnectHangboardGlyph = Icons.Material.IconFont.Bluetooth_connected;
                }
             }
-         } catch (Exception) {
-            Debug.WriteLine("Connect ble device");
+         } catch (Exception ex) {
+            await HandleExceptionAsync("Connect ble device", ex);
          }
       }
 
@@ -289,13 +289,13 @@ namespace MxA.ViewModels {
 
       private async Task LoadTraining() {
          try {
-            var item = await DataStore.GetItemAsync(TrainingId);
-            _trainingWorker = new TrainingWorker(item);
-            _trainingWorker.WorkerChanged += _trainingWorker_WorkerChanged;
+            //var item = await DataStore.GetItemAsync(TrainingId);
+            //_trainingWorker = new TrainingWorker(item);
+            //_trainingWorker.WorkerChanged += _trainingWorker_WorkerChanged;
 
-            TotalReps = item.Reps;
-            TotalSets = item.Sets;
-            TrainingName = item.Name;
+            //TotalReps = item.Reps;
+            //TotalSets = item.Sets;
+            //TrainingName = item.Name;
 
             SetCurrentPeriod();
             UpdateCommands();

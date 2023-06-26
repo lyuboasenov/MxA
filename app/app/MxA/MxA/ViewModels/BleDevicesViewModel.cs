@@ -48,7 +48,7 @@ namespace MxA.ViewModels {
 
             if (status != Plugin.Permissions.Abstractions.PermissionStatus.Granted) {
                if (await CrossPermissions.Current.ShouldShowRequestPermissionRationaleAsync(Permission.Location)) {
-                  Debug.WriteLine("Need location", "App needs location permission", "OK");
+                  await DisplayAlertAsync("Need location", "App needs location permission", "OK");
                }
 
                var status1 = await CrossPermissions.Current.RequestPermissionAsync<LocationPermission>();
@@ -59,7 +59,7 @@ namespace MxA.ViewModels {
             }
 
             if (status != Plugin.Permissions.Abstractions.PermissionStatus.Granted) {
-               Debug.WriteLine("Need location", "App need location permission", "OK");
+               await DisplayAlertAsync("Need location", "App need location permission", "OK");
                return;
             }
 
@@ -67,7 +67,7 @@ namespace MxA.ViewModels {
             _gattDevices.Clear();
             await _adapter.StartScanningForDevicesAsync();
          } catch (Exception ex) {
-            Debug.WriteLine(ex);
+            await HandleExceptionAsync(ex);
          } finally {
             IsBusy = false;
          }
