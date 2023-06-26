@@ -8,11 +8,14 @@ namespace MxA.Models {
       public string Description { get; set; }
       public string Thumbnail { get; set; }
 
+      public string Color { get; set; }
+
       public WorkoutType(Database.Models.Type type, IEnumerable<WorkoutTarget> targets) {
          Id = type.Id;
          Name = type.Name;
          Description = type.Description;
          Thumbnail = type.Thumbnail;
+         Color = type.Color;
 
          foreach(var t in targets) {
             Add(t);

@@ -22,7 +22,9 @@ namespace MxA.Helpers {
                   Name = s.Name,
                   Description = s.Description,
                   Thumbnail = s.Thumbnail,
-                  Version = s.Version
+                  Version = s.Version,
+                  Color = s.Color,
+                  Order = s.Order
                }),
                ds.Types);
 
@@ -77,7 +79,13 @@ namespace MxA.Helpers {
 
                   return list;
                },
-               ds.ExerciseFocusPoints);
+               ds.ExerciseFocusPoints,
+               async (d) => {
+                  var items = await d.GetItemsAsync();
+                  foreach(var i in items) {
+                     await d.DeleteItemAsync(i.Id);
+                  }
+               });
 
             // Activities
             await ImportEntity(
@@ -126,7 +134,13 @@ namespace MxA.Helpers {
 
                   return list;
                   },
-               ds.ProgressionWorkoutRefs);
+               ds.ProgressionWorkoutRefs,
+               async (d) => {
+                  var items = await d.GetItemsAsync();
+                  foreach (var i in items) {
+                     await d.DeleteItemAsync(i.Id);
+                  }
+               });
 
             await ImportEntity(
                data.Progressions,
@@ -145,7 +159,13 @@ namespace MxA.Helpers {
 
                   return list;
                },
-               ds.WorkoutRefs);
+               ds.WorkoutRefs,
+               async (d) => {
+                  var items = await d.GetItemsAsync();
+                  foreach (var i in items) {
+                     await d.DeleteItemAsync(i.Id);
+                  }
+               });
 
             // Workouts
             await ImportEntity(
@@ -162,7 +182,8 @@ namespace MxA.Helpers {
                   Summary = s.Summary,
                   TargetId = s.Target,
                   TypeId = s.Type,
-                  Thumbnail = s.Thumbnail
+                  Thumbnail = s.Thumbnail,
+                  WorkoutList = s.WorkoutList
                }),
                ds.Workouts);
 
@@ -183,7 +204,13 @@ namespace MxA.Helpers {
 
                   return list;
                   },
-               ds.WorkoutEquipments);
+               ds.WorkoutEquipments,
+               async (d) => {
+                  var items = await d.GetItemsAsync();
+                  foreach (var i in items) {
+                     await d.DeleteItemAsync(i.Id);
+                  }
+               });
 
             await ImportEntity(
                data.Workouts,
@@ -204,12 +231,25 @@ namespace MxA.Helpers {
 
                   return list;
                },
-               ds.WorkoutActivities);
+               ds.WorkoutActivities,
+               async (d) => {
+                  var items = await d.GetItemsAsync();
+                  foreach (var i in items) {
+                     await d.DeleteItemAsync(i.Id);
+                  }
+               });
          }
       }
 
-      private static async Task ImportEntity<T, U>(T[] sources, Func<T[], IEnumerable<U>> converter, IDataStoreEntity<U> ds) {
+      private static async Task ImportEntity<T, U>(T[] sources, Func<T[], IEnumerable<U>> converter, IDataStoreEntity<U> ds, Func<IDataStoreEntity<U>, Task> clean = null) where U : Database.Models.IModel {
+         if (clean != null) {
+            await clean(ds);
+         }
+
          foreach(var e in converter(sources)) {
+            if (!string.IsNullOrEmpty(e.Id)) {
+               await ds.DeleteItemAsync(e.Id);
+            }
             await ds.AddOrUpdateItemAsync(e);
          }
       }

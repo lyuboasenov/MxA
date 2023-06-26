@@ -51,15 +51,18 @@ namespace MxA.ViewModels {
             Items.Clear();
 
             var types = await DataStore.Types.GetItemsAsync();
+            types = types.OrderBy(t => t.Order);
+
             var targets = await DataStore.Targets.GetItemsAsync();
             var workouts = await DataStore.Workouts.GetItemsAsync();
+            var progressions = await DataStore.Progression.GetItemsAsync();
 
             foreach (var type in types) {
                var list = new List<WorkoutTarget>();
                foreach(var target in targets) {
-                  var filteredWorkouts = workouts.Where(w => w.Id == w.ParentId && w.TypeId == type.Id && w.TargetId == target.Id);
+                  var filteredWorkouts = workouts.Where(w => w.TypeId == type.Id && w.TargetId == target.Id && w.WorkoutList);
                   if (filteredWorkouts.Any()) {
-                     list.Add(new WorkoutTarget(target, filteredWorkouts));
+                     list.Add(new WorkoutTarget(target, filteredWorkouts.OrderBy(w => w.Name)));
                   }
                }
                if (list.Any()) {

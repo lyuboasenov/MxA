@@ -19,5 +19,6 @@ namespace MxA.Helpers.Import.Models {
       public uint Version { get; set; }
       public System.DateTime Updated { get; set; }
       public System.DateTime Created { get; set; }
+      public bool WorkoutList { get; set; }
    }
 }

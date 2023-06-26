@@ -66,7 +66,11 @@ namespace MxA.Database.Services {
       public async Task<bool> DeleteItemAsync(string id) {
          var database = await GetDatabase();
          T item = await GetItemAsync(id);
-         return await database.DeleteAsync(item) == 1;
+         if (item != null) {
+            return await database.DeleteAsync(item) == 1;
+         } else {
+            return false;
+         }
       }
 
       public async Task<T> GetItemAsync(string id) {
