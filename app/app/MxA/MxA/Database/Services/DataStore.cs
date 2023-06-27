@@ -16,8 +16,6 @@ namespace MxA.Database.Services {
       public IDataStoreEntity<WorkoutRef> WorkoutRefs { get; }
       public IDataStoreEntity<Workout> Workouts { get; }
       public IDataStoreEntity<ExerciseFocusPoint> ExerciseFocusPoints { get; }
-      public IDataStoreEntity<ProgressionWorkoutRef> ProgressionWorkoutRefs { get; }
-      public IDataStoreEntity<WorkoutActivity> WorkoutActivities { get; }
       public IDataStoreEntity<WorkoutEquipment> WorkoutEquipments { get; }
       public Task<SQLiteAsyncConnection> Database => _databaseLazy.Value;
 
@@ -31,11 +29,9 @@ namespace MxA.Database.Services {
          await _database.CreateTableAsync<Exercise>();
          await _database.CreateTableAsync<ExerciseFocusPoint>();
          await _database.CreateTableAsync<Progression>();
-         await _database.CreateTableAsync<ProgressionWorkoutRef>();
          await _database.CreateTableAsync<Target>();
          await _database.CreateTableAsync<Type>();
          await _database.CreateTableAsync<Workout>();
-         await _database.CreateTableAsync<WorkoutActivity>();
          await _database.CreateTableAsync<WorkoutEquipment>();
          await _database.CreateTableAsync<WorkoutRef>();
 
@@ -52,8 +48,6 @@ namespace MxA.Database.Services {
          WorkoutRefs = new DataStoreEntity<WorkoutRef>(this);
          Workouts = new DataStoreEntity<Workout>(this);
          ExerciseFocusPoints = new DataStoreEntity<ExerciseFocusPoint>(this);
-         ProgressionWorkoutRefs = new DataStoreEntity<ProgressionWorkoutRef>(this);
-         WorkoutActivities = new DataStoreEntity<WorkoutActivity>(this);
          WorkoutEquipments = new DataStoreEntity<WorkoutEquipment>(this);
       }
    }

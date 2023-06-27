@@ -18,7 +18,7 @@ using Xamarin.Forms;
 
 namespace MxA.ViewModels {
 
-   [QueryProperty(nameof(TrainingId), nameof(TrainingId))]
+   [QueryProperty(nameof(ActivityId), nameof(ActivityId))]
    public class TimerViewModel : BaseViewModel {
 
       #region members
@@ -57,7 +57,7 @@ namespace MxA.ViewModels {
       public float SetsProgress { get; set; }
       public Color Color { get; set; }
       public Color NextColor { get; set; }
-      public string TrainingId { get; set; }
+      public string ActivityId { get; set; }
       public string TrainingName { get; set; }
       public string NextPeriod { get; set; }
       public uint NextPeriodTime { get; set; }
@@ -124,8 +124,8 @@ namespace MxA.ViewModels {
          //}
       }
 
-      public async void OnTrainingIdChanged() {
-         await LoadTraining();
+      public async void OnActivityIdChanged() {
+         await LoadActivity();
       }
 
       public void OnIsRunningChanged() {
@@ -287,15 +287,17 @@ namespace MxA.ViewModels {
          _trainingWorker.NextSet();
       }
 
-      private async Task LoadTraining() {
+      private async Task LoadActivity() {
          try {
-            //var item = await DataStore.GetItemAsync(TrainingId);
-            //_trainingWorker = new TrainingWorker(item);
-            //_trainingWorker.WorkerChanged += _trainingWorker_WorkerChanged;
+            var activity = await DataStore.Activities.GetItemAsync(ActivityId);
+            var exercise = await DataStore.Exercises.GetItemAsync(activity.ExerciseId);
+            _trainingWorker = new TrainingWorker(activity);
+            _trainingWorker.WorkerChanged += _trainingWorker_WorkerChanged;
 
-            //TotalReps = item.Reps;
-            //TotalSets = item.Sets;
-            //TrainingName = item.Name;
+            TotalReps = activity.Reps;
+            TotalSets = activity.Sets;
+            TrainingName = exercise.Name;
+            Title = exercise.Name;
 
             SetCurrentPeriod();
             UpdateCommands();

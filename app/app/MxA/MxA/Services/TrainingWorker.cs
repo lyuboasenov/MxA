@@ -1,4 +1,5 @@
-﻿using MxA.Models;
+﻿using MxA.Database.Models;
+using MxA.Models;
 using System;
 using System.Linq;
 using System.Timers;
@@ -6,12 +7,13 @@ using System.Timers;
 namespace MxA.Services {
    class TrainingWorker : IDisposable {
       private Timer _timer;
-      private readonly Training _training;
+      private readonly Activity _activity;
       private Period[] _periods;
       private int _currentPeriodIndex;
 
       private Period _preparePeriod;
       private Period _coolDownPeriod;
+
 
       public Period CurrentPeriod { get; private set; }
       public Period NextPeriod { get; private set; }
@@ -25,16 +27,16 @@ namespace MxA.Services {
 
       public event EventHandler WorkerChanged;
 
-      public TrainingWorker(Training training) {
-         if (training == null)
-            throw new ArgumentNullException(nameof(training));
+      public TrainingWorker(Activity activity) {
+         if (activity == null)
+            throw new ArgumentNullException(nameof(activity));
 
-         _training = training;
+         _activity = activity;
          _timer = new Timer(1000);
          _timer.Elapsed += Timer_Elapsed;
          _timer.Start();
 
-         var periods = training.Expand();
+         var periods = activity.Expand();
 
          _periods = periods.
             Where(p =>

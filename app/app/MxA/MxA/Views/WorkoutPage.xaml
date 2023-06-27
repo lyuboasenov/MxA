@@ -3,6 +3,8 @@
     x:Class="MxA.Views.WorkoutPage"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:converters="clr-namespace:MxA.Converters"
+    xmlns:icons="clr-namespace:MxA.Icons.Material"
     xmlns:local="clr-namespace:MxA.ViewModels"
     xmlns:models="clr-namespace:MxA.Models"
     Title="{Binding Title}"
@@ -13,6 +15,13 @@
         <BackButtonBehavior Command="{Binding ExitCommand}" />
     </Shell.BackButtonBehavior>
 
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <x:Boolean x:Key="true">True</x:Boolean>
+            <converters:SecondsToStringConverter x:Key="secondsConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
     <ContentPage.Content>
         <ScrollView>
             <StackLayout>
@@ -20,6 +29,7 @@
                     Margin="10"
                     HorizontalOptions="CenterAndExpand"
                     Source="{Binding Workout.Thumbnail}" />
+
                 <StackLayout BindableLayout.ItemsSource="{Binding WorkoutRefs}" Orientation="Horizontal">
                     <BindableLayout.ItemTemplate>
                         <DataTemplate>
@@ -28,13 +38,6 @@
                                 CommandParameter="{Binding}"
                                 HorizontalOptions="CenterAndExpand"
                                 Text="{Binding Label}" />
-                        </DataTemplate>
-                    </BindableLayout.ItemTemplate>
-                </StackLayout>
-                <StackLayout BindableLayout.ItemsSource="{Binding Activities}">
-                    <BindableLayout.ItemTemplate>
-                        <DataTemplate>
-                            <Label Text="{Binding ExerciseId}" />
                         </DataTemplate>
                     </BindableLayout.ItemTemplate>
                 </StackLayout>
@@ -52,7 +55,46 @@
                 <StackLayout BindableLayout.ItemsSource="{Binding Activities}">
                     <BindableLayout.ItemTemplate>
                         <DataTemplate x:DataType="models:ActivityExercise">
-                            <Label Text="{Binding Exercise.Name}" />
+                            <Frame
+                                Margin="10"
+                                BackgroundColor="{DynamicResource PageBackgroundColor}"
+                                OutlineColor="{DynamicResource Primary}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <StackLayout>
+                                        <Label FontAttributes="Bold" Text="{Binding Exercise.Name}" />
+                                        <StackLayout Orientation="Horizontal">
+                                            <Label Text="{Binding Activity.Sets, StringFormat='{0} sets'}" />
+                                            <Label Text="x" />
+                                            <Label Text="{Binding Activity.Reps, StringFormat='{0} reps'}" />
+                                            <Label Text="x" />
+                                            <Label Text="{Binding Activity.Work, Converter={StaticResource secondsConverter}, ConverterParameter={StaticResource true}}" />
+                                        </StackLayout>
+                                        <StackLayout Orientation="Horizontal">
+                                            <Label Text="Rest " />
+                                            <Label Text="{Binding Activity.RestBWReps, Converter={StaticResource secondsConverter}, ConverterParameter={StaticResource true}, StringFormat='{0} per rep'}" />
+                                            <Label Text="&amp;" />
+                                            <Label Text="{Binding Activity.RestBWSets, Converter={StaticResource secondsConverter}, ConverterParameter={StaticResource true}, StringFormat='{0} per set'}" />
+                                        </StackLayout>
+                                    </StackLayout>
+
+                                    <ImageButton
+                                        Grid.Column="1"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type local:WorkoutViewModel}}, Path=SelectActivityCommand}"
+                                        CommandParameter="{Binding .}"
+                                        VerticalOptions="CenterAndExpand">
+                                        <ImageButton.Source>
+                                            <FontImageSource
+                                                FontFamily="MD"
+                                                Glyph="{Static icons:IconFont.Navigate_next}"
+                                                Color="{DynamicResource Primary}" />
+                                        </ImageButton.Source>
+                                    </ImageButton>
+                                </Grid>
+                            </Frame>
                         </DataTemplate>
                     </BindableLayout.ItemTemplate>
                 </StackLayout>

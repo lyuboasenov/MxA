@@ -90,19 +90,30 @@ namespace MxA.Helpers {
             // Activities
             await ImportEntity(
                data.Activities,
-               a => a.Select(s => new Database.Models.Activity() {
-                  Id = s.Id,
-                  ExerciseId = s.Exercise,
-                  Work = s.Work,
-                  RestBWReps = s.RestBWReps,
-                  RestBWSets = s.RestBWSets,
-                  Reps = s.Reps,
-                  Sets = s.Sets,
-                  Prep = 10,
-                  Version = 0,
-                  SkipLastRepRest = false,
-                  SkipLastSetRest = false
-               }),
+               a => {
+
+                  uint order = 0;
+                  var list = new List<Database.Models.Activity>();
+                  foreach (var s in a) {
+                     list.Add(new Database.Models.Activity() {
+                        Id = s.Id,
+                        ExerciseId = s.Exercise,
+                        Work = s.Work,
+                        RestBWReps = s.RestBWReps,
+                        RestBWSets = s.RestBWSets,
+                        Reps = s.Reps,
+                        Sets = s.Sets,
+                        Prep = 10,
+                        Version = 0,
+                        SkipLastRepRest = false,
+                        SkipLastSetRest = false,
+                        WorkoutId = s.Workout,
+                        Order = order++
+                     });
+                  }
+
+                  return list;
+               },
                ds.Activities);
 
             // Progression
@@ -118,41 +129,17 @@ namespace MxA.Helpers {
             await ImportEntity(
                data.Progressions,
                a => {
-                  var list = new List<Database.Models.ProgressionWorkoutRef>();
-
-                  uint order = 0;
-                  foreach(var p in a) {
-                     foreach(var wr in p.Workouts) {
-                        list.Add(new Database.Models.ProgressionWorkoutRef() {
-                           Id = wr.Id,
-                           Order = order++,
-                           ProgressionId = p.Id,
-                           WorkoutRefId = wr.Id,
-                        });
-                     }
-                  }
-
-                  return list;
-                  },
-               ds.ProgressionWorkoutRefs,
-               async (d) => {
-                  var items = await d.GetItemsAsync();
-                  foreach (var i in items) {
-                     await d.DeleteItemAsync(i.Id);
-                  }
-               });
-
-            await ImportEntity(
-               data.Progressions,
-               a => {
                   var list = new List<Database.Models.WorkoutRef>();
 
+                  uint order = 0;
                   foreach (var p in a) {
                      foreach (var wr in p.Workouts) {
                         list.Add(new Database.Models.WorkoutRef() {
                            Id = wr.Id,
                            Label = wr.Label,
-                           WorkoutId = wr.Workout
+                           WorkoutId = wr.Workout,
+                           ProgressionId = p.Id,
+                           Order = order++
                         });
                      }
                   }
@@ -205,33 +192,6 @@ namespace MxA.Helpers {
                   return list;
                   },
                ds.WorkoutEquipments,
-               async (d) => {
-                  var items = await d.GetItemsAsync();
-                  foreach (var i in items) {
-                     await d.DeleteItemAsync(i.Id);
-                  }
-               });
-
-            await ImportEntity(
-               data.Workouts,
-               a => {
-                  var list = new List<Database.Models.WorkoutActivity>();
-
-                  uint order = 0;
-                  foreach (var w in a) {
-                     foreach (var ac in w.Activities) {
-                        list.Add(
-                           new Database.Models.WorkoutActivity() {
-                              WorkoutId = w.Id,
-                              ActivityId = ac,
-                              Order = order++
-                           });
-                     }
-                  }
-
-                  return list;
-               },
-               ds.WorkoutActivities,
                async (d) => {
                   var items = await d.GetItemsAsync();
                   foreach (var i in items) {

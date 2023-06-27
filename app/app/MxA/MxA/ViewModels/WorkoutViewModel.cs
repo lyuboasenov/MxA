@@ -1,19 +1,10 @@
-﻿using Plugin.BLE;
-using Plugin.BLE.Abstractions.Contracts;
-using Plugin.BLE.Abstractions.EventArgs;
-using Plugin.SimpleAudioPlayer;
-using MxA.Models;
-using MxA.Services;
+﻿using MxA.Models;
 using MxA.Views;
 using System;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
-using System.Timers;
 using System.Windows.Input;
-using Xamarin.Essentials;
 using Xamarin.Forms;
 using MxA.Database.Models;
 using System.Collections.Generic;
@@ -30,6 +21,7 @@ namespace MxA.ViewModels {
       #region commands
       public ICommand SelectProgressionCommand { get; private set; }
       public ICommand ExitCommand { get; private set; }
+      public ICommand SelectActivityCommand { get; private set; }
 
       #endregion
       #region properties
@@ -45,6 +37,11 @@ namespace MxA.ViewModels {
          Title = "Workout";
          SelectProgressionCommand = new Command<WorkoutRef>(OnProgressionSelected);
          ExitCommand = new Command(OnExitCommand);
+         SelectActivityCommand = new Command<ActivityExercise>(OnSelectActivityCommand);
+      }
+
+      private async void OnSelectActivityCommand(ActivityExercise item) {
+         await Shell.Current.GoToAsync($"{nameof(TimerPage)}?{nameof(TimerViewModel.ActivityId)}={item.Activity.Id}");
       }
 
       private async void OnExitCommand(object obj) {
@@ -67,31 +64,16 @@ namespace MxA.ViewModels {
 
             if (!string.IsNullOrEmpty(Workout.ProgressionId)) {
                _progression = await DataStore.Progression.GetItemAsync(Workout.ProgressionId);
-               var progressionWorkoutRefs = await DataStore.ProgressionWorkoutRefs.GetItemsAsync();
-               var workoutRefTasks = progressionWorkoutRefs.
-                  Where(ww => ww.ProgressionId == Workout.ProgressionId).
-                  OrderBy(wr => wr.Order).
-                  Select(async (w) => await DataStore.WorkoutRefs.GetItemAsync(w.WorkoutRefId));
 
-
-               _workoutRefs = await Task.WhenAll(workoutRefTasks);
-               foreach(var w in _workoutRefs) {
+               _workoutRefs = await DataStore.WorkoutRefs.GetItemsAsync();
+               foreach(var w in _workoutRefs.Where(w => w.ProgressionId == _progression.Id)) {
                   WorkoutRefs.Add(w);
                }
             }
 
-            var activityRefs = await DataStore.
-               WorkoutActivities.
-               GetItemsAsync();
+            _activities = await DataStore.Activities.GetItemsAsync();
 
-            var activityTasks = activityRefs.
-               Where(ar => ar.WorkoutId == Workout.Id).
-               OrderBy(o => o.Order).
-               Select(a => DataStore.Activities.GetItemAsync(a.ActivityId));
-
-            _activities = await Task.WhenAll(activityTasks);
-
-            foreach(var a in _activities) {
+            foreach (var a in _activities.Where(a => a.WorkoutId == Workout.Id)) {
                var e = await DataStore.Exercises.GetItemAsync(a.ExerciseId);
                Activities.Add(new ActivityExercise() {
                   Activity = a,

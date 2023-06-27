@@ -18,5 +18,7 @@ namespace MxA.Database.Models {
       public DateTime Created { get; set; }
       public DateTime? Updated { get; set; }
       public bool Active { get; set; }
+      public string WorkoutId { get; set; }
+      public uint Order { get; set; }
    }
 }
