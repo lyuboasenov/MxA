@@ -48,7 +48,16 @@ namespace MxA.Services {
       public uint CurrentSet { get; private set; }
       public uint TotalSets => _activity.Sets;
 
-      public int? NextCounter { get; private set; }
+      public int? NextCounter {
+         get {
+            if (_prepare) {
+               return GetStateTime(_state);
+            } else {
+               return GetStateTime(_nextState);
+            }
+         }
+      }
+
       public int Counter { get; private set; }
       public int SubCounter { get; private set; }
 
@@ -100,6 +109,12 @@ namespace MxA.Services {
          _activity.Sets = sets;
          _activity.SkipLastRepRest = skipLastRepRest;
          _activity.SkipLastSetRest = skipLastSetRest;
+
+         Counter = (int) (_activity.PrepTime == 0 ? 9 : _activity.PrepTime - 1);
+         SubCounter = 9;
+         _prepare = true;
+         _state = TimerInternalState.Work;
+         _nextState = GetNextState();
       }
 
       public void PlayPause() {
@@ -109,14 +124,15 @@ namespace MxA.Services {
          } else {
             _timer.Stop();
             _prepare = true;
-            Counter = (int) _activity.PrepTime;
+            Counter = (int) (_activity.PrepTime == 0 ? 9 : _activity.PrepTime - 1);
          }
+         StateChanged?.Invoke(this, EventArgs.Empty);
       }
 
       private void Timer_Elapsed(object sender, ElapsedEventArgs e) {
          if (_running) {
             if (--SubCounter == -1) {
-               SubCounter = 10;
+               SubCounter = 9;
                if (--Counter == -1) {
                   UpdateState();
                }
@@ -130,41 +146,94 @@ namespace MxA.Services {
             // Prepare period had finished
             // We start or continue where we left off
             _prepare = false;
-            Counter = GetPeriodTime(_state);
+            Counter = GetStateTime(_state) - 1;
          } else {
-            // Advanced to next period
-            _state = GetNextState(_state);
-            Counter = GetPeriodTime(_state);
-
-            _nextState = GetNextState(_state);
-            NextCounter = GetPeriodTime(_nextState);
+            // Advanced to next state
+            AdvanceState();
+            Counter = GetStateTime(_state) - 1;
+            _nextState = GetNextState();
          }
       }
 
-      private TimerInternalState GetNextState(TimerInternalState state) {
-         if (state == TimerInternalState.Work && IsLastRep() && _activity.SkipLastRepRest) {
-            state = TimerInternalState.RepetitionRest;
-         }
+      private void AdvanceState() {
+         if (_state == TimerInternalState.Work) {
+            // Move to repetition rest
+            _state = TimerInternalState.RepetitionRest;
 
-         if (state == TimerInternalState.RepetitionRest) {
-            if (IsLastSet() && _activity.SkipLastSetRest) {
-               state = TimerInternalState.SetRest;
+
+            if (IsLastRep() && _activity.SkipLastRepRest) {
+               // if is last rep and skip last rep => move to set rest
+               _state = TimerInternalState.SetRest;
+
+               if (IsLastSet() && _activity.SkipLastSetRest) {
+                  // TODO: Time done
+               }
             }
-            CurrentRepetition = (++CurrentRepetition) % TotalRepetitions;
-         }
+         } else if (_state == TimerInternalState.RepetitionRest) {
+            if (IsLastRep()) {
+               _state = TimerInternalState.SetRest;
 
-         if (state == TimerInternalState.SetRest) {
-            CurrentSet = (++CurrentSet) % TotalSets;
+               if (IsLastSet() && _activity.SkipLastSetRest) {
+                  // TODO: Time done
+               }
+            } else {
+               _state = TimerInternalState.Work;
+               CurrentRepetition++;
+            }
+         } else if (_state == TimerInternalState.SetRest) {
+            if (IsLastSet()) {
+               // TODO: Time done
+            } else {
+               _state = TimerInternalState.Work;
+               CurrentRepetition = 0;
+               CurrentSet++;
+            }
          }
-         return ++state;
       }
 
-      private int GetPeriodTime(TimerInternalState? state) {
+      private TimerInternalState? GetNextState() {
+         TimerInternalState? result = null;
+         if (_state == TimerInternalState.Work) {
+            // Move to repetition rest
+            result = TimerInternalState.RepetitionRest;
+
+            if (IsLastRep() && _activity.SkipLastRepRest) {
+               // if is last rep and skip last rep => move to set rest
+               result = TimerInternalState.SetRest;
+
+               if (IsLastSet() && _activity.SkipLastSetRest) {
+                  result = null;
+               }
+            }
+         } else if (_state == TimerInternalState.RepetitionRest) {
+            if (IsLastRep()) {
+               result = TimerInternalState.SetRest;
+
+               if (IsLastSet() && _activity.SkipLastSetRest) {
+                  // TODO: Time done
+                  result = null;
+               }
+            } else {
+               result = TimerInternalState.Work;
+            }
+         } else if (_state == TimerInternalState.SetRest) {
+            if (IsLastSet()) {
+               // TODO: Time done
+               result = null;
+            } else {
+               result = TimerInternalState.Work;
+            }
+         }
+
+         return result;
+      }
+
+      private int GetStateTime(TimerInternalState? state) {
          switch (state) {
             case null:
                return 0;
             case TimerInternalState.Work:
-               return (int) _activity.WorkTime;
+               return (int) _activity.WorkTime ;
             case TimerInternalState.RepetitionRest:
                return (int) _activity.RestBetweenReps;
             case TimerInternalState.SetRest:

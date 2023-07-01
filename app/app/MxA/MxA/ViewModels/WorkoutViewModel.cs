@@ -18,12 +18,14 @@ namespace MxA.ViewModels {
       private Progression _progression;
       private IEnumerable<WorkoutRef> _workoutRefs;
       private IEnumerable<Activity> _activities;
+
       #region commands
       public ICommand SelectProgressionCommand { get; private set; }
       public ICommand ExitCommand { get; private set; }
       public ICommand SelectActivityCommand { get; private set; }
 
       #endregion
+
       #region properties
       public string WorkoutId { get; set; }
       public Workout Workout { get; set; }
@@ -39,19 +41,19 @@ namespace MxA.ViewModels {
          ExitCommand = new Command(OnExitCommand);
          SelectActivityCommand = new Command<ActivityExercise>(OnSelectActivityCommand);
       }
+      #endregion
 
       private async void OnSelectActivityCommand(ActivityExercise item) {
          await Shell.Current.GoToAsync($"{nameof(TimerPage)}?{nameof(TimerViewModel.ActivityId)}={item.Activity.Id}");
       }
 
       private async void OnExitCommand(object obj) {
-         await Shell.Current.GoToAsync($"//{nameof(TrainingPage)}");
+         await Shell.Current.Navigation.PopToRootAsync();
       }
 
       private async void OnProgressionSelected(WorkoutRef obj) {
          await Shell.Current.GoToAsync($"{nameof(WorkoutPage)}?{nameof(WorkoutViewModel.WorkoutId)}={obj.WorkoutId}");
       }
-      #endregion
 
       public async void OnWorkoutIdChanged() {
          await LoadWorkout();

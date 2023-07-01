@@ -15,6 +15,7 @@ namespace MxA.Services {
       private Period _coolDownPeriod;
 
 
+
       public Period CurrentPeriod { get; private set; }
       public Period NextPeriod { get; private set; }
       public bool IsRunning { get; private set; }

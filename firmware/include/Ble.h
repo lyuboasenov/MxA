@@ -76,10 +76,11 @@ class MyServerCallbacks : public BLEServerCallbacks {
 
 class WeightCharacteristicCallback : public BLECharacteristicCallbacks {
    void onWrite(BLECharacteristic* pCharacteristic) {
-      double doubleValue = (double) pCharacteristic->getData();
+      uint8_t* value = pCharacteristic->getData();
+      double doubleValue = atof((const char *) value);
       _ble->on_set_weight((float) doubleValue);
    }
-
+   public:
    WeightCharacteristicCallback(Ble* ble) : _ble(ble) { }
 
    private:
