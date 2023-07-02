@@ -129,6 +129,64 @@ namespace MxA.Services {
          StateChanged?.Invoke(this, EventArgs.Empty);
       }
 
+      public void NextRepetition() {
+         _running = false;
+
+         _timer.Stop();
+         _prepare = true;
+         Counter = (int) (_activity.PrepTime == 0 ? 9 : _activity.PrepTime - 1);
+
+         AdvanceState();
+         _nextState = GetNextState();
+
+         StateChanged?.Invoke(this, EventArgs.Empty);
+      }
+
+      public void PreviousRepetition() {
+         _running = false;
+
+         _timer.Stop();
+         _prepare = true;
+         Counter = (int) (_activity.PrepTime == 0 ? 9 : _activity.PrepTime - 1);
+
+         RevertState();
+         _nextState = GetNextState();
+
+         StateChanged?.Invoke(this, EventArgs.Empty);
+      }
+
+      public void NextSet() {
+         _running = false;
+
+         _timer.Stop();
+         _prepare = true;
+         Counter = (int) (_activity.PrepTime == 0 ? 9 : _activity.PrepTime - 1);
+
+         CurrentSet++;
+         CurrentRepetition = 0;
+         _state = TimerInternalState.Work;
+         Counter = GetStateTime(_state) - 1;
+         _nextState = GetNextState();
+
+         StateChanged?.Invoke(this, EventArgs.Empty);
+      }
+
+      public void PreviousSet() {
+         _running = false;
+
+         _timer.Stop();
+         _prepare = true;
+         Counter = (int) (_activity.PrepTime == 0 ? 9 : _activity.PrepTime - 1);
+
+         CurrentSet = CurrentSet == 0 ? 0 : CurrentSet - 1;
+         CurrentRepetition = 0;
+         _state = TimerInternalState.Work;
+         Counter = GetStateTime(_state) - 1;
+         _nextState = GetNextState();
+
+         StateChanged?.Invoke(this, EventArgs.Empty);
+      }
+
       private void Timer_Elapsed(object sender, ElapsedEventArgs e) {
          if (_running) {
             if (--SubCounter == -1) {
@@ -152,6 +210,27 @@ namespace MxA.Services {
             AdvanceState();
             Counter = GetStateTime(_state) - 1;
             _nextState = GetNextState();
+         }
+      }
+
+      private void RevertState() {
+         if (_state == TimerInternalState.Work) {
+            if (CurrentRepetition > 0) {
+               _state = TimerInternalState.RepetitionRest;
+               CurrentRepetition--;
+            } else {
+               _state = TimerInternalState.SetRest;
+               CurrentSet--;
+               CurrentRepetition = TotalRepetitions - 1;
+            }
+         } else if (_state == TimerInternalState.RepetitionRest) {
+            _state = TimerInternalState.Work;
+         } else if (_state == TimerInternalState.SetRest) {
+            _state = TimerInternalState.RepetitionRest;
+
+            if (IsLastRep() && _activity.SkipLastRepRest) {
+               _state = TimerInternalState.Work;
+            }
          }
       }
 

@@ -90,41 +90,6 @@ namespace MxA.ViewModels {
          }
       }
 
-      private void MoveNextPeriod() {
-         //if (_periods?.Length > 0 && _currentPeriod + 1 < _periods?.Length) {
-         //   _currentPeriod++;
-         //   SetCurrentPeriod();
-         //}
-      }
-
-      private void MovePrevPeriod() {
-         //if (_periods?.Length > 0 && _currentPeriod - 1 >= 0) {
-         //   _currentPeriod--;
-         //   SetCurrentPeriod();
-         //}
-      }
-
-      private void MovePrevSet() {
-         //if (_periods?.Length > 0) {
-         //   var currentSet = _periods[_currentPeriod].Set;
-
-         //   while (_currentPeriod > 0 && _periods[_currentPeriod--].Set > currentSet - 2) { }
-         //   _currentPeriod++;
-
-         //   SetCurrentPeriod();
-         //}
-      }
-
-      private void MoveNextSet() {
-         //if (_periods?.Length > 0) {
-         //   var currentSet = _periods[_currentPeriod].Set;
-
-         //   while (_currentPeriod + 1 < _periods.Length && _periods[_currentPeriod++].Set < currentSet + 1) { }
-
-         //   SetCurrentPeriod();
-         //}
-      }
-
       public async void OnActivityIdChanged() {
          await LoadActivity();
       }
@@ -222,13 +187,11 @@ namespace MxA.ViewModels {
       }
 
       private void OnPlayPauseCommand(object obj) {
-         IsRunning = !IsRunning;
          _timerSM.PlayPause();
       }
 
       private bool CanPlayPause(object obj) {
-         // throw new NotImplementedException();
-         return true;
+         return _timerSM != null;
       }
 
       private async void OnExitCommand(object obj) {
@@ -260,40 +223,41 @@ namespace MxA.ViewModels {
       }
 
       private bool CanNextSet(object obj) {
-         // return _trainingWorker?.CanNextSet ?? false;
-         return true;
+         return _timerSM != null &&
+            _timerSM.CurrentSet < _timerSM.TotalSets - 1;
       }
 
       private bool CanPrevSet(object obj) {
-         // return _trainingWorker?.CanPrevSet ?? false;
-         return true;
+         return _timerSM != null &&
+            (_timerSM.CurrentRepetition > 0 || _timerSM.CurrentSet > 0);
       }
 
       private bool CanNextRep(object obj) {
-         // return _trainingWorker?.CanNextRep ?? false;
-         return true;
+         return _timerSM != null &&
+            (_timerSM.CurrentSet < _timerSM.TotalSets - 1 ||
+            _timerSM.CurrentRepetition < _timerSM.TotalRepetitions - 1);
       }
 
       private bool CanPrevRep(object obj) {
-         // return _trainingWorker?.CanPrevRep ?? false;
-         return true;
+         return _timerSM != null &&
+            (_timerSM.CurrentRepetition > 0 || _timerSM.CurrentSet > 0);
       }
 
       private void OnPrevRepCommand(object obj) {
-         // _trainingWorker.PrevRep();
+         _timerSM.PreviousRepetition();
       }
 
       private void OnNextRepCommand(object obj) {
-         // _trainingWorker.NextRep();
+         _timerSM.NextRepetition();
       }
 
       private void OnPrevSetCommand(object obj) {
-         // _trainingWorker.PrevSet();
+         _timerSM.PreviousSet();
 
       }
 
       private void OnNextSetCommand(object obj) {
-         // _trainingWorker.NextSet();
+         _timerSM.NextSet();
       }
 
       private async Task LoadActivity() {
