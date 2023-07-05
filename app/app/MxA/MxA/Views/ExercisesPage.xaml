@@ -4,44 +4,53 @@
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:MxA.ViewModels"
-    xmlns:model="clr-namespace:MxA.Models"
-    x:Name="BrowseItemsPage"
+    xmlns:models="clr-namespace:MxA.Database.Models"
     Title="{Binding Title}"
     BackgroundColor="{DynamicResource PageBackgroundColor}"
     Visual="Material">
 
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Command="{Binding AddItemCommand}" Text="Add" />
-    </ContentPage.ToolbarItems>
     <!--
         x:DataType enables compiled bindings for better performance and compile time validation of binding expressions.
         https://docs.microsoft.com/xamarin/xamarin-forms/app-fundamentals/data-binding/compiled-bindings
     -->
     <RefreshView
-        x:DataType="local:ItemsViewModel"
+        x:DataType="local:ExercisesViewModel"
         Command="{Binding LoadItemsCommand}"
-        IsRefreshing="{Binding IsBusy, Mode=TwoWay}">
+        HorizontalOptions="FillAndExpand"
+        IsRefreshing="{Binding IsBusy, Mode=TwoWay}"
+        VerticalOptions="FillAndExpand">
         <CollectionView
-            x:Name="ItemsListView"
+            BackgroundColor="{DynamicResource PageBackgroundColor}"
             ItemsSource="{Binding Items}"
-            SelectionMode="None">
+            SelectedItem="{Binding SelectedItem}"
+            SelectionMode="Single"
+            VerticalOptions="FillAndExpand">
             <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <StackLayout Padding="10" x:DataType="model:Training">
+                <DataTemplate x:DataType="models:Exercise">
+                    <StackLayout
+                        Padding="3"
+                        BackgroundColor="{DynamicResource PageBackgroundColor}"
+                        Orientation="Horizontal">
+                        <Image
+                            HeightRequest="100"
+                            HorizontalOptions="Start"
+                            Source="{Binding Thumbnail}"
+                            WidthRequest="100" />
                         <Label
-                            FontSize="16"
+                            Margin="5,0,0,0"
+                            FontSize="20"
                             LineBreakMode="NoWrap"
                             Style="{DynamicResource ListItemTextStyle}"
-                            Text="{Binding Name}" />
-                        <StackLayout.GestureRecognizers>
-                            <TapGestureRecognizer
-                                Command="{Binding Source={RelativeSource AncestorType={x:Type local:ItemsViewModel}}, Path=ItemTapped}"
-                                CommandParameter="{Binding .}"
-                                NumberOfTapsRequired="1" />
-                        </StackLayout.GestureRecognizers>
+                            Text="{Binding Name}"
+                            VerticalOptions="Center" />
                     </StackLayout>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
+            <CollectionView.EmptyViewTemplate>
+                <DataTemplate>
+                    <Label Text="No exercises" />
+                </DataTemplate>
+            </CollectionView.EmptyViewTemplate>
         </CollectionView>
     </RefreshView>
 </ContentPage>

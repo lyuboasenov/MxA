@@ -11,8 +11,18 @@
     android:TabbedPage.ToolbarPlacement="Bottom">
 
     <TabbedPage.ToolbarItems>
-        <ToolbarItem Command="{Binding AddItemCommand}" Text="Add" />
-        <ToolbarItem Command="{Binding ImportWorkoutsCommand}" Text="Import" />
+        <ToolbarItem
+            Command="{Binding AddItemCommand}"
+            Order="Secondary"
+            Text="Add workout" />
+        <ToolbarItem
+            Command="{Binding AddItemCommand}"
+            Order="Secondary"
+            Text="Add exercise" />
+        <ToolbarItem
+            Command="{Binding ImportWorkoutsCommand}"
+            Order="Secondary"
+            Text="Import" />
     </TabbedPage.ToolbarItems>
 
     <!--  Pages can be added as references or inline  -->
