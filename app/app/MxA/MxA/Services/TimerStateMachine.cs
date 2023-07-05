@@ -2,13 +2,14 @@
 using System.Timers;
 
 namespace MxA.Services {
-   internal class TimerStateMachine : IDisposable {
+   public class TimerStateMachine : IDisposable {
 
       public enum TimerState {
          Preparation = 0,
          Work = 1,
          RepetitionRest = 2,
-         SetRest = 3
+         SetRest = 3,
+         Done = 4
       }
 
       private enum TimerInternalState {
@@ -33,6 +34,7 @@ namespace MxA.Services {
       #region members
       private Timer _timer;
       private bool _running;
+      private bool _done = false;
 
       private TimerInternalState _state;
       private TimerInternalState? _nextState;
@@ -67,18 +69,24 @@ namespace MxA.Services {
          get {
             if (_prepare) {
                return TimerState.Preparation;
+            } else if (_done) {
+               return TimerState.Done;
             } else {
                return (TimerState) _state;
             }
          }
       }
 
-      public TimerState NextState {
+      public TimerState? NextState {
          get {
             if (_prepare) {
                return (TimerState) _state;
             } else {
-               return (TimerState) _nextState;
+               TimerState? result = null;
+               if (_nextState != null) {
+                  result = (TimerState) _nextState;
+               }
+               return result;
             }
          }
       }
@@ -118,6 +126,7 @@ namespace MxA.Services {
       }
 
       public void PlayPause() {
+         _done = false;
          _running = !_running;
          if (_running) {
             _timer.Start();
@@ -165,7 +174,7 @@ namespace MxA.Services {
          CurrentSet++;
          CurrentRepetition = 0;
          _state = TimerInternalState.Work;
-         Counter = GetStateTime(_state) - 1;
+         Counter = (GetStateTime(_state) ?? 0) - 1;
          _nextState = GetNextState();
 
          StateChanged?.Invoke(this, EventArgs.Empty);
@@ -181,7 +190,7 @@ namespace MxA.Services {
          CurrentSet = CurrentSet == 0 ? 0 : CurrentSet - 1;
          CurrentRepetition = 0;
          _state = TimerInternalState.Work;
-         Counter = GetStateTime(_state) - 1;
+         Counter = (GetStateTime(_state) ?? 0) - 1;
          _nextState = GetNextState();
 
          StateChanged?.Invoke(this, EventArgs.Empty);
@@ -204,12 +213,14 @@ namespace MxA.Services {
             // Prepare period had finished
             // We start or continue where we left off
             _prepare = false;
-            Counter = GetStateTime(_state) - 1;
+            Counter = (GetStateTime(_state) ?? 0) - 1;
          } else {
             // Advanced to next state
             AdvanceState();
-            Counter = GetStateTime(_state) - 1;
-            _nextState = GetNextState();
+            if (!_done) {
+               Counter = (GetStateTime(_state) ?? 0) - 1;
+               _nextState = GetNextState();
+            }
          }
       }
 
@@ -217,9 +228,15 @@ namespace MxA.Services {
          if (_state == TimerInternalState.Work) {
             if (CurrentRepetition > 0) {
                _state = TimerInternalState.RepetitionRest;
+               if (_activity.RestBetweenReps == 0) {
+                  _state = TimerInternalState.Work;
+               }
                CurrentRepetition--;
             } else {
                _state = TimerInternalState.SetRest;
+               if (_activity.RestBetweenReps == 0) {
+                  _state = TimerInternalState.Work;
+               }
                CurrentSet--;
                CurrentRepetition = TotalRepetitions - 1;
             }
@@ -228,7 +245,7 @@ namespace MxA.Services {
          } else if (_state == TimerInternalState.SetRest) {
             _state = TimerInternalState.RepetitionRest;
 
-            if (IsLastRep() && _activity.SkipLastRepRest) {
+            if (IsLastRep() && _activity.SkipLastRepRest || _activity.RestBetweenReps == 0) {
                _state = TimerInternalState.Work;
             }
          }
@@ -240,20 +257,31 @@ namespace MxA.Services {
             _state = TimerInternalState.RepetitionRest;
 
 
-            if (IsLastRep() && _activity.SkipLastRepRest) {
+            if (IsLastRep() && (_activity.SkipLastRepRest || _activity.RestBetweenReps == 0)) {
                // if is last rep and skip last rep => move to set rest
                _state = TimerInternalState.SetRest;
 
                if (IsLastSet() && _activity.SkipLastSetRest) {
-                  // TODO: Time done
+                  TimerDone();
+               } else if (_activity.RestBetweenSets == 0) {
+                  _state = TimerInternalState.Work;
+                  CurrentRepetition = 0;
+                  CurrentSet++;
                }
+            } else if (_activity.RestBetweenReps == 0) {
+               _state = TimerInternalState.Work;
+               CurrentRepetition++;
             }
          } else if (_state == TimerInternalState.RepetitionRest) {
             if (IsLastRep()) {
                _state = TimerInternalState.SetRest;
 
                if (IsLastSet() && _activity.SkipLastSetRest) {
-                  // TODO: Time done
+                  TimerDone();
+               } else if (_activity.RestBetweenSets == 0) {
+                  _state = TimerInternalState.Work;
+                  CurrentRepetition = 0;
+                  CurrentSet++;
                }
             } else {
                _state = TimerInternalState.Work;
@@ -261,7 +289,7 @@ namespace MxA.Services {
             }
          } else if (_state == TimerInternalState.SetRest) {
             if (IsLastSet()) {
-               // TODO: Time done
+               TimerDone();
             } else {
                _state = TimerInternalState.Work;
                CurrentRepetition = 0;
@@ -270,19 +298,30 @@ namespace MxA.Services {
          }
       }
 
+      private void TimerDone() {
+         _timer.Stop();
+         _done = true;
+         Counter = 0;
+         StateChanged?.Invoke(this, EventArgs.Empty);
+      }
+
       private TimerInternalState? GetNextState() {
          TimerInternalState? result = null;
          if (_state == TimerInternalState.Work) {
             // Move to repetition rest
             result = TimerInternalState.RepetitionRest;
 
-            if (IsLastRep() && _activity.SkipLastRepRest) {
+            if (IsLastRep() && (_activity.SkipLastRepRest || _activity.RestBetweenReps == 0)) {
                // if is last rep and skip last rep => move to set rest
                result = TimerInternalState.SetRest;
 
                if (IsLastSet() && _activity.SkipLastSetRest) {
                   result = null;
+               } else if (_activity.RestBetweenSets == 0) {
+                  result = TimerInternalState.Work;
                }
+            } else if (_activity.RestBetweenReps == 0) {
+               result = TimerInternalState.Work;
             }
          } else if (_state == TimerInternalState.RepetitionRest) {
             if (IsLastRep()) {
@@ -291,6 +330,8 @@ namespace MxA.Services {
                if (IsLastSet() && _activity.SkipLastSetRest) {
                   // TODO: Time done
                   result = null;
+               } else if (_activity.RestBetweenSets == 0) {
+                  result = TimerInternalState.Work;
                }
             } else {
                result = TimerInternalState.Work;
@@ -307,10 +348,10 @@ namespace MxA.Services {
          return result;
       }
 
-      private int GetStateTime(TimerInternalState? state) {
+      private int? GetStateTime(TimerInternalState? state) {
          switch (state) {
             case null:
-               return 0;
+               return null;
             case TimerInternalState.Work:
                return (int) _activity.WorkTime ;
             case TimerInternalState.RepetitionRest:

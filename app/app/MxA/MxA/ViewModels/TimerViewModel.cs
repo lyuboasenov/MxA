@@ -12,6 +12,10 @@ using System.Windows.Input;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 using MxA.Database.Models;
+using System.Collections.Generic;
+using MxA.Models;
+using System.Collections.Concurrent;
+using System.Linq;
 
 namespace MxA.ViewModels {
 
@@ -31,6 +35,7 @@ namespace MxA.ViewModels {
       private bool _playSound;
       private Activity _activity;
       private Exercise _exercise;
+      private ConcurrentBag<TimerEvent> _timerEvents = new ConcurrentBag<TimerEvent>();
       #endregion
 
       #region commands
@@ -50,7 +55,7 @@ namespace MxA.ViewModels {
       public uint Set { get; set; }
       public uint TotalSets { get; set; }
       public uint Counter { get; set; }
-      public uint Load { get; set; }
+      public double Load { get; set; }
       public uint BatteryLevel { get; set; }
       public bool BleConnected { get; set; } = false;
       public float RepsProgress { get; set; }
@@ -144,7 +149,7 @@ namespace MxA.ViewModels {
       private void Load_ValueUpdated(object sender, Plugin.BLE.Abstractions.EventArgs.CharacteristicUpdatedEventArgs e) {
          var doubleValue = BitConverter.ToDouble(e.Characteristic.Value, 0);
          Debug.Write($"Value: {doubleValue}");
-         Load = (uint) doubleValue;
+         Load = doubleValue >= 0 ? doubleValue : 0;
       }
 
       public void OnAppearing() {
@@ -224,7 +229,7 @@ namespace MxA.ViewModels {
 
       private bool CanNextSet(object obj) {
          return _timerSM != null &&
-            _timerSM.CurrentSet < _timerSM.TotalSets - 1;
+            _timerSM.CurrentSet < _timerSM.TotalSets;
       }
 
       private bool CanPrevSet(object obj) {
@@ -234,8 +239,8 @@ namespace MxA.ViewModels {
 
       private bool CanNextRep(object obj) {
          return _timerSM != null &&
-            (_timerSM.CurrentSet < _timerSM.TotalSets - 1 ||
-            _timerSM.CurrentRepetition < _timerSM.TotalRepetitions - 1);
+            (_timerSM.CurrentSet < _timerSM.TotalSets ||
+            _timerSM.CurrentRepetition < _timerSM.TotalRepetitions);
       }
 
       private bool CanPrevRep(object obj) {
@@ -295,6 +300,31 @@ namespace MxA.ViewModels {
             PlayTones();
          }
          UpdateCommands();
+         LogTimerEvent();
+
+         if (_timerSM.State == TimerStateMachine.TimerState.Done) {
+            var count = _timerEvents.Where(ev => ev.State == TimerStateMachine.TimerState.Work);
+            var load = _timerEvents.Where(ev => ev.State == TimerStateMachine.TimerState.Work).Sum(ee => ee.Load);
+
+            int i = 0;
+
+            // TODO: Save activity
+         }
+      }
+
+      private void LogTimerEvent() {
+         if (_timerSM.IsRunning &&
+            (_timerSM.State == TimerStateMachine.TimerState.Work ||
+            (_timerSM.NextState == TimerStateMachine.TimerState.Work && _timerSM.Counter < 2))) {
+            _timerEvents.Add(
+               new TimerEvent() {
+               Counter = (uint) _timerSM.Counter,
+               Load = Load,
+               State = _timerSM.State,
+               Repetition = _timerSM.CurrentRepetition,
+               Set = _timerSM.CurrentSet,
+               SubCounter = (uint) _timerSM.SubCounter});
+         }
       }
 
       private void SetCurrentPeriod() {
@@ -310,9 +340,9 @@ namespace MxA.ViewModels {
          RepsProgress = (float) Rep / TotalReps;
          SetsProgress = (float) Set / TotalSets;
 
-         if (_timerSM.NextCounter != null) {
-            NextColor = StateToColor(_timerSM.NextState);
-            NextPeriod = StateToName(_timerSM.NextState);
+         if (_timerSM.NextState != null) {
+            NextColor = StateToColor(_timerSM.NextState.Value);
+            NextPeriod = StateToName(_timerSM.NextState.Value);
             NextPeriodTime = (uint) _timerSM.NextCounter.Value;
             ISNextVisible = true;
          } else {
@@ -332,6 +362,8 @@ namespace MxA.ViewModels {
                return "Rest";
             case TimerStateMachine.TimerState.Work:
                return "Work";
+            case TimerStateMachine.TimerState.Done:
+               return "Done";
             default:
                return "";
          }
@@ -346,6 +378,8 @@ namespace MxA.ViewModels {
                return Color.Blue;
             case TimerStateMachine.TimerState.Work:
                return Color.Green;
+            case TimerStateMachine.TimerState.Done:
+               return Color.Gray;
             default:
                return Color.White;
          }
