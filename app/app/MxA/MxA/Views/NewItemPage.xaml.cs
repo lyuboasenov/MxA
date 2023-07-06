@@ -10,7 +10,7 @@ namespace MxA.Views
 {
     public partial class NewItemPage : ContentPage
     {
-        public Item Item { get; set; }
+        public object Item { get; set; }
 
         public NewItemPage()
         {

@@ -10,7 +10,6 @@ namespace MxA {
          Routing.RegisterRoute(nameof(NewItemPage), typeof(NewItemPage));
          Routing.RegisterRoute(nameof(TimerPage), typeof(TimerPage));
          Routing.RegisterRoute(nameof(BleDevicesPage), typeof(BleDevicesPage));
-         Routing.RegisterRoute(nameof(ItemsPage), typeof(ItemsPage));
          Routing.RegisterRoute(nameof(TrainingPage), typeof(TrainingPage));
          Routing.RegisterRoute(nameof(WorkoutPage), typeof(WorkoutPage));
          Routing.RegisterRoute(nameof(ExercisePage), typeof(ExercisePage));

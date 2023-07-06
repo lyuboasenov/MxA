@@ -46,21 +46,21 @@ namespace MxA.ViewModels {
       }
 
       private async void OnSave() {
-         SimpleTraining newTraining = new SimpleTraining() {
-            Id = Name.
-               Replace(" ", "_").
-               Replace("\\", "_").
-               Replace("/", "_").
-               ToLower(),
-            Name = Name,
-            PrepTime = PrepMinutes * 60 + PrepSeconds,
-            WorkTime = WorkMinutes * 60 + WorkSeconds,
-            RestTime = RestMinutes * 60 + RestSeconds,
-            RestBwSetsTime = SetRestMinutes * 60 + SetRestSeconds,
-            CoolDownTime = CoolDownMinutes * 60 + CoolDownSeconds,
-            Reps = Reps,
-            Sets = Sets
-         };
+         //SimpleTraining newTraining = new SimpleTraining() {
+         //   Id = Name.
+         //      Replace(" ", "_").
+         //      Replace("\\", "_").
+         //      Replace("/", "_").
+         //      ToLower(),
+         //   Name = Name,
+         //   PrepTime = PrepMinutes * 60 + PrepSeconds,
+         //   WorkTime = WorkMinutes * 60 + WorkSeconds,
+         //   RestTime = RestMinutes * 60 + RestSeconds,
+         //   RestBwSetsTime = SetRestMinutes * 60 + SetRestSeconds,
+         //   CoolDownTime = CoolDownMinutes * 60 + CoolDownSeconds,
+         //   Reps = Reps,
+         //   Sets = Sets
+         //};
 
          // await DataStore.AddItemAsync(newTraining);
 
