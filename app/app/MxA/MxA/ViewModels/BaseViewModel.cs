@@ -17,11 +17,14 @@ namespace MxA.ViewModels {
 
       public event PropertyChangedEventHandler PropertyChanged;
 
+      public static Task<bool> DisplayAlertAsync(string title, string message, string accept, string cancel) {
+         return App.Current.MainPage.DisplayAlert(title, message, accept, cancel);
+      }
       public static Task<string> DisplayPromptAsync(string title, string message, string accept = "OK", string cancel = "Cancel", string placeholder = null, int maxLength = -1, Keyboard keyboard = null, string initialValue = "") {
          return App.Current.MainPage.DisplayPromptAsync(title, message, accept, cancel, placeholder, maxLength, keyboard, initialValue);
       }
-      public static async Task DisplayAlertAsync(string title, string message, string cancel) {
-         await App.Current.MainPage.DisplayAlert(title, message, cancel);
+      public static Task DisplayAlertAsync(string title, string message, string cancel) {
+         return App.Current.MainPage.DisplayAlert(title, message, cancel);
       }
       public static Task HandleExceptionAsync(Exception ex) {
          return HandleExceptionAsync(string.Empty, ex);

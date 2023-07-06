@@ -2,9 +2,12 @@
 using MxA.Database.Models;
 using MxA.Models;
 using SkiaSharp;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Input;
 using Xamarin.Forms;
 using static MxA.Services.TimerStateMachine;
 
@@ -20,6 +23,14 @@ namespace MxA.ViewModels {
       public ActivityLog ActivityLog { get; set; }
       public Activity Activity { get; set; }
       public Exercise Exercise { get; set; }
+
+      public ICommand DeleteActivityLogCommand { get; }
+      public ICommand ExitCommand { get; }
+
+      public ActivityLoadReportViewModel() {
+         DeleteActivityLogCommand = new Command(async () => await OnDeleteActivityLogCommand());
+         ExitCommand = new Command(async () => await OnExitCommand());
+      }
 
       public async void OnActivityLogIdChanged() {
          ActivityLog = await DataStore.ActivityLogs.GetItemAsync(ActivityLogId);
@@ -47,6 +58,25 @@ namespace MxA.ViewModels {
                   }
                });
          }
+      }
+
+      private Task OnExitCommand() {
+         return Shell.Current.GoToAsync("..");
+      }
+
+      private async Task OnDeleteActivityLogCommand() {
+         if (await DisplayAlertAsync("Delete", "Are you sure, you want to delete this activity?", "Yes", "No")) {
+            var tasks = new List<Task>();
+            foreach(var e in _timerEvents) {
+               tasks.Add(DataStore.TimerEvents.DeleteItemAsync(e.Id));
+            }
+
+            tasks.Add(DataStore.ActivityLogs.DeleteItemAsync(ActivityLog.Id));
+
+            await Task.WhenAll(tasks);
+         }
+
+         await Shell.Current.GoToAsync("..");
       }
 
       private ChartEntry CreateEntry(TimerEvent e) {
