@@ -63,6 +63,9 @@
     <Compile Update="Views\ExercisesPage.xaml.cs">
       <DependentUpon>ExercisesPage.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\ActivityLogsPage.xaml.cs">
+      <DependentUpon>ActivityLogsPage.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\WorkoutsPage.xaml.cs">
       <DependentUpon>WorkoutsPage.xaml</DependentUpon>
     </Compile>

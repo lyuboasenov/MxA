@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="MxA.Views.ActivityLogsPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:icons="clr-namespace:MxA.Icons.Material"
+    xmlns:local="clr-namespace:MxA.ViewModels"
+    xmlns:models="clr-namespace:MxA.Models"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+    Title="{Binding Title}"
+    BackgroundColor="{DynamicResource PageBackgroundColor}"
+    Visual="Material">
+
+    <ContentPage.Resources>
+        <xct:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+    </ContentPage.Resources>
+    <!--
+        x:DataType enables compiled bindings for better performance and compile time validation of binding expressions.
+        https://docs.microsoft.com/xamarin/xamarin-forms/app-fundamentals/data-binding/compiled-bindings
+    -->
+    <RefreshView Command="{Binding LoadLogEntriesCommand}" IsRefreshing="{Binding IsBusy, Mode=TwoWay}">
+        <CollectionView
+            x:Name="ItemsListView"
+            ItemsSource="{Binding LogEntries}"
+            SelectionMode="None">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:ActivityLogGroup">
+                    <xct:Expander x:Name="expander">
+                        <xct:Expander.Header>
+                            <StackLayout
+                                Padding="10"
+                                Orientation="Horizontal"
+                                VerticalOptions="CenterAndExpand">
+
+                                <Label
+                                    FontFamily="MD"
+                                    FontSize="25"
+                                    IsVisible="{Binding IsExpanded, Source={x:Reference expander}, Converter={StaticResource InvertedBoolConverter}}"
+                                    Text="{Static icons:IconFont.Expand_more}"
+                                    VerticalOptions="CenterAndExpand" />
+                                <Label
+                                    FontFamily="MD"
+                                    FontSize="25"
+                                    IsVisible="{Binding IsExpanded, Source={x:Reference expander}}"
+                                    Text="{Static icons:IconFont.Expand_less}"
+                                    VerticalOptions="CenterAndExpand" />
+
+                                <Label
+                                    FontAttributes="Bold"
+                                    FontSize="25"
+                                    LineBreakMode="NoWrap"
+                                    Style="{DynamicResource ListItemTextStyle}"
+                                    Text="{Binding Date, StringFormat='{0:yyyy/MM/dd}'}"
+                                    VerticalOptions="CenterAndExpand" />
+                            </StackLayout>
+                        </xct:Expander.Header>
+
+                        <StackLayout>
+                            <CollectionView
+                                Margin="40,0,0,0"
+                                ItemsSource="{Binding}"
+                                SelectedItem="{Binding Path=SelectedItem, Source={RelativeSource AncestorType={x:Type local:ActivityLogsViewModel}, Mode=FindAncestorBindingContext}}"
+                                SelectionMode="Single">
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate x:DataType="models:ActivityActivityLog">
+                                        <StackLayout>
+                                            <Label
+                                                FontAttributes="Bold"
+                                                FontSize="15"
+                                                LineBreakMode="NoWrap"
+                                                Style="{DynamicResource ListItemTextStyle}"
+                                                Text="{Binding Exercise.Name}"
+                                                VerticalOptions="Start" />
+                                        </StackLayout>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </StackLayout>
+                    </xct:Expander>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </RefreshView>
+</ContentPage>

@@ -14,6 +14,8 @@ namespace MxA {
          Routing.RegisterRoute(nameof(TrainingPage), typeof(TrainingPage));
          Routing.RegisterRoute(nameof(WorkoutPage), typeof(WorkoutPage));
          Routing.RegisterRoute(nameof(ExercisePage), typeof(ExercisePage));
+         Routing.RegisterRoute(nameof(ActivityLogsPage), typeof(ActivityLogsPage));
+         Routing.RegisterRoute(nameof(ActivityLoadReportPage), typeof(ActivityLoadReportPage));
       }
 
       private async void OnMenuItemClicked(object sender, EventArgs e) {

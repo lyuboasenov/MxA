@@ -3,18 +3,45 @@
     x:Class="MxA.Views.ActivityLoadReportPage"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:microcharts="clr-namespace:Microcharts.Forms;assembly=Microcharts.Forms">
+    xmlns:microcharts="clr-namespace:Microcharts.Forms;assembly=Microcharts.Forms"
+    Title="{Binding Title}">
     <ContentPage.Content>
         <StackLayout>
             <Label
-                HorizontalOptions="CenterAndExpand"
-                Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" />
+                Margin="20,0,0,0"
+                FontAttributes="Bold"
+                HorizontalOptions="StartAndExpand"
+                Text="Note:"
+                TextColor="{DynamicResource PrimaryTextColor}"
+                VerticalOptions="StartAndExpand" />
+
+            <Label
+                Margin="20,0,0,0"
+                HorizontalOptions="StartAndExpand"
+                Text="{Binding ActivityLog.Note}"
+                TextColor="{DynamicResource PrimaryTextColor}"
+                VerticalOptions="StartAndExpand" />
+
+            <BoxView
+                Margin="15,0,5,0"
+                HeightRequest="1"
+                Color="{DynamicResource Primary}" />
 
             <CollectionView ItemsSource="{Binding Reps}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <microcharts:ChartView Chart="{Binding RepChart}" />
+                        <StackLayout>
+                            <StackLayout Orientation="Horizontal">
+                                <Label Text="Rep:" TextColor="{DynamicResource PrimaryTextColor}" />
+                                <Label Text="{Binding Repetition}" TextColor="{DynamicResource PrimaryTextColor}" />
+                                <Label Text="Set:" TextColor="{DynamicResource PrimaryTextColor}" />
+                                <Label Text="{Binding Set}" TextColor="{DynamicResource PrimaryTextColor}" />
+
+                                <Label Text="Average load:" TextColor="{DynamicResource PrimaryTextColor}" />
+                                <Label Text="{Binding AverageLoad, StringFormat='{0:0.00}'}" TextColor="{DynamicResource PrimaryTextColor}" />
+                            </StackLayout>
+                            <microcharts:ChartView Chart="{Binding Chart}" HeightRequest="200" />
+                        </StackLayout>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>

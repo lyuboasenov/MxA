@@ -15,5 +15,6 @@ namespace MxA.Database.Models {
       public uint Set { get; set; }
       public TimerState State { get; set; }
       public double Load { get; set; }
+      public uint Order { get; set; }
    }
 }

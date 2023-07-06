@@ -62,7 +62,7 @@
         <ShellContent ContentTemplate="{DataTemplate local:TrainingPage}" Route="TrainingPage" />
     </FlyoutItem>
     <FlyoutItem Title="Logbook" Icon="{StaticResource IconLogbook}">
-        <ShellContent ContentTemplate="{DataTemplate local:ItemsPage}" Route="ItemsPage" />
+        <ShellContent ContentTemplate="{DataTemplate local:ActivityLogsPage}" Route="ActivityLogsPage" />
     </FlyoutItem>
     <FlyoutItem Title="Settings" Icon="{StaticResource IconSettings}">
         <ShellContent ContentTemplate="{DataTemplate local:SettingsPage}" Route="SettingsPage" />

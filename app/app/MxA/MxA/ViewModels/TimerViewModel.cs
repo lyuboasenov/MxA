@@ -37,6 +37,7 @@ namespace MxA.ViewModels {
       private Exercise _exercise;
       private ConcurrentBag<TimerEvent> _timerEvents = new ConcurrentBag<TimerEvent>();
       private bool _timerDoneExecuted = false;
+      private uint _timerEventCounter;
       #endregion
 
       #region commands
@@ -325,9 +326,6 @@ namespace MxA.ViewModels {
          LogTimerEvent();
 
          if (_timerSM.State == TimerStateMachine.TimerState.Done) {
-            var count = _timerEvents.Where(ev => ev.State == TimerStateMachine.TimerState.Work);
-            var load = _timerEvents.Where(ev => ev.State == TimerStateMachine.TimerState.Work).Sum(ee => ee.Load);
-
             MainThread.BeginInvokeOnMainThread(() => {
                TimerDoneCommand.Execute(null);
             });
@@ -346,7 +344,8 @@ namespace MxA.ViewModels {
                State = _timerSM.State,
                Repetition = _timerSM.CurrentRepetition,
                Set = _timerSM.CurrentSet,
-               SubCounter = (uint) _timerSM.SubCounter});
+               SubCounter = (uint) _timerSM.SubCounter,
+               Order = _timerEventCounter++});
          }
       }
 
