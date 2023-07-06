@@ -11,17 +11,15 @@ namespace MxA.ViewModels {
 
    [AddINotifyPropertyChangedInterface]
    public class BaseViewModel : INotifyPropertyChanged {
-
-      // public IDataStoreEntity<Training> DataStore => DependencyService.Get<IDataStoreEntity<Training>>();
       public IDataStore DataStore => DependencyService.Get<IDataStore>();
-
       public bool IsBusy { get; set; }
-
       public string Title { get; set; }
 
       public event PropertyChangedEventHandler PropertyChanged;
 
-
+      public static Task<string> DisplayPromptAsync(string title, string message, string accept = "OK", string cancel = "Cancel", string placeholder = null, int maxLength = -1, Keyboard keyboard = null, string initialValue = "") {
+         return App.Current.MainPage.DisplayPromptAsync(title, message, accept, cancel, placeholder, maxLength, keyboard, initialValue);
+      }
       public static async Task DisplayAlertAsync(string title, string message, string cancel) {
          await App.Current.MainPage.DisplayAlert(title, message, cancel);
       }

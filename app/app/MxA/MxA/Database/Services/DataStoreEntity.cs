@@ -2,6 +2,7 @@
 using SQLite;
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace MxA.Database.Services {
@@ -85,6 +86,13 @@ namespace MxA.Database.Services {
          bool isVers = typeof(IVersion).IsAssignableFrom(typeof(T));
          // return await database.Table<T>().Where(i => isVers ? ((IVersion) i).Active : true).ToArrayAsync();
          return await database.Table<T>().ToArrayAsync();
+      }
+
+      public async Task<IEnumerable<T>> GetItemsAsync(Expression<Func<T, bool>> predExpr, bool forceRefresh = false) {
+         var database = await GetDatabase();
+         bool isVers = typeof(IVersion).IsAssignableFrom(typeof(T));
+         // return await database.Table<T>().Where(i => isVers ? ((IVersion) i).Active : true).ToArrayAsync();
+         return await database.Table<T>().Where(predExpr).ToArrayAsync();
       }
 
       private Task<SQLiteAsyncConnection> GetDatabase() {

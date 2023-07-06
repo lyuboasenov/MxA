@@ -36,6 +36,7 @@ namespace MxA.ViewModels {
       private Activity _activity;
       private Exercise _exercise;
       private ConcurrentBag<TimerEvent> _timerEvents = new ConcurrentBag<TimerEvent>();
+      private bool _timerDoneExecuted = false;
       #endregion
 
       #region commands
@@ -46,6 +47,7 @@ namespace MxA.ViewModels {
       public ICommand PrevSetCommand { get; private set; }
       public ICommand NextSetCommand { get; private set; }
       public ICommand ConnectHangboardCommand { get; private set; }
+      public ICommand TimerDoneCommand { get; private set; }
       #endregion
 
       #region properties
@@ -189,6 +191,7 @@ namespace MxA.ViewModels {
          NextRepCommand = new Command(OnNextRepCommand, CanNextRep);
          PrevSetCommand = new Command(OnPrevSetCommand, CanPrevSet);
          NextSetCommand = new Command(OnNextSetCommand, CanNextSet);
+         TimerDoneCommand = new Command(async () => await OnTimerDoneCommand());
       }
 
       private void OnPlayPauseCommand(object obj) {
@@ -265,6 +268,25 @@ namespace MxA.ViewModels {
          _timerSM.NextSet();
       }
 
+      private async Task OnTimerDoneCommand() {
+         if (!_timerDoneExecuted) {
+            _timerDoneExecuted = true;
+            var note = await DisplayPromptAsync("Save log", "Note");
+            if (note != null) {
+               var added = await DataStore.ActivityLogs.AddItemAsync(new ActivityLog() {
+                  ActivityId = _activity.Id,
+                  Note = note,
+                  Created = DateTime.Now
+               });
+
+               foreach (var e in _timerEvents) {
+                  e.ActivityLogId = added.Id;
+                  await DataStore.TimerEvents.AddItemAsync(e);
+               }
+            }
+         }
+      }
+
       private async Task LoadActivity() {
          try {
             _activity = await DataStore.Activities.GetItemAsync(ActivityId);
@@ -278,7 +300,7 @@ namespace MxA.ViewModels {
                _activity.Reps,
                _activity.Sets,
                _activity.SkipLastRepRest,
-               _activity.SkipLastSetRest);
+               true);
             _timerSM.StateChanged += _timerSM_StateChanged;
             _timerSM_StateChanged(this, EventArgs.Empty);
 
@@ -306,9 +328,10 @@ namespace MxA.ViewModels {
             var count = _timerEvents.Where(ev => ev.State == TimerStateMachine.TimerState.Work);
             var load = _timerEvents.Where(ev => ev.State == TimerStateMachine.TimerState.Work).Sum(ee => ee.Load);
 
-            int i = 0;
+            MainThread.BeginInvokeOnMainThread(() => {
+               TimerDoneCommand.Execute(null);
+            });
 
-            // TODO: Save activity
          }
       }
 

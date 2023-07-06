@@ -12,5 +12,8 @@ namespace MxA.Database.Services {
       IDataStoreEntity<Workout> Workouts { get; }
       IDataStoreEntity<WorkoutEquipment> WorkoutEquipments { get; }
       IDataStoreEntity<WorkoutRef> WorkoutRefs { get; }
+
+      IDataStoreEntity<ActivityLog> ActivityLogs { get; }
+      IDataStoreEntity<TimerEvent> TimerEvents { get; }
    }
 }

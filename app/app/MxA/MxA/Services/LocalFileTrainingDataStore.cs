@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using MxA.Database.Services;
+using System.Linq.Expressions;
 
 namespace MxA.Services {
    public class LocalFileTrainingDataStore : IDataStoreEntity<Training> {
@@ -83,6 +84,10 @@ namespace MxA.Services {
       }
 
       Task<Training> IDataStoreEntity<Training>.UpdateItemAsync(Training item) {
+         throw new NotImplementedException();
+      }
+
+      public Task<IEnumerable<Training>> GetItemsAsync(Expression<Func<Training, bool>> predExpr, bool forceRefresh = false) {
          throw new NotImplementedException();
       }
    }

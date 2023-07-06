@@ -17,6 +17,8 @@ namespace MxA.Database.Services {
       public IDataStoreEntity<Workout> Workouts { get; }
       public IDataStoreEntity<ExerciseFocusPoint> ExerciseFocusPoints { get; }
       public IDataStoreEntity<WorkoutEquipment> WorkoutEquipments { get; }
+      public IDataStoreEntity<ActivityLog> ActivityLogs { get; }
+      public IDataStoreEntity<TimerEvent> TimerEvents { get; }
       public Task<SQLiteAsyncConnection> Database => _databaseLazy.Value;
 
       public static SQLiteAsyncConnection _database;
@@ -34,6 +36,8 @@ namespace MxA.Database.Services {
          await _database.CreateTableAsync<Workout>();
          await _database.CreateTableAsync<WorkoutEquipment>();
          await _database.CreateTableAsync<WorkoutRef>();
+         await _database.CreateTableAsync<ActivityLog>();
+         await _database.CreateTableAsync<TimerEvent>();
 
          return _database;
       });
@@ -49,6 +53,8 @@ namespace MxA.Database.Services {
          Workouts = new DataStoreEntity<Workout>(this);
          ExerciseFocusPoints = new DataStoreEntity<ExerciseFocusPoint>(this);
          WorkoutEquipments = new DataStoreEntity<WorkoutEquipment>(this);
+         ActivityLogs = new DataStoreEntity<ActivityLog>(this);
+         TimerEvents = new DataStoreEntity<TimerEvent>(this);
       }
    }
 }
