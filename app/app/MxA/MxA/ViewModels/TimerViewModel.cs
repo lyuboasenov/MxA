@@ -38,6 +38,9 @@ namespace MxA.ViewModels {
       private ConcurrentBag<TimerEvent> _timerEvents = new ConcurrentBag<TimerEvent>();
       private bool _timerDoneExecuted = false;
       private uint _timerEventCounter;
+      private TimerStateMachine.TimerState _currentState = TimerStateMachine.TimerState.Preparation;
+      private TimerStateMachine.TimerState _previousState = TimerStateMachine.TimerState.Preparation;
+      private uint _currentStateMaxCounter = 9;
       #endregion
 
       #region commands
@@ -323,6 +326,11 @@ namespace MxA.ViewModels {
             PlayTones();
          }
          UpdateCommands();
+         if (_currentState != _timerSM.State) {
+            _previousState = _currentState;
+            _currentState = _timerSM.State;
+            _currentStateMaxCounter = (uint) _timerSM.Counter;
+         }
          LogTimerEvent();
 
          if (_timerSM.State == TimerStateMachine.TimerState.Done) {
@@ -336,7 +344,8 @@ namespace MxA.ViewModels {
       private void LogTimerEvent() {
          if (_timerSM.IsRunning &&
             (_timerSM.State == TimerStateMachine.TimerState.Work ||
-            (_timerSM.NextState == TimerStateMachine.TimerState.Work && _timerSM.Counter < 2))) {
+            (_timerSM.NextState == TimerStateMachine.TimerState.Work && _timerSM.Counter < 2) ||
+            (_previousState == TimerStateMachine.TimerState.Work && (_currentStateMaxCounter - _timerSM.Counter) < 2 ))) {
             _timerEvents.Add(
                new TimerEvent() {
                Counter = (uint) _timerSM.Counter,

@@ -12,9 +12,7 @@ namespace MxA.ViewModels {
 
    [QueryProperty(nameof(ActivityLogId), nameof(ActivityLogId))]
    public class ActivityLoadReportViewModel : BaseViewModel {
-      private ActivityLog _activityLog;
-      private Activity _activity;
-      private Exercise _exercise;
+
       private IEnumerable<TimerEvent> _timerEvents;
       public ObservableCollection<RepetitionReport> Reps { get; } = new ObservableCollection<RepetitionReport>();
 

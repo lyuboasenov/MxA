@@ -40,7 +40,7 @@
                                 <Label Text="Average load:" TextColor="{DynamicResource PrimaryTextColor}" />
                                 <Label Text="{Binding AverageLoad, StringFormat='{0:0.00}'}" TextColor="{DynamicResource PrimaryTextColor}" />
                             </StackLayout>
-                            <microcharts:ChartView Chart="{Binding Chart}" HeightRequest="200" />
+                            <microcharts:ChartView Chart="{Binding Chart}" HeightRequest="300" />
                         </StackLayout>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
