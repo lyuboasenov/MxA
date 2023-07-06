@@ -59,7 +59,7 @@
     -->
 
     <FlyoutItem Title="Training" Icon="{StaticResource IconList}">
-        <ShellContent ContentTemplate="{DataTemplate local:TrainingPage}" Route="TrainingPage" />
+        <ShellContent ContentTemplate="{DataTemplate local:TrainingsPage}" Route="TrainingsPage" />
     </FlyoutItem>
     <FlyoutItem Title="Logbook" Icon="{StaticResource IconLogbook}">
         <ShellContent ContentTemplate="{DataTemplate local:ActivityLogsPage}" Route="ActivityLogsPage" />

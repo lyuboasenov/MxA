@@ -2,45 +2,46 @@
 using MxA.Views;
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
-using Xamarin.Essentials;
 using Xamarin.Forms;
-using static Xamarin.Essentials.Permissions;
 
 namespace MxA.ViewModels {
    public class ExercisesViewModel : BaseViewModel {
       public ObservableCollection<Exercise> Items { get; } = new ObservableCollection<Exercise>();
       public Exercise SelectedItem { get; set; }
       public Command LoadItemsCommand { get; }
+      public string SearchTerm { get; set; }
 
       public ExercisesViewModel() {
          Title = "Exercises";
          LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
+
+         OnAppearing();
       }
 
-      private async Task<PermissionStatus> CheckAndRequestPermission<T>() where T : BasePermission, new() {
-         try {
-            var status = await Permissions.CheckStatusAsync<T>();
-            if (status != PermissionStatus.Granted) {
-               status = await Permissions.RequestAsync<T>();
+      private DateTime _lastSearchTermChange;
+      public void OnSearchTermChanged() {
+         Task.Run(async () => {
+            var last = _lastSearchTermChange = DateTime.Now;
+            await Task.Delay(100);
+            if (_lastSearchTermChange == last) {
+               LoadItemsCommand?.Execute(null);
             }
-
-            return status;
-         } catch { }
-
-         return PermissionStatus.Unknown;
+         });
       }
 
       async Task ExecuteLoadItemsCommand() {
          IsBusy = true;
 
          try {
-            await CheckAndRequestPermission<Permissions.LocationWhenInUse>();
-            await CheckAndRequestPermission<Permissions.StorageRead>();
-            await CheckAndRequestPermission<Permissions.StorageWrite>();
-
             Items.Clear();
             var items = await DataStore.Exercises.GetItemsAsync();
+            items = items.Where(w =>
+               string.IsNullOrEmpty(SearchTerm) ||
+               w.Description?.IndexOf(SearchTerm, StringComparison.OrdinalIgnoreCase) >= 0 ||
+               w.Name.IndexOf(SearchTerm, StringComparison.OrdinalIgnoreCase) >= 0);
             foreach (var item in items) {
                Items.Add(item);
             }

@@ -1,20 +1,23 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage
-    x:Class="MxA.Views.WorkoutsPage"
+<ContentView
+    x:Class="MxA.Views.WorkoutsView"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:MxA.ViewModels"
     xmlns:model="clr-namespace:MxA.Models"
     xmlns:models="clr-namespace:MxA.Database.Models"
     xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
-    x:Name="BrowseItemsPage"
-    Title="{Binding Title}"
     BackgroundColor="{DynamicResource PageBackgroundColor}"
     Visual="Material">
 
-    <ContentPage.Resources>
+    <ContentView.Resources>
         <ColorTypeConverter x:Key="colorTypeConverter" />
-    </ContentPage.Resources>
+        <!--<local:WorkoutsViewModel x:Key="viewModel" />-->
+    </ContentView.Resources>
+
+    <!--<ContentView.BindingContext>
+        <StaticResource Key="viewModel" />
+    </ContentView.BindingContext>-->
 
     <!--
         x:DataType enables compiled bindings for better performance and compile time validation of binding expressions.
@@ -140,4 +143,4 @@
             </CollectionView.ItemTemplate>
         </CollectionView>
     </RefreshView>
-</ContentPage>
+</ContentView>

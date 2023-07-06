@@ -6,11 +6,10 @@ namespace MxA {
    public partial class AppShell : Xamarin.Forms.Shell {
       public AppShell() {
          InitializeComponent();
-         Routing.RegisterRoute(nameof(ItemDetailPage), typeof(ItemDetailPage));
          Routing.RegisterRoute(nameof(NewItemPage), typeof(NewItemPage));
          Routing.RegisterRoute(nameof(TimerPage), typeof(TimerPage));
          Routing.RegisterRoute(nameof(BleDevicesPage), typeof(BleDevicesPage));
-         Routing.RegisterRoute(nameof(TrainingPage), typeof(TrainingPage));
+         Routing.RegisterRoute(nameof(TrainingsPage), typeof(TrainingsPage));
          Routing.RegisterRoute(nameof(WorkoutPage), typeof(WorkoutPage));
          Routing.RegisterRoute(nameof(ExercisePage), typeof(ExercisePage));
          Routing.RegisterRoute(nameof(ActivityLogsPage), typeof(ActivityLogsPage));

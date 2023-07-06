@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="MxA.Views.TrainingsPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:icons="clr-namespace:MxA.Icons.Material"
+    xmlns:viewModels="clr-namespace:MxA.ViewModels"
+    xmlns:views="clr-namespace:MxA.Views"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+    x:Name="page"
+    Title="{Binding Title}"
+    BackgroundColor="{DynamicResource PageBackgroundColor}">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+
+            <ControlTemplate x:Key="TabItemTemplate">
+                <Label
+                    FontAttributes="{TemplateBinding FontAttributes}"
+                    FontSize="{TemplateBinding FontSize}"
+                    HorizontalOptions="CenterAndExpand"
+                    Text="{TemplateBinding Text}"
+                    TextColor="{TemplateBinding CurrentTextColor}"
+                    VerticalOptions="CenterAndExpand" />
+            </ControlTemplate>
+
+            <Style x:Key="TabItemStyle" TargetType="xct:TabViewItem">
+                <Setter Property="FontSize" Value="20" />
+                <Setter Property="TextColor" Value="{DynamicResource PrimaryTextColor}" />
+                <Setter Property="TextColorSelected" Value="{DynamicResource SecondaryTextColor}" />
+                <Setter Property="FontAttributes" Value="Bold" />
+            </Style>
+
+            <Style x:Key="CustomTabStyle" TargetType="xct:TabView">
+                <Setter Property="IsTabTransitionEnabled" Value="True" />
+                <Setter Property="TabStripHeight" Value="50" />
+                <Setter Property="TabContentBackgroundColor" Value="{DynamicResource Primary}" />
+                <Setter Property="TabStripPlacement" Value="Bottom" />
+            </Style>
+
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Command="{Binding ToggleSearchBoxCommand}" Order="Primary">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource
+                    FontFamily="MD"
+                    Glyph="{Binding Path=BindingContext.SearchGlyph, Source={Reference page}}"
+                    Color="{DynamicResource PrimaryTextColor}" />
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+        <ToolbarItem
+            Command="{Binding AddItemCommand}"
+            Order="Secondary"
+            Text="Add workout" />
+        <ToolbarItem
+            Command="{Binding AddItemCommand}"
+            Order="Secondary"
+            Text="Add exercise" />
+        <ToolbarItem
+            Command="{Binding ImportWorkoutsCommand}"
+            Order="Secondary"
+            Text="Import" />
+    </ContentPage.ToolbarItems>
+
+    <StackLayout>
+        <Frame
+            Margin="5"
+            Padding="10"
+            BackgroundColor="{DynamicResource PageBackgroundColor}"
+            BorderColor="{DynamicResource Primary}"
+            CornerRadius="10"
+            IsVisible="{Binding IsSearchBoxVisible}">
+            <StackLayout Orientation="Horizontal">
+                <Label
+                    FontFamily="MD"
+                    FontSize="30"
+                    Text="{Static icons:IconFont.Search}"
+                    VerticalOptions="CenterAndExpand" />
+                <Entry HorizontalOptions="FillAndExpand" Text="{Binding SearchTerm}" />
+            </StackLayout>
+        </Frame>
+
+        <xct:TabView Style="{StaticResource CustomTabStyle}">
+            <xct:TabView.TabStripBackgroundView>
+                <BoxView CornerRadius="15, 15, 0, 0" Color="{DynamicResource Primary}" />
+            </xct:TabView.TabStripBackgroundView>
+            <xct:TabViewItem
+                ControlTemplate="{StaticResource TabItemTemplate}"
+                Style="{DynamicResource TabItemStyle}"
+                Text="Workouts">
+                <views:WorkoutsView BindingContext="{Binding Path=BindingContext.WorkoutsViewModel, Source={Reference page}}" />
+            </xct:TabViewItem>
+            <xct:TabViewItem
+                ControlTemplate="{StaticResource TabItemTemplate}"
+                Style="{DynamicResource TabItemStyle}"
+                Text="Exercises">
+                <views:ExercisesView BindingContext="{Binding Path=BindingContext.ExercisesViewModel, Source={Reference page}}" />
+            </xct:TabViewItem>
+        </xct:TabView>
+    </StackLayout>
+</ContentPage>

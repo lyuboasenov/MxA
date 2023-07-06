@@ -1,10 +1,7 @@
 ﻿using MxA.Database.Services;
 using MxA.Helpers;
-using MxA.Services;
 using MxA.Views;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -12,8 +9,11 @@ using Xamarin.Forms;
 namespace MxA.ViewModels {
    public class TrainingViewModel : BaseViewModel {
       private readonly IDataStore _dataStore;
+      public bool IsSearchBoxVisible { get; set; }
+      public string SearchTerm { get; set; }
 
       public Command AddItemCommand { get; }
+      public Command ToggleSearchBoxCommand { get; }
       public Command ImportWorkoutsCommand { get; }
 
 
@@ -23,6 +23,7 @@ namespace MxA.ViewModels {
          Title = "Trainings";
          AddItemCommand = new Command(OnAddItem);
          ImportWorkoutsCommand = new Command(async() => await OnImportWorkoutsAsync());
+         ToggleSearchBoxCommand = new Command(() => { IsSearchBoxVisible = !IsSearchBoxVisible; });
       }
 
       private async Task OnImportWorkoutsAsync() {

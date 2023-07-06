@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -16,6 +17,7 @@ namespace MxA.ViewModels {
       public Command LoadItemsCommand { get; }
       public Command AddItemCommand { get; }
       public Command<Workout> ItemTapped { get; }
+      public string SearchTerm { get; set; }
 
       public WorkoutsViewModel() {
          Title = "Workouts";
@@ -25,29 +27,25 @@ namespace MxA.ViewModels {
          ItemTapped = new Command<Workout>(this.OnItemSelected);
 
          AddItemCommand = new Command(OnAddItem);
+
+         OnAppearing();
       }
 
-      private async Task<PermissionStatus> CheckAndRequestPermission<T>() where T : BasePermission, new() {
-         try {
-            var status = await Permissions.CheckStatusAsync<T>();
-            if (status != PermissionStatus.Granted) {
-               status = await Permissions.RequestAsync<T>();
+      private DateTime _lastSearchTermChange;
+      public void OnSearchTermChanged() {
+         Task.Run(async () => {
+            var last = _lastSearchTermChange = DateTime.Now;
+            await Task.Delay(100);
+            if (_lastSearchTermChange == last) {
+               LoadItemsCommand?.Execute(null);
             }
-
-            return status;
-         } catch { }
-
-         return PermissionStatus.Unknown;
+         });
       }
 
       async Task ExecuteLoadItemsCommand() {
          IsBusy = true;
 
          try {
-            await CheckAndRequestPermission<Permissions.LocationWhenInUse>();
-            await CheckAndRequestPermission<Permissions.StorageRead>();
-            await CheckAndRequestPermission<Permissions.StorageWrite>();
-
             Items.Clear();
 
             var types = await DataStore.Types.GetItemsAsync();
@@ -55,6 +53,7 @@ namespace MxA.ViewModels {
 
             var targets = await DataStore.Targets.GetItemsAsync();
             var workouts = await DataStore.Workouts.GetItemsAsync();
+            workouts = workouts.Where(w => string.IsNullOrEmpty(SearchTerm) || w.Name.IndexOf(SearchTerm, StringComparison.OrdinalIgnoreCase) >= 0);
             var progressions = await DataStore.Progression.GetItemsAsync();
 
             foreach (var type in types) {

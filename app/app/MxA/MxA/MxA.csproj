@@ -60,14 +60,17 @@
     <Compile Update="Views\ActivityLoadReportPage.xaml.cs">
       <DependentUpon>ActivityLoadReportPage.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\ExercisesPage.xaml.cs">
-      <DependentUpon>ExercisesPage.xaml</DependentUpon>
+    <Compile Update="Views\ExercisesView.xaml.cs">
+      <DependentUpon>ExercisesView.xaml</DependentUpon>
     </Compile>
     <Compile Update="Views\ActivityLogsPage.xaml.cs">
       <DependentUpon>ActivityLogsPage.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\WorkoutsPage.xaml.cs">
-      <DependentUpon>WorkoutsPage.xaml</DependentUpon>
+    <Compile Update="Views\TrainingsPage.xaml.cs">
+      <DependentUpon>TrainingsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\WorkoutsView.xaml.cs">
+      <DependentUpon>WorkoutsView.xaml</DependentUpon>
     </Compile>
     <Compile Update="Views\SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
@@ -78,9 +81,6 @@
     <Compile Update="Views\TimerPage.xaml.cs">
       <SubType>Code</SubType>
       <DependentUpon>TimerPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\TrainingPage.xaml.cs">
-      <DependentUpon>TrainingPage.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
 
@@ -102,9 +102,6 @@
     </EmbeddedResource>
     <EmbeddedResource Update="Views\TimerPage.xaml">
       <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\TrainingPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\WorkoutPage.xaml">
