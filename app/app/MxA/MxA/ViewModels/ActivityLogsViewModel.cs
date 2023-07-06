@@ -18,7 +18,7 @@ namespace MxA.ViewModels {
       }
 
       async Task ExecuteLoadItemsCommand() {
-         IsBusy = true;
+         IsRefreshingData = true;
 
          try {
             LogEntries.Clear();
@@ -49,12 +49,12 @@ namespace MxA.ViewModels {
          } catch (Exception ex) {
             await HandleExceptionAsync(ex);
          } finally {
-            IsBusy = false;
+            IsRefreshingData = false;
          }
       }
 
       public void OnAppearing() {
-         IsBusy = true;
+         IsRefreshingData = true;
          SelectedItem = null;
          LoadItemsCommand.Execute(true);
       }

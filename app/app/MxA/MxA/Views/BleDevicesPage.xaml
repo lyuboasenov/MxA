@@ -20,7 +20,7 @@
     <RefreshView
         x:DataType="local:BleDevicesViewModel"
         Command="{Binding ScanCommand}"
-        IsRefreshing="{Binding IsBusy, Mode=TwoWay}">
+        IsRefreshing="{Binding IsRefreshingData, Mode=TwoWay}">
         <CollectionView
             x:Name="ItemsListView"
             ItemsSource="{Binding Items}"

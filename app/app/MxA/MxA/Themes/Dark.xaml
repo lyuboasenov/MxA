@@ -13,7 +13,7 @@
     <Color x:Key="PrimaryColor">#263238</Color>
     <Color x:Key="SecondaryColor">#eceff1</Color>
     <Color x:Key="PrimaryTextColor">#eceff1</Color>
-    <Color x:Key="SecondaryTextColor">#eceff1</Color>
+    <Color x:Key="SecondaryTextColor">#b0bec5</Color>
     <Color x:Key="TertiaryTextColor">Gray</Color>
     <Color x:Key="TransparentColor">Transparent</Color>
 

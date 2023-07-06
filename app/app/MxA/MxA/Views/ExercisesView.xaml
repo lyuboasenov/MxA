@@ -24,7 +24,7 @@
         x:DataType="local:ExercisesViewModel"
         Command="{Binding LoadItemsCommand}"
         HorizontalOptions="FillAndExpand"
-        IsRefreshing="{Binding IsBusy, Mode=TwoWay}"
+        IsRefreshing="{Binding IsRefreshingData, Mode=TwoWay}"
         VerticalOptions="FillAndExpand">
         <CollectionView
             BackgroundColor="{DynamicResource PageBackgroundColor}"

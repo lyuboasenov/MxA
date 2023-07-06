@@ -12,7 +12,7 @@ namespace MxA.ViewModels {
    [AddINotifyPropertyChangedInterface]
    public class BaseViewModel : INotifyPropertyChanged {
       public IDataStore DataStore => DependencyService.Get<IDataStore>();
-      public bool IsBusy { get; set; }
+      public bool IsRefreshingData { get; set; }
       public string Title { get; set; }
 
       public event PropertyChangedEventHandler PropertyChanged;

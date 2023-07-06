@@ -41,7 +41,7 @@ namespace MxA.ViewModels {
       }
 
       async Task ExecuteScanCommand() {
-         IsBusy = true;
+         IsRefreshingData = true;
 
          try {
             var status = await CrossPermissions.Current.CheckPermissionStatusAsync<LocationPermission>();
@@ -69,12 +69,12 @@ namespace MxA.ViewModels {
          } catch (Exception ex) {
             await HandleExceptionAsync(ex);
          } finally {
-            IsBusy = false;
+            IsRefreshingData = false;
          }
       }
 
       public void OnAppearing() {
-         IsBusy = true;
+         IsRefreshingData = true;
          SelectedItem = null;
       }
 

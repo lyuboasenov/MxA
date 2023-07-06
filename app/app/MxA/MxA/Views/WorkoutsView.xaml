@@ -27,7 +27,7 @@
         Padding="5"
         x:DataType="local:WorkoutsViewModel"
         Command="{Binding LoadItemsCommand}"
-        IsRefreshing="{Binding IsBusy, Mode=TwoWay}">
+        IsRefreshing="{Binding IsRefreshingData, Mode=TwoWay}">
         <CollectionView ItemsSource="{Binding Items}" SelectionMode="None">
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="model:WorkoutType">

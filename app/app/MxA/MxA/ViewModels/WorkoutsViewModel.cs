@@ -31,19 +31,12 @@ namespace MxA.ViewModels {
          OnAppearing();
       }
 
-      private DateTime _lastSearchTermChange;
       public void OnSearchTermChanged() {
-         Task.Run(async () => {
-            var last = _lastSearchTermChange = DateTime.Now;
-            await Task.Delay(100);
-            if (_lastSearchTermChange == last) {
-               LoadItemsCommand?.Execute(null);
-            }
-         });
+         IsRefreshingData = true;
       }
 
       async Task ExecuteLoadItemsCommand() {
-         IsBusy = true;
+         IsRefreshingData = true;
 
          try {
             Items.Clear();
@@ -71,12 +64,12 @@ namespace MxA.ViewModels {
          } catch (Exception ex) {
             await HandleExceptionAsync(ex);
          } finally {
-            IsBusy = false;
+            IsRefreshingData = false;
          }
       }
 
       public void OnAppearing() {
-         IsBusy = true;
+         IsRefreshingData = true;
          SelectedItem = null;
       }
 

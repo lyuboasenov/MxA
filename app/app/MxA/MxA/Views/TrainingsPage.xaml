@@ -4,7 +4,6 @@
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:icons="clr-namespace:MxA.Icons.Material"
-    xmlns:viewModels="clr-namespace:MxA.ViewModels"
     xmlns:views="clr-namespace:MxA.Views"
     xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
     x:Name="page"
@@ -26,8 +25,8 @@
 
             <Style x:Key="TabItemStyle" TargetType="xct:TabViewItem">
                 <Setter Property="FontSize" Value="20" />
-                <Setter Property="TextColor" Value="{DynamicResource PrimaryTextColor}" />
-                <Setter Property="TextColorSelected" Value="{DynamicResource SecondaryTextColor}" />
+                <Setter Property="TextColor" Value="{DynamicResource SecondaryTextColor}" />
+                <Setter Property="TextColorSelected" Value="{DynamicResource PrimaryTextColor}" />
                 <Setter Property="FontAttributes" Value="Bold" />
             </Style>
 
@@ -90,13 +89,13 @@
                 ControlTemplate="{StaticResource TabItemTemplate}"
                 Style="{DynamicResource TabItemStyle}"
                 Text="Workouts">
-                <views:WorkoutsView BindingContext="{Binding Path=BindingContext.WorkoutsViewModel, Source={Reference page}}" />
+                <views:WorkoutsView Margin="0,0,0,50" BindingContext="{Binding Path=BindingContext.WorkoutsViewModel, Source={Reference page}}" />
             </xct:TabViewItem>
             <xct:TabViewItem
                 ControlTemplate="{StaticResource TabItemTemplate}"
                 Style="{DynamicResource TabItemStyle}"
                 Text="Exercises">
-                <views:ExercisesView BindingContext="{Binding Path=BindingContext.ExercisesViewModel, Source={Reference page}}" />
+                <views:ExercisesView Margin="0,0,0,50" BindingContext="{Binding Path=BindingContext.ExercisesViewModel, Source={Reference page}}" />
             </xct:TabViewItem>
         </xct:TabView>
     </StackLayout>
