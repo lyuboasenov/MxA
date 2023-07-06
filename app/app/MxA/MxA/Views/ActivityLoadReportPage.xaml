@@ -3,8 +3,12 @@
     x:Class="MxA.Views.ActivityLoadReportPage"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:icons="clr-namespace:MxA.Icons.Material"
     xmlns:microcharts="clr-namespace:Microcharts.Forms;assembly=Microcharts.Forms"
-    Title="{Binding Title}">
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+    Title="{Binding Title}"
+    BackgroundColor="{DynamicResource PageBackgroundColor}"
+    Visual="Material">
 
     <ContentPage.ToolbarItems>
         <ToolbarItem
@@ -17,43 +21,110 @@
         <BackButtonBehavior Command="{Binding ExitCommand}" />
     </Shell.BackButtonBehavior>
 
+    <ContentPage.Resources>
+        <xct:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+    </ContentPage.Resources>
+
     <ContentPage.Content>
         <StackLayout>
-            <Label
-                Margin="20,0,0,0"
-                FontAttributes="Bold"
-                HorizontalOptions="StartAndExpand"
-                Text="Note:"
-                TextColor="{DynamicResource PrimaryTextColor}"
-                VerticalOptions="StartAndExpand" />
+            <xct:Expander x:Name="expander" Margin="10,10,0,0">
+                <xct:Expander.Header>
+                    <StackLayout Orientation="Horizontal">
+                        <Label
+                            FontFamily="MD"
+                            FontSize="25"
+                            IsVisible="{Binding IsExpanded, Source={x:Reference expander}, Converter={StaticResource InvertedBoolConverter}}"
+                            Text="{Static icons:IconFont.Expand_more}"
+                            VerticalOptions="CenterAndExpand" />
+                        <Label
+                            FontFamily="MD"
+                            FontSize="25"
+                            IsVisible="{Binding IsExpanded, Source={x:Reference expander}}"
+                            Text="{Static icons:IconFont.Expand_less}"
+                            VerticalOptions="CenterAndExpand" />
 
-            <Label
-                Margin="20,0,0,0"
-                HorizontalOptions="StartAndExpand"
-                Text="{Binding ActivityLog.Note}"
-                TextColor="{DynamicResource PrimaryTextColor}"
-                VerticalOptions="StartAndExpand" />
+                        <Label Text="Details" />
+                    </StackLayout>
+
+                </xct:Expander.Header>
+                <StackLayout>
+                    <Label
+                        Margin="20,0,0,0"
+                        FontAttributes="Bold"
+                        HorizontalOptions="StartAndExpand"
+                        Text="Note:"
+                        TextColor="{DynamicResource PrimaryTextColor}"
+                        VerticalOptions="StartAndExpand" />
+
+                    <Label
+                        Margin="20,0,0,0"
+                        HorizontalOptions="StartAndExpand"
+                        Text="{Binding ActivityLog.Note}"
+                        TextColor="{DynamicResource PrimaryTextColor}"
+                        VerticalOptions="StartAndExpand" />
+
+                    <BoxView
+                        Margin="15,0,5,0"
+                        HeightRequest="1"
+                        Color="{DynamicResource Primary}" />
+
+                    <Label
+                        Margin="20,0,0,0"
+                        FontAttributes="Bold"
+                        HorizontalOptions="StartAndExpand"
+                        Text="Total:"
+                        TextColor="{DynamicResource PrimaryTextColor}" />
+
+                    <StackLayout Margin="20,0,0,0" Orientation="Horizontal">
+                        <Label Text="Reps:" TextColor="{DynamicResource PrimaryTextColor}" />
+                        <Label Text="{Binding TotalRepetitions}" TextColor="{DynamicResource PrimaryTextColor}" />
+                        <Label Text="Sets:" TextColor="{DynamicResource PrimaryTextColor}" />
+                        <Label Text="{Binding TotalSets}" TextColor="{DynamicResource PrimaryTextColor}" />
+
+                        <Label Text="Total average load:" TextColor="{DynamicResource PrimaryTextColor}" />
+                        <Label Text="{Binding TotalAverageLoad, StringFormat='{0:0.00}'}" TextColor="{DynamicResource PrimaryTextColor}" />
+                    </StackLayout>
+                </StackLayout>
+            </xct:Expander>
 
             <BoxView
                 Margin="15,0,5,0"
                 HeightRequest="1"
                 Color="{DynamicResource Primary}" />
 
-            <CollectionView ItemsSource="{Binding Reps}">
+            <CollectionView ItemsSource="{Binding Repetitions}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <StackLayout>
-                            <StackLayout Orientation="Horizontal">
-                                <Label Text="Rep:" TextColor="{DynamicResource PrimaryTextColor}" />
-                                <Label Text="{Binding Repetition}" TextColor="{DynamicResource PrimaryTextColor}" />
-                                <Label Text="Set:" TextColor="{DynamicResource PrimaryTextColor}" />
-                                <Label Text="{Binding Set}" TextColor="{DynamicResource PrimaryTextColor}" />
+                        <xct:Expander Margin="10,10,0,0">
+                            <xct:Expander.Header>
+                                <StackLayout HorizontalOptions="Start" Orientation="Horizontal">
 
-                                <Label Text="Average load:" TextColor="{DynamicResource PrimaryTextColor}" />
-                                <Label Text="{Binding AverageLoad, StringFormat='{0:0.00}'}" TextColor="{DynamicResource PrimaryTextColor}" />
+                                    <Label
+                                        FontFamily="MD"
+                                        FontSize="25"
+                                        IsVisible="{Binding IsExpanded, Source={x:RelativeSource AncestorType={Type xct:Expander}}, Converter={StaticResource InvertedBoolConverter}}"
+                                        Text="{Static icons:IconFont.Expand_more}"
+                                        VerticalOptions="CenterAndExpand" />
+                                    <Label
+                                        FontFamily="MD"
+                                        FontSize="25"
+                                        IsVisible="{Binding IsExpanded, Source={x:RelativeSource AncestorType={Type xct:Expander}}}"
+                                        Text="{Static icons:IconFont.Expand_less}"
+                                        VerticalOptions="CenterAndExpand" />
+
+                                    <Label Text="Rep:" TextColor="{DynamicResource PrimaryTextColor}" />
+                                    <Label Text="{Binding Repetition}" TextColor="{DynamicResource PrimaryTextColor}" />
+                                    <Label Text="Set:" TextColor="{DynamicResource PrimaryTextColor}" />
+                                    <Label Text="{Binding Set}" TextColor="{DynamicResource PrimaryTextColor}" />
+
+                                    <Label Text="Average load:" TextColor="{DynamicResource PrimaryTextColor}" />
+                                    <Label Text="{Binding AverageLoad, StringFormat='{0:0.00}'}" TextColor="{DynamicResource PrimaryTextColor}" />
+                                </StackLayout>
+                            </xct:Expander.Header>
+                            <StackLayout>
+                                <microcharts:ChartView Chart="{Binding Chart}" HeightRequest="300" />
                             </StackLayout>
-                            <microcharts:ChartView Chart="{Binding Chart}" HeightRequest="300" />
-                        </StackLayout>
+                        </xct:Expander>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>

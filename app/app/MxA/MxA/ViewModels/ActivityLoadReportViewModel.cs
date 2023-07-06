@@ -2,7 +2,6 @@
 using MxA.Database.Models;
 using MxA.Models;
 using SkiaSharp;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -17,12 +16,16 @@ namespace MxA.ViewModels {
    public class ActivityLoadReportViewModel : BaseViewModel {
 
       private IEnumerable<TimerEvent> _timerEvents;
-      public ObservableCollection<RepetitionReport> Reps { get; } = new ObservableCollection<RepetitionReport>();
+      public ObservableCollection<RepetitionReport> Repetitions { get; } = new ObservableCollection<RepetitionReport>();
 
       public string ActivityLogId { get; set; }
       public ActivityLog ActivityLog { get; set; }
       public Activity Activity { get; set; }
       public Exercise Exercise { get; set; }
+
+      public uint TotalRepetitions { get; set; }
+      public uint TotalSets { get; set; }
+      public double TotalAverageLoad { get; set; }
 
       public ICommand DeleteActivityLogCommand { get; }
       public ICommand ExitCommand { get; }
@@ -40,13 +43,18 @@ namespace MxA.ViewModels {
 
          Title = $"{Exercise.Name} on {ActivityLog.Created.ToString("yyyy/MM/dd")}";
 
+         var workEvents = _timerEvents.Where(w => w.State == TimerState.Work);
+         TotalRepetitions = (uint) workEvents.Select(s => s.Repetition).Distinct().Count();
+         TotalSets = (uint) workEvents.Select(s => s.Set).Distinct().Count();
+         TotalAverageLoad = workEvents.Sum(s => s.Load) / workEvents.Count();
+
          var group = _timerEvents.
             OrderBy(o => o.Set).
             ThenBy(oo => oo.Set).
             GroupBy(e => new { Repetition = e.Repetition, Set = e.Set });
 
          foreach (var g in group) {
-            Reps.Add(
+            Repetitions.Add(
                new RepetitionReport() {
                   Repetition = g.Key.Repetition + 1,
                   Set = g.Key.Set + 1,
