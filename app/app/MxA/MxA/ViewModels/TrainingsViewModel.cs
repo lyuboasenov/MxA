@@ -32,7 +32,7 @@ namespace MxA.ViewModels {
          ImportWorkoutsCommand = new Command(async() => await OnImportWorkoutsAsync());
          ToggleSearchBoxCommand = new Command(async() => await OnToggleSearchBoxCommand());
          CheckPermissionsCommand = new Command(async () => await OnCheckPermissionsCommand());
-         SearchCommand = new Command(async () => await OnSearchCommand());
+         SearchCommand = new Command<string>(async (s) => await OnSearchCommand(s));
          SearchGlyph = IconFont.Search;
       }
 
@@ -40,7 +40,8 @@ namespace MxA.ViewModels {
 
       }
 
-      private Task OnSearchCommand() {
+      private Task OnSearchCommand(string s) {
+         SearchTerm = s;
          if (_workoutsViewModel.IsValueCreated) {
             _workoutsViewModel.Value.SearchTerm = SearchTerm;
          }

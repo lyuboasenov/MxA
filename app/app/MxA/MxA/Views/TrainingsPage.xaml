@@ -72,13 +72,11 @@
             CornerRadius="10"
             IsVisible="{Binding IsSearchBoxVisible}">
             <StackLayout Orientation="Horizontal">
-                <!--<Label
-                    FontFamily="MD"
-                    FontSize="30"
-                    Text="{Static icons:IconFont.Search}"
-                    VerticalOptions="CenterAndExpand" />
-                <Entry HorizontalOptions="FillAndExpand" Text="{Binding SearchTerm}" />-->
-                <SearchBar Placeholder="Enter search term" SearchCommand="{Binding SearchCommand}" />
+                <SearchBar
+                    x:Name="srcBar"
+                    Placeholder="Enter search term"
+                    SearchCommand="{Binding SearchCommand}"
+                    SearchCommandParameter="{Binding Text, Source={x:Reference srcBar}}" />
             </StackLayout>
         </Frame>
 
