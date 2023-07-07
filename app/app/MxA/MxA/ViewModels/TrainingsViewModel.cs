@@ -23,6 +23,7 @@ namespace MxA.ViewModels {
       public Command ToggleSearchBoxCommand { get; }
       public Command ImportWorkoutsCommand { get; }
       public ICommand CheckPermissionsCommand { get; }
+      public ICommand SearchCommand { get; }
 
 
       public TrainingsViewModel() {
@@ -31,16 +32,23 @@ namespace MxA.ViewModels {
          ImportWorkoutsCommand = new Command(async() => await OnImportWorkoutsAsync());
          ToggleSearchBoxCommand = new Command(async() => await OnToggleSearchBoxCommand());
          CheckPermissionsCommand = new Command(async () => await OnCheckPermissionsCommand());
+         SearchCommand = new Command(async () => await OnSearchCommand());
          SearchGlyph = IconFont.Search;
       }
 
       public void OnSearchTermChanged() {
+
+      }
+
+      private Task OnSearchCommand() {
          if (_workoutsViewModel.IsValueCreated) {
             _workoutsViewModel.Value.SearchTerm = SearchTerm;
          }
          if (_exercisesViewModel.IsValueCreated) {
             _exercisesViewModel.Value.SearchTerm = SearchTerm;
          }
+
+         return Task.CompletedTask;
       }
 
       private async Task OnCheckPermissionsCommand() {

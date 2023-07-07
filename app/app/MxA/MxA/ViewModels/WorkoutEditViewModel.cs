@@ -13,7 +13,7 @@ using System.Collections.ObjectModel;
 namespace MxA.ViewModels {
 
    [QueryProperty(nameof(WorkoutId), nameof(WorkoutId))]
-   public class WorkoutViewModel : BaseViewModel {
+   public class WorkoutEditViewModel : BaseViewModel {
 
       private Progression _progression;
       private IEnumerable<WorkoutRef> _workoutRefs;
@@ -22,9 +22,11 @@ namespace MxA.ViewModels {
       #region commands
       public ICommand SelectProgressionCommand { get; private set; }
       public ICommand ExitCommand { get; private set; }
-      public ICommand EditCommand { get; private set; }
-      public ICommand DeleteCommand { get; private set; }
-      public ICommand SelectActivityCommand { get; private set; }
+      public ICommand AddActivityCommand { get; private set; }
+      public ICommand SaveCommand { get; private set; }
+      public ICommand CanelCommand { get; private set; }
+      public ICommand EditActivityCommand { get; private set; }
+      public ICommand DeleteActivityCommand { get; private set; }
 
       #endregion
 
@@ -37,37 +39,58 @@ namespace MxA.ViewModels {
 
       #region constructors
 
-      public WorkoutViewModel() {
+      public WorkoutEditViewModel() {
          Title = "Workout";
          SelectProgressionCommand = new Command<WorkoutRef>(OnProgressionSelected);
          ExitCommand = new Command(OnExitCommand);
-         EditCommand = new Command(OnEditCommand);
-         DeleteCommand = new Command(OnDeleteCommand);
-         SelectActivityCommand = new Command<ActivityExercise>(OnSelectActivityCommand);
+         AddActivityCommand = new Command(OnAddActivityCommand);
+         SaveCommand = new Command(OnSaveCommand);
+         CanelCommand = new Command(OnCanelCommand);
+         EditActivityCommand = new Command<ActivityExercise>(OnEditActivityCommand);
+         DeleteActivityCommand = new Command<ActivityExercise>(OnDeleteActivityCommand);
+
+         Workout = new Workout() {
+            Id = Guid.NewGuid().ToString("N")
+         };
       }
       #endregion
 
-      private async void OnSelectActivityCommand(ActivityExercise item) {
-         await Shell.Current.GoToAsync($"{nameof(TimerPage)}?{nameof(TimerViewModel.ActivityId)}={item.Activity.Id}");
+      private async void OnAddActivityCommand() {
+         var activity = await DataStore.
+            Activities.
+            AddOrUpdateItemAsync(new Activity() {
+               WorkoutId = Workout.Id
+            });
+
+         await Shell.Current.GoToAsync($"{nameof(ActivityEditPage)}?{nameof(ActivityEditViewModel.ActivityId)}={activity.Id}");
+      }
+
+      private async void OnEditActivityCommand(ActivityExercise item) {
+         await Shell.Current.GoToAsync($"{nameof(ActivityEditPage)}?{nameof(ActivityEditViewModel.ActivityId)}={item.Activity.Id}");
+      }
+      private async void OnDeleteActivityCommand(ActivityExercise item) {
+         if (await DisplayAlertAsync("Delete", "Are you sure you want to remote this activity?", "OK", "Cancel")) {
+            item.Activity.Active = false;
+
+            await DataStore.Activities.DeleteItemAsync(item.Activity.Id);
+
+            await LoadWorkout();
+         }
       }
 
       private async void OnExitCommand(object obj) {
          await Shell.Current.Navigation.PopToRootAsync();
       }
 
-      private async void OnEditCommand(object obj) {
-         await Shell.Current.GoToAsync($"{nameof(WorkoutEditPage)}?{nameof(WorkoutEditViewModel.WorkoutId)}={Workout.Id}");
+      private async void OnCanelCommand(object obj) {
+         await Shell.Current.Navigation.PopToRootAsync();
       }
 
-      private async void OnDeleteCommand(object obj) {
-         if (await DisplayAlertAsync("Delete", "Are you sure you want to remote this workout?", "OK", "Cancel")) {
-            Workout.Active = false;
-            Workout.Updated = DateTime.Now;
+      private async void OnSaveCommand(object obj) {
+         //TODO: save
+         await DataStore.Workouts.AddOrUpdateItemAsync(Workout);
 
-            await DataStore.Workouts.UpdateItemAsync(Workout);
-
-            await Shell.Current.Navigation.PopToRootAsync();
-         }
+         await Shell.Current.Navigation.PopToRootAsync();
       }
 
       private async void OnProgressionSelected(WorkoutRef obj) {
@@ -87,13 +110,14 @@ namespace MxA.ViewModels {
                _progression = await DataStore.Progression.GetItemAsync(Workout.ProgressionId);
 
                _workoutRefs = await DataStore.WorkoutRefs.GetItemsAsync();
-               foreach(var w in _workoutRefs.Where(w => w.ProgressionId == _progression.Id)) {
+               WorkoutRefs.Clear();
+               foreach (var w in _workoutRefs.Where(w => w.ProgressionId == _progression.Id)) {
                   WorkoutRefs.Add(w);
                }
             }
 
             _activities = await DataStore.Activities.GetItemsAsync(a => a.WorkoutId == Workout.Id);
-
+            Activities.Clear();
             foreach (var a in _activities) {
                var e = await DataStore.Exercises.GetItemAsync(a.ExerciseId);
                Activities.Add(new ActivityExercise() {

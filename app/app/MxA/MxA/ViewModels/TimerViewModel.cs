@@ -315,8 +315,8 @@ namespace MxA.ViewModels {
 
             SetCurrentPeriod();
             UpdateCommands();
-         } catch (Exception) {
-            Debug.WriteLine("Failed to Load Item");
+         } catch (Exception ex) {
+            await HandleExceptionAsync(ex);
          }
       }
 

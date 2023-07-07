@@ -44,19 +44,23 @@ namespace MxA.Database.Services {
       public async Task<T> UpdateItemAsync(T item) {
          var database = await GetDatabase();
          var id = item.Id;
-         if (item is IVersion ver) {
+         if (item is IVersion verNew) {
             // Disable existing item
-            item.Id = $"{id}_inactive";
+            var existingItem = await GetItemAsync(item.Id);
+
+            existingItem.Id = $"{id}_inactive_{Guid.NewGuid().ToString("N")}";
+            var ver = existingItem as IVersion;
             ver.Updated = DateTime.Now;
             ver.Active = false;
-            await database.UpdateAsync(item);
+            await database.InsertAsync(existingItem);
 
             // Add new item
             item.Id = id;
-            ver.Active = true;
-            ver.Version++;
+            verNew.Updated = DateTime.Now;
+            verNew.Active = true;
+            verNew.Version++;
 
-            await database.InsertAsync(item);
+            await database.UpdateAsync(item);
          } else {
             await database.UpdateAsync(item);
          }
@@ -68,7 +72,15 @@ namespace MxA.Database.Services {
          var database = await GetDatabase();
          T item = await GetItemAsync(id);
          if (item != null) {
-            return await database.DeleteAsync(item) == 1;
+            if (item is IVersion vers) {
+               //item.Id = $"{id}_inactive_{Guid.NewGuid().ToString("N")}";
+               vers.Updated = DateTime.Now;
+               vers.Active = false;
+
+               return await database.UpdateAsync(item) == 1;
+            } else {
+               return await database.DeleteAsync(item) == 1;
+            }
          } else {
             return false;
          }
@@ -84,15 +96,21 @@ namespace MxA.Database.Services {
       public async Task<IEnumerable<T>> GetItemsAsync(bool forceRefresh = false) {
          var database = await GetDatabase();
          bool isVers = typeof(IVersion).IsAssignableFrom(typeof(T));
-         // return await database.Table<T>().Where(i => isVers ? ((IVersion) i).Active : true).ToArrayAsync();
-         return await database.Table<T>().ToArrayAsync();
+         if (isVers) {
+            return await database.Table<T>().Where(i => ((IVersion) i).Active).ToArrayAsync();
+         } else {
+            return await database.Table<T>().ToArrayAsync();
+         }
       }
 
       public async Task<IEnumerable<T>> GetItemsAsync(Expression<Func<T, bool>> predExpr, bool forceRefresh = false) {
          var database = await GetDatabase();
          bool isVers = typeof(IVersion).IsAssignableFrom(typeof(T));
-         // return await database.Table<T>().Where(i => isVers ? ((IVersion) i).Active : true).ToArrayAsync();
-         return await database.Table<T>().Where(predExpr).ToArrayAsync();
+         if (isVers) {
+            return await database.Table<T>().Where(predExpr).Where(i => ((IVersion) i).Active).ToArrayAsync();
+         } else {
+            return await database.Table<T>().Where(predExpr).ToArrayAsync();
+         }
       }
 
       private Task<SQLiteAsyncConnection> GetDatabase() {

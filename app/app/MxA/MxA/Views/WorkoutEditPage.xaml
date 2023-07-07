@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
-    x:Class="MxA.Views.WorkoutPage"
+    x:Class="MxA.Views.WorkoutEditPage"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:converters="clr-namespace:MxA.Converters"
@@ -23,25 +23,19 @@
     </ContentPage.Resources>
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem
-            Command="{Binding EditCommand}"
-            Order="Secondary"
-            Text="Edit">
+        <ToolbarItem Command="{Binding SaveCommand}" Order="Primary">
             <ToolbarItem.IconImageSource>
                 <FontImageSource
                     FontFamily="MD"
-                    Glyph="{Static icons:IconFont.Edit}"
+                    Glyph="{Static icons:IconFont.Save}"
                     Color="{DynamicResource PrimaryTextColor}" />
             </ToolbarItem.IconImageSource>
         </ToolbarItem>
-        <ToolbarItem
-            Command="{Binding DeleteCommand}"
-            Order="Secondary"
-            Text="Delete">
+        <ToolbarItem Command="{Binding CanelCommand}" Order="Primary">
             <ToolbarItem.IconImageSource>
                 <FontImageSource
                     FontFamily="MD"
-                    Glyph="{Static icons:IconFont.Delete}"
+                    Glyph="{Static icons:IconFont.Cancel}"
                     Color="{DynamicResource PrimaryTextColor}" />
             </ToolbarItem.IconImageSource>
         </ToolbarItem>
@@ -50,10 +44,31 @@
     <ContentPage.Content>
         <ScrollView>
             <StackLayout>
-                <Image
-                    Margin="10"
-                    HorizontalOptions="CenterAndExpand"
-                    Source="{Binding Workout.Thumbnail}" />
+
+                <Label
+                    FontAttributes="Bold"
+                    FontSize="Header"
+                    Text="Name" />
+
+                <Entry Text="{Binding Workout.Name}" />
+
+                <BoxView
+                    Margin="2,0,2,0"
+                    BackgroundColor="{DynamicResource PrimaryTextColor}"
+                    HeightRequest="1" />
+
+                <Label
+                    FontAttributes="Bold"
+                    FontSize="Header"
+                    Text="Thumbnail" />
+
+                <Entry Text="{Binding Workout.Thumbnail}" />
+
+                <BoxView
+                    Margin="2,0,2,0"
+                    BackgroundColor="{DynamicResource PrimaryTextColor}"
+                    HeightRequest="1" />
+
 
                 <StackLayout BindableLayout.ItemsSource="{Binding WorkoutRefs}" Orientation="Horizontal">
                     <BindableLayout.ItemTemplate>
@@ -67,10 +82,28 @@
                     </BindableLayout.ItemTemplate>
                 </StackLayout>
 
-                <Label
-                    FontAttributes="Bold"
-                    FontSize="Header"
-                    Text="Exercises" />
+                <BoxView
+                    Margin="2,0,2,0"
+                    BackgroundColor="{DynamicResource PrimaryTextColor}"
+                    HeightRequest="1" />
+
+                <StackLayout Orientation="Horizontal">
+                    <Label
+                        FontAttributes="Bold"
+                        FontSize="Header"
+                        HorizontalOptions="StartAndExpand"
+                        Text="Exercises" />
+
+                    <ImageButton Command="{Binding AddActivityCommand}" HorizontalOptions="End">
+                        <ImageButton.Source>
+                            <FontImageSource
+                                FontFamily="MD"
+                                Glyph="{Static icons:IconFont.Add}"
+                                Color="{DynamicResource Primary}" />
+                        </ImageButton.Source>
+                    </ImageButton>
+                </StackLayout>
+
 
                 <BoxView
                     Margin="2,0,2,0"
@@ -87,6 +120,7 @@
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
                                     <StackLayout>
@@ -108,13 +142,26 @@
 
                                     <ImageButton
                                         Grid.Column="1"
-                                        Command="{Binding Source={RelativeSource AncestorType={x:Type local:WorkoutViewModel}}, Path=SelectActivityCommand}"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type local:WorkoutEditViewModel}}, Path=EditActivityCommand}"
                                         CommandParameter="{Binding .}"
                                         VerticalOptions="CenterAndExpand">
                                         <ImageButton.Source>
                                             <FontImageSource
                                                 FontFamily="MD"
-                                                Glyph="{Static icons:IconFont.Navigate_next}"
+                                                Glyph="{Static icons:IconFont.Edit}"
+                                                Color="{DynamicResource Primary}" />
+                                        </ImageButton.Source>
+                                    </ImageButton>
+
+                                    <ImageButton
+                                        Grid.Column="2"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type local:WorkoutEditViewModel}}, Path=DeleteActivityCommand}"
+                                        CommandParameter="{Binding .}"
+                                        VerticalOptions="CenterAndExpand">
+                                        <ImageButton.Source>
+                                            <FontImageSource
+                                                FontFamily="MD"
+                                                Glyph="{Static icons:IconFont.Delete}"
                                                 Color="{DynamicResource Primary}" />
                                         </ImageButton.Source>
                                     </ImageButton>
@@ -123,6 +170,11 @@
                         </DataTemplate>
                     </BindableLayout.ItemTemplate>
                 </StackLayout>
+
+                <BoxView
+                    Margin="2,0,2,0"
+                    BackgroundColor="{DynamicResource PrimaryTextColor}"
+                    HeightRequest="1" />
 
                 <Label
                     FontAttributes="Bold"
@@ -134,7 +186,7 @@
                     BackgroundColor="{DynamicResource PrimaryTextColor}"
                     HeightRequest="1" />
 
-                <Label Text="{Binding Workout.Notes}" />
+                <Editor AutoSize="TextChanges" Text="{Binding Workout.Notes}" />
             </StackLayout>
         </ScrollView>
     </ContentPage.Content>
