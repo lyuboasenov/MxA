@@ -245,7 +245,7 @@ namespace MxA.Services {
          } else if (_state == TimerInternalState.SetRest) {
             _state = TimerInternalState.RepetitionRest;
 
-            if (IsLastRep() && _activity.SkipLastRepRest || _activity.RestBetweenReps == 0) {
+            if (IsLastRep() && (_activity.SkipLastRepRest || _activity.RestBetweenReps == 0 || _activity.RestBetweenSets > 0)) {
                _state = TimerInternalState.Work;
             }
          }
@@ -257,7 +257,7 @@ namespace MxA.Services {
             _state = TimerInternalState.RepetitionRest;
 
 
-            if (IsLastRep() && (_activity.SkipLastRepRest || _activity.RestBetweenReps == 0)) {
+            if (IsLastRep() && (_activity.SkipLastRepRest || _activity.RestBetweenReps == 0 || _activity.RestBetweenSets > 0)) {
                // if is last rep and skip last rep => move to set rest
                _state = TimerInternalState.SetRest;
 
@@ -311,7 +311,7 @@ namespace MxA.Services {
             // Move to repetition rest
             result = TimerInternalState.RepetitionRest;
 
-            if (IsLastRep() && (_activity.SkipLastRepRest || _activity.RestBetweenReps == 0)) {
+            if (IsLastRep() && (_activity.SkipLastRepRest || _activity.RestBetweenReps == 0 || _activity.RestBetweenSets > 0)) {
                // if is last rep and skip last rep => move to set rest
                result = TimerInternalState.SetRest;
 
