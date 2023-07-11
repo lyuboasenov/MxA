@@ -27,7 +27,7 @@
 
     <ContentPage.Content>
         <StackLayout>
-            <xct:Expander x:Name="expander" Margin="10,10,0,0">
+            <xct:Expander x:Name="expander" Margin="10,10,0,0" IsExpanded="true">
                 <xct:Expander.Header>
                     <StackLayout Orientation="Horizontal">
                         <Label
