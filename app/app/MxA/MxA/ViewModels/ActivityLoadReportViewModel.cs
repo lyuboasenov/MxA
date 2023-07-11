@@ -50,7 +50,7 @@ namespace MxA.ViewModels {
 
          var group = _timerEvents.
             OrderBy(o => o.Set).
-            ThenBy(oo => oo.Set).
+            ThenBy(oo => oo.Repetition).
             GroupBy(e => new { Repetition = e.Repetition, Set = e.Set });
 
          foreach (var g in group) {
