@@ -18,7 +18,7 @@ namespace MxA.Helpers.ImportExport {
          };
 
          var exporter = DependencyService.Get<IDownloadFolderExporter>();
-         var result = await exporter.ExportAsync($"mxa-logbook-export-{DateTime.Now.ToString("yyyy.MM.dd")}.json", JsonConvert.SerializeObject(exportBundle, Formatting.None));
+         var result = await exporter.ExportAsync($"mxa-logbook-export-{DateTime.Now.ToString("yyyy.MM.dd.HH.mm")}.json", JsonConvert.SerializeObject(exportBundle, Formatting.None));
 
          await App.Current.MainPage.DisplayAlert("Export", $"Log(s) exported at {result}.", "Ok");
       }
