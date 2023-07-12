@@ -1,5 +1,5 @@
 ﻿using MxA.Database.Services;
-using MxA.Helpers;
+using MxA.Helpers.ImportExport;
 using MxA.Models;
 using MxA.Views;
 using Newtonsoft.Json;
@@ -84,13 +84,9 @@ namespace MxA.ViewModels {
       }
 
       private async Task OnExportCommand() {
-         var exportBundle = new {
-            LogEntries = await DataStore.ActivityLogs.GetItemsAsync(),
-            Events = await DataStore.TimerEvents.GetItemsAsync(),
-         };
-
-         var exporter = DependencyService.Get<IDownloadFolderExporter>();
-         await exporter.ExportAsync($"mxa-logbook-export-{DateTime.Now.ToString("yyyy.MM.dd")}.json", JsonConvert.SerializeObject(exportBundle, Formatting.None));
+         await LogbookExporter.ExportAsync(
+            await DataStore.ActivityLogs.GetItemsAsync(),
+            await DataStore.TimerEvents.GetItemsAsync());
       }
    }
 }

@@ -1,6 +1,6 @@
 ﻿using Microcharts;
 using MxA.Database.Models;
-using MxA.Helpers;
+using MxA.Helpers.ImportExport;
 using MxA.Models;
 using Newtonsoft.Json;
 using SkiaSharp;
@@ -75,13 +75,7 @@ namespace MxA.ViewModels {
       }
 
       private Task OnExportCommand() {
-         var exportBundle = new {
-            LogEntries = new[] { ActivityLog },
-            Events = _timerEvents,
-         };
-
-         var exporter = DependencyService.Get<IDownloadFolderExporter>();
-         return exporter.ExportAsync($"mxa-logbook-export-{DateTime.Now.ToString("yyyy.MM.dd")}.json", JsonConvert.SerializeObject(exportBundle, Formatting.None));
+         return LogbookExporter.ExportAsync(ActivityLog, _timerEvents);
       }
 
       private Task OnExitCommand() {

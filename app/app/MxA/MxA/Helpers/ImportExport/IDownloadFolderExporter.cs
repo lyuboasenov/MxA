@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MxA.Helpers {
+namespace MxA.Helpers.ImportExport {
    public interface IDownloadFolderExporter {
-      Task ExportAsync(string baseName, string content);
+      Task<string> ExportAsync(string baseName, string content);
    }
 }
