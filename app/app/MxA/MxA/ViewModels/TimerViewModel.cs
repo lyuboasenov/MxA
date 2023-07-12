@@ -308,6 +308,8 @@ namespace MxA.ViewModels {
                   e.ActivityLogId = added.Id;
                   await DataStore.TimerEvents.AddItemAsync(e);
                }
+
+               ExitCommand?.Execute(null);
             }
          }
       }

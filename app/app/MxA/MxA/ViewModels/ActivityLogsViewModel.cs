@@ -1,20 +1,29 @@
-﻿using MxA.Models;
+﻿using MxA.Database.Services;
+using MxA.Helpers;
+using MxA.Models;
 using MxA.Views;
+using Newtonsoft.Json;
 using System;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Xamarin.Forms;
+using Xamarin.Forms.PlatformConfiguration;
+using Xamarin.Forms.Shapes;
 
 namespace MxA.ViewModels {
    public class ActivityLogsViewModel : BaseViewModel {
       public ObservableCollection<ActivityLogGroup> LogEntries { get; }
       public Command LoadItemsCommand { get; }
+      public ICommand ExportCommand { get; }
 
       public ActivityLogsViewModel() {
          Title = "Activity logs";
          LogEntries = new ObservableCollection<ActivityLogGroup>();
          LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
+         ExportCommand = new Command(async () => await OnExportCommand());
       }
 
       async Task ExecuteLoadItemsCommand() {
@@ -72,6 +81,16 @@ namespace MxA.ViewModels {
          // This will push the ItemDetailPage onto the navigation stack
          await Shell.Current.GoToAsync($"{nameof(ActivityLoadReportPage)}?{nameof(ActivityLoadReportViewModel.ActivityLogId)}={item.ActivityLog.Id}");
 
+      }
+
+      private async Task OnExportCommand() {
+         var exportBundle = new {
+            LogEntries = await DataStore.ActivityLogs.GetItemsAsync(),
+            Events = await DataStore.TimerEvents.GetItemsAsync(),
+         };
+
+         var exporter = DependencyService.Get<IDownloadFolderExporter>();
+         await exporter.ExportAsync($"mxa-logbook-export-{DateTime.Now.ToString("yyyy.MM.dd")}.json", JsonConvert.SerializeObject(exportBundle, Formatting.None));
       }
    }
 }

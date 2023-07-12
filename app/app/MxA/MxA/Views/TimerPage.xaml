@@ -6,17 +6,15 @@
     xmlns:converters="clr-namespace:MxA.Converters"
     xmlns:icons="clr-namespace:MxA.Icons.Material"
     xmlns:vm="clr-namespace:MxA.ViewModels"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
     Title="{Binding TrainingName}"
     BackgroundColor="{DynamicResource PageBackgroundColor}"
-    Visual="Material">
+    Visual="Material"
+    NavigationPage.HasBackButton="False">
 
     <ContentPage.BindingContext>
         <vm:TimerViewModel />
     </ContentPage.BindingContext>
-
-    <Shell.BackButtonBehavior>
-        <BackButtonBehavior Command="{Binding ExitCommand}" />
-    </Shell.BackButtonBehavior>
 
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -24,6 +22,7 @@
             <converters:SecondsToStringConverter x:Key="secondsConverter" />
             <converters:SecondsToFontSizeConverter x:Key="secondsToFontSizeConverter" />
             <converters:BatterLevelToGlyphConverter x:Key="batterLevelToImageConverter" />
+            <xct:InvertedBoolConverter x:Key="InvertedBoolConverter" />
         </ResourceDictionary>
     </ContentPage.Resources>
 
@@ -154,6 +153,13 @@
                         HeightRequest="1"
                         Color="{DynamicResource Primary}" />
                 </Grid>
+                <StackLayout IsVisible="{Binding BleConnected, Converter={StaticResource InvertedBoolConverter}}">
+                    <ImageButton Command="{Binding ConnectHangboardCommand}" HorizontalOptions="EndAndExpand">
+                        <ImageButton.Source>
+                            <FontImageSource FontFamily="MD" Glyph="{Binding ConnectHangboardGlyph}" Color="{DynamicResource PrimaryTextColor}" />
+                        </ImageButton.Source>
+                    </ImageButton>
+                </StackLayout>
             </StackLayout>
 
             <!--  Counter & next  -->

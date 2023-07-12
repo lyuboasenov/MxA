@@ -1,4 +1,6 @@
-﻿namespace MxA.Helpers.Import.Models {
+﻿using MxA.Helpers.ImportExport.Models;
+
+namespace MxA.Helpers.Import.Models {
    public class Container {
       public Type[] Types { get; set; }
       public Target[] Targets { get; set; }

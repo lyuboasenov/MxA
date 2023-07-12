@@ -12,6 +12,10 @@
 
     <ContentPage.ToolbarItems>
         <ToolbarItem
+            Command="{Binding ExportCommand}"
+            Order="Primary"
+            Text="{Static icons:IconFont.Import_export}" />
+        <ToolbarItem
             Command="{Binding DeleteActivityLogCommand}"
             Order="Secondary"
             Text="Delete" />

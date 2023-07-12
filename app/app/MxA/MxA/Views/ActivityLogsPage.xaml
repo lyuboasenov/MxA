@@ -14,6 +14,14 @@
     <ContentPage.Resources>
         <xct:InvertedBoolConverter x:Key="InvertedBoolConverter" />
     </ContentPage.Resources>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem
+            Command="{Binding ExportCommand}"
+            Order="Primary"
+            Text="{Static icons:IconFont.Import_export}" />
+    </ContentPage.ToolbarItems>
+    
     <!--
         x:DataType enables compiled bindings for better performance and compile time validation of binding expressions.
         https://docs.microsoft.com/xamarin/xamarin-forms/app-fundamentals/data-binding/compiled-bindings

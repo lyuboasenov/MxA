@@ -1,9 +1,13 @@
 ﻿using Microcharts;
 using MxA.Database.Models;
+using MxA.Helpers;
 using MxA.Models;
+using Newtonsoft.Json;
 using SkiaSharp;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -29,10 +33,12 @@ namespace MxA.ViewModels {
 
       public ICommand DeleteActivityLogCommand { get; }
       public ICommand ExitCommand { get; }
+      public ICommand ExportCommand { get; }
 
       public ActivityLoadReportViewModel() {
          DeleteActivityLogCommand = new Command(async () => await OnDeleteActivityLogCommand());
          ExitCommand = new Command(async () => await OnExitCommand());
+         ExportCommand = new Command(async () => await OnExportCommand());
       }
 
       public async void OnActivityLogIdChanged() {
@@ -66,6 +72,16 @@ namespace MxA.ViewModels {
                   }
                });
          }
+      }
+
+      private Task OnExportCommand() {
+         var exportBundle = new {
+            LogEntries = new[] { ActivityLog },
+            Events = _timerEvents,
+         };
+
+         var exporter = DependencyService.Get<IDownloadFolderExporter>();
+         return exporter.ExportAsync($"mxa-logbook-export-{DateTime.Now.ToString("yyyy.MM.dd")}.json", JsonConvert.SerializeObject(exportBundle, Formatting.None));
       }
 
       private Task OnExitCommand() {

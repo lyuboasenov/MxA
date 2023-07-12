@@ -1,4 +1,4 @@
-﻿namespace MxA.Helpers.Import.Models {
+﻿namespace MxA.Helpers.ImportExport.Models {
    public class Activity {
       public string Id { get; set; }
       public string Workout { get; set; }
