@@ -12,10 +12,6 @@
     BackgroundColor="{DynamicResource PageBackgroundColor}"
     Visual="Material">
 
-    <Shell.BackButtonBehavior>
-        <BackButtonBehavior IsEnabled="False" />
-    </Shell.BackButtonBehavior>
-
     <ContentPage.BindingContext>
         <vm:TimerViewModel />
     </ContentPage.BindingContext>

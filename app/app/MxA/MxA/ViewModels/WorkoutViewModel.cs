@@ -48,7 +48,7 @@ namespace MxA.ViewModels {
       #endregion
 
       private async void OnSelectActivityCommand(ActivityExercise item) {
-         await Shell.Current.GoToAsync($"{nameof(TimerPage)}?{nameof(TimerViewModel.ActivityId)}={item.Activity.Id}");
+         await Shell.Current.GoToAsync($"//{nameof(TimerPage)}?{nameof(TimerViewModel.ActivityId)}={item.Activity.Id}");
       }
 
       private async void OnExitCommand(object obj) {
