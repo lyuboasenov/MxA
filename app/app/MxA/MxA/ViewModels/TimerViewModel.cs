@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using MxA.Models;
 using System.Collections.Concurrent;
 using System.Linq;
+using Newtonsoft.Json;
 
 namespace MxA.ViewModels {
 
@@ -286,9 +287,19 @@ namespace MxA.ViewModels {
             }
 
             var note = await DisplayPromptAsync("Save log", "Note");
+            
             if (note != null) {
+               var dict = new Dictionary<string, object>();
+               dict.Add("work", _activity.Work);
+               dict.Add("rep_rest", _activity.RestBWReps);
+               dict.Add("set_rest", _activity.RestBWSets);
+               dict.Add("reps", _activity.Reps);
+               dict.Add("sets", _activity.Sets);
+
                var added = await DataStore.ActivityLogs.AddItemAsync(new ActivityLog() {
                   ActivityId = _activity.Id,
+                  ActivityName = _exercise.Name,
+                  ActivityDetailsJson = JsonConvert.SerializeObject(dict),
                   Note = note,
                   Created = DateTime.Now
                });
