@@ -7,10 +7,14 @@
     xmlns:icons="clr-namespace:MxA.Icons.Material"
     xmlns:vm="clr-namespace:MxA.ViewModels"
     xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+    x:Name="page"
     Title="{Binding TrainingName}"
     BackgroundColor="{DynamicResource PageBackgroundColor}"
-    Visual="Material"
-    NavigationPage.HasBackButton="False">
+    Visual="Material">
+
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior IsEnabled="False" />
+    </Shell.BackButtonBehavior>
 
     <ContentPage.BindingContext>
         <vm:TimerViewModel />
@@ -31,7 +35,7 @@
             <ToolbarItem.IconImageSource>
                 <FontImageSource
                     FontFamily="MD"
-                    Glyph="{Binding ConnectHangboardGlyph}"
+                    Glyph="{Binding BindingContext.ConnectHangboardGlyph, Source={Reference page}}"
                     Color="{DynamicResource PrimaryTextColor}" />
             </ToolbarItem.IconImageSource>
         </ToolbarItem>
@@ -153,13 +157,6 @@
                         HeightRequest="1"
                         Color="{DynamicResource Primary}" />
                 </Grid>
-                <StackLayout IsVisible="{Binding BleConnected, Converter={StaticResource InvertedBoolConverter}}">
-                    <ImageButton Command="{Binding ConnectHangboardCommand}" HorizontalOptions="EndAndExpand">
-                        <ImageButton.Source>
-                            <FontImageSource FontFamily="MD" Glyph="{Binding ConnectHangboardGlyph}" Color="{DynamicResource PrimaryTextColor}" />
-                        </ImageButton.Source>
-                    </ImageButton>
-                </StackLayout>
             </StackLayout>
 
             <!--  Counter & next  -->

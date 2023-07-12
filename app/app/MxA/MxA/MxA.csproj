@@ -6,6 +6,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Resources\icons\**" />
+    <EmbeddedResource Remove="Resources\icons\**" />
+    <None Remove="Resources\icons\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <EmbeddedResource Remove="Themes\ResourceDictionary.xaml" />
     <EmbeddedResource Remove="Themes\ResourceDictionary1.xaml" />
   </ItemGroup>
@@ -110,9 +116,5 @@
     <EmbeddedResource Update="Views\WorkoutPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Resources\icons\" />
   </ItemGroup>
 </Project>
