@@ -51,7 +51,8 @@ namespace MxA.ViewModels {
       public ICommand PrevSetCommand { get; private set; }
       public ICommand NextSetCommand { get; private set; }
       public ICommand ConnectHangboardCommand { get; private set; }
-      public ICommand TimerDoneCommand { get; private set; }
+      public ICommand CompleteTimerCommand { get; private set; }
+      public ICommand CancelTimerCommand { get; private set; }
       #endregion
 
       #region properties
@@ -195,7 +196,8 @@ namespace MxA.ViewModels {
          NextRepCommand = new Command(OnNextRepCommand, CanNextRep);
          PrevSetCommand = new Command(OnPrevSetCommand, CanPrevSet);
          NextSetCommand = new Command(OnNextSetCommand, CanNextSet);
-         TimerDoneCommand = new Command(async () => await OnTimerDoneCommand());
+         CompleteTimerCommand = new Command(async () => await OnCompleteTimerCommand());
+         CancelTimerCommand = new Command(async () => await OnCancelTimerCommand());
       }
 
       private void OnPlayPauseCommand(object obj) {
@@ -232,6 +234,9 @@ namespace MxA.ViewModels {
          ((Command) NextRepCommand).ChangeCanExecute();
          ((Command) PrevSetCommand).ChangeCanExecute();
          ((Command) NextSetCommand).ChangeCanExecute();
+         ((Command) NextSetCommand).ChangeCanExecute();
+         ((Command) CompleteTimerCommand).ChangeCanExecute();
+         ((Command) CancelTimerCommand).ChangeCanExecute();
       }
 
       private bool CanNextSet(object obj) {
@@ -272,9 +277,14 @@ namespace MxA.ViewModels {
          _timerSM.NextSet();
       }
 
-      private async Task OnTimerDoneCommand() {
+      private async Task OnCompleteTimerCommand() {
          if (!_timerDoneExecuted) {
             _timerDoneExecuted = true;
+
+            if (IsRunning) {
+               PlayPauseCommand?.Execute(null);
+            }
+
             var note = await DisplayPromptAsync("Save log", "Note");
             if (note != null) {
                var added = await DataStore.ActivityLogs.AddItemAsync(new ActivityLog() {
@@ -288,6 +298,16 @@ namespace MxA.ViewModels {
                   await DataStore.TimerEvents.AddItemAsync(e);
                }
             }
+         }
+      }
+
+      private async Task OnCancelTimerCommand() {
+         if (IsRunning) {
+            PlayPauseCommand?.Execute(null);
+         }
+
+         if (await DisplayAlertAsync("Cancel", "Are you sure you want to cancel the timer?", "Yes", "No")) {
+            ExitCommand?.Execute(null);
          }
       }
 
@@ -335,7 +355,7 @@ namespace MxA.ViewModels {
 
          if (_timerSM.State == TimerStateMachine.TimerState.Done) {
             MainThread.BeginInvokeOnMainThread(() => {
-               TimerDoneCommand.Execute(null);
+               CompleteTimerCommand.Execute(null);
             });
 
          }

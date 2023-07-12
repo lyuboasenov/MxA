@@ -36,11 +36,19 @@
                     Color="{DynamicResource PrimaryTextColor}" />
             </ToolbarItem.IconImageSource>
         </ToolbarItem>
-        <ToolbarItem Command="{Binding ConnectHangboardCommand}">
+        <ToolbarItem Command="{Binding CompleteTimerCommand}">
             <ToolbarItem.IconImageSource>
                 <FontImageSource
                     FontFamily="MD"
-                    Glyph="{Static icons:IconFont.Fact_check}"
+                    Glyph="{Static icons:IconFont.Done}"
+                    Color="{DynamicResource PrimaryTextColor}" />
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+        <ToolbarItem Command="{Binding CancelTimerCommand}">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource
+                    FontFamily="MD"
+                    Glyph="{Static icons:IconFont.Close}"
                     Color="{DynamicResource PrimaryTextColor}" />
             </ToolbarItem.IconImageSource>
         </ToolbarItem>
