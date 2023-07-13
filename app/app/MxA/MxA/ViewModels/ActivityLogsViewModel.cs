@@ -79,7 +79,7 @@ namespace MxA.ViewModels {
             return;
 
          // This will push the ItemDetailPage onto the navigation stack
-         await Shell.Current.GoToAsync($"{nameof(ActivityLoadReportPage)}?{nameof(ActivityLoadReportViewModel.ActivityLogId)}={item.ActivityLog.Id}");
+         await Shell.Current.GoToAsync($"//{nameof(ActivityLogsPage)}/{nameof(ActivityLoadReportPage)}?{nameof(ActivityLoadReportViewModel.ActivityLogId)}={item.ActivityLog.Id}");
 
       }
 

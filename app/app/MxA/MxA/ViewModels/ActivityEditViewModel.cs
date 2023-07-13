@@ -1,4 +1,5 @@
 ﻿using MxA.Database.Models;
+using MxA.Views;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -81,17 +82,17 @@ namespace MxA.ViewModels {
       }
 
       private async void OnExitCommand(object obj) {
-         await Shell.Current.Navigation.PopToRootAsync();
+         await Shell.Current.GoToAsync($"//{nameof(TrainingsPage)}/{nameof(WorkoutEditPage)}?{nameof(WorkoutViewModel.WorkoutId)}={Activity.WorkoutId}");
       }
 
-      private async void OnCanelCommand(object obj) {
-         await Shell.Current.Navigation.PopToRootAsync();
+      private void OnCanelCommand(object obj) {
+         ExitCommand?.Execute(null);
       }
 
       private async void OnSaveCommand(object obj) {
          await DataStore.Activities.AddOrUpdateItemAsync(Activity);
 
-         await Shell.Current.Navigation.PopToRootAsync();
+         ExitCommand?.Execute(null);
       }
 
       private async Task OnLoadExercisesCommand() {

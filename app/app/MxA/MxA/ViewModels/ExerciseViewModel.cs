@@ -1,4 +1,5 @@
 ﻿using MxA.Database.Models;
+using MxA.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -48,7 +49,7 @@ namespace MxA.ViewModels {
 
       private async void OnExitCommand(object obj) {
          // Prefixing with `//` switches to a different navigation stack instead of pushing to the active one
-         await Shell.Current.Navigation.PopToRootAsync();
+         await Shell.Current.GoToAsync($"//{nameof(TrainingsPage)}");
       }
    }
 }

@@ -52,11 +52,11 @@ namespace MxA.ViewModels {
       }
 
       private async void OnExitCommand(object obj) {
-         await Shell.Current.Navigation.PopToRootAsync();
+         await Shell.Current.GoToAsync($"//{nameof(TrainingsPage)}");
       }
 
       private async void OnEditCommand(object obj) {
-         await Shell.Current.GoToAsync($"{nameof(WorkoutEditPage)}?{nameof(WorkoutEditViewModel.WorkoutId)}={Workout.Id}");
+         await Shell.Current.GoToAsync($"//{nameof(TrainingsPage)}/{nameof(WorkoutEditPage)}?{nameof(WorkoutEditViewModel.WorkoutId)}={Workout.Id}");
       }
 
       private async void OnDeleteCommand(object obj) {

@@ -62,12 +62,17 @@ namespace MxA.ViewModels {
                WorkoutId = Workout.Id
             });
 
-         await Shell.Current.GoToAsync($"{nameof(ActivityEditPage)}?{nameof(ActivityEditViewModel.ActivityId)}={activity.Id}");
+         await GoToActivityEditPageAsync(activity.Id);
       }
 
       private async void OnEditActivityCommand(ActivityExercise item) {
-         await Shell.Current.GoToAsync($"{nameof(ActivityEditPage)}?{nameof(ActivityEditViewModel.ActivityId)}={item.Activity.Id}");
+         await GoToActivityEditPageAsync(item.Activity.Id);
       }
+
+      private Task GoToActivityEditPageAsync(string activityId) {
+         return Shell.Current.GoToAsync($"//{nameof(TrainingsPage)}/{nameof(ActivityEditPage)}?{nameof(ActivityEditViewModel.ActivityId)}={activityId}");
+      }
+
       private async void OnDeleteActivityCommand(ActivityExercise item) {
          if (await DisplayAlertAsync("Delete", "Are you sure you want to remote this activity?", "OK", "Cancel")) {
             item.Activity.Active = false;
@@ -79,18 +84,18 @@ namespace MxA.ViewModels {
       }
 
       private async void OnExitCommand(object obj) {
-         await Shell.Current.Navigation.PopToRootAsync();
+         await Shell.Current.GoToAsync($"//{nameof(TrainingsPage)}/{nameof(WorkoutPage)}?{nameof(WorkoutViewModel.WorkoutId)}={Workout.Id}");
       }
 
-      private async void OnCanelCommand(object obj) {
-         await Shell.Current.Navigation.PopToRootAsync();
+      private void OnCanelCommand(object obj) {
+         ExitCommand?.Execute(obj);
       }
 
       private async void OnSaveCommand(object obj) {
          //TODO: save
          await DataStore.Workouts.AddOrUpdateItemAsync(Workout);
 
-         await Shell.Current.Navigation.PopToRootAsync();
+         ExitCommand?.Execute(obj);
       }
 
       private async void OnProgressionSelected(WorkoutRef obj) {

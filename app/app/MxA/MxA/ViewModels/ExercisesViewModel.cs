@@ -21,7 +21,6 @@ namespace MxA.ViewModels {
          OnAppearing();
       }
 
-      private DateTime _lastSearchTermChange;
       public void OnSearchTermChanged() {
          IsRefreshingData = true;
       }
@@ -60,7 +59,7 @@ namespace MxA.ViewModels {
             return;
 
          // This will push the ItemDetailPage onto the navigation stack
-         await Shell.Current.GoToAsync($"{nameof(ExercisePage)}?{nameof(ExerciseViewModel.ExerciseId)}={item.Id}");
+         await Shell.Current.GoToAsync($"//{nameof(TrainingsPage)}/{nameof(ExercisePage)}?{nameof(ExerciseViewModel.ExerciseId)}={item.Id}");
       }
    }
 }

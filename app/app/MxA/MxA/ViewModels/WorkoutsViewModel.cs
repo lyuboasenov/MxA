@@ -5,11 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
-using Xamarin.Essentials;
 using Xamarin.Forms;
-using static Xamarin.Essentials.Permissions;
 
 namespace MxA.ViewModels {
    public class WorkoutsViewModel : BaseViewModel {
@@ -88,7 +85,7 @@ namespace MxA.ViewModels {
             return;
 
          // This will push the ItemDetailPage onto the navigation stack
-         await Shell.Current.GoToAsync($"{nameof(WorkoutPage)}?{nameof(WorkoutViewModel.WorkoutId)}={item.Id}");
+         await Shell.Current.GoToAsync($"//{nameof(TrainingsPage)}/{nameof(WorkoutPage)}?{nameof(WorkoutViewModel.WorkoutId)}={item.Id}");
       }
    }
 }
