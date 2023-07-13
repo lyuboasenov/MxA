@@ -2,12 +2,14 @@
 using MxA.Themes;
 using Xamarin.Essentials;
 using Xamarin.Forms;
+using Xamarin.Forms.Svg;
 
 namespace MxA {
    public partial class App : Application {
 
       public App() {
          InitializeComponent();
+         SvgImageSource.RegisterAssembly();
          DependencyService.Register<IDataStore, DataStore>();
          MainPage = new AppShell();
       }

@@ -22,6 +22,7 @@ namespace MxA.iOS {
       public override bool FinishedLaunching(UIApplication app, NSDictionary options) {
          FormsMaterial.Init();
          global::Xamarin.Forms.Forms.Init();
+         Xamarin.Forms.Svg.iOS.SvgImage.Init();  //need to write here
          LoadApplication(new App());
 
          return base.FinishedLaunching(app, options);

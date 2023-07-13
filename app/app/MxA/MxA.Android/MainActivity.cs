@@ -15,6 +15,7 @@ namespace MxA.Droid {
          FormsMaterial.Init(this, savedInstanceState);
          Xamarin.Essentials.Platform.Init(this, savedInstanceState);
          global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
+         Xamarin.Forms.Svg.Droid.SvgImage.Init(this);
          global::Xamarin.Forms.FormsMaterial.Init(this, savedInstanceState);
          LoadApplication(new App());
       }
