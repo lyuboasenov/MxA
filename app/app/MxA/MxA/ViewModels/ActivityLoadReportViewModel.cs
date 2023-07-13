@@ -2,6 +2,7 @@
 using MxA.Database.Models;
 using MxA.Helpers.ImportExport;
 using MxA.Models;
+using MxA.Views;
 using Newtonsoft.Json;
 using SkiaSharp;
 using System;
@@ -59,16 +60,39 @@ namespace MxA.ViewModels {
             ThenBy(oo => oo.Repetition).
             GroupBy(e => new { Repetition = e.Repetition, Set = e.Set });
 
-         foreach (var g in group) {
+         var dict = group.ToDictionary(d => d.Key, dd => dd.ToList());
+
+         uint maxOrder = 0;
+         for(int i = 0; i < dict.Count; i++) {
+            var kvp = dict.ElementAt(i);
+            var elementsToMove = new List<TimerEvent>();
+            foreach (var item in kvp.Value) {
+               if ((item.State == TimerState.RepetitionRest || item.State == TimerState.SetRest)
+                  && item.Counter < 2 
+                  && item.Order > maxOrder) {
+                  elementsToMove.Add(item);
+               }
+            }
+
+            kvp.Value.RemoveAll(e => elementsToMove.Contains(e));
+            if (elementsToMove.Any()) {
+               maxOrder = elementsToMove.Max(m => m.Order);
+            }
+            var next = dict.ElementAtOrDefault(i + 1);
+            next.Value?.AddRange(elementsToMove);
+         }
+
+         foreach (var g in dict) {
+            var ordered = g.Value.OrderBy(o => o.Order).ToArray();
             Repetitions.Add(
                new RepetitionReport() {
                   Repetition = g.Key.Repetition + 1,
                   Set = g.Key.Set + 1,
-                  AverageLoad = g.Where(w => w.State == TimerState.Work).Sum(s => s.Load) / g.Where(w => w.State == TimerState.Work).Count(),
+                  AverageLoad = g.Value.Where(w => w.State == TimerState.Work).Sum(s => s.Load) / g.Value.Where(w => w.State == TimerState.Work).Count(),
                   Chart = new LineChart() {
-                     Entries = g.
+                     Entries = g.Value.
                         OrderBy(o => o.Order).
-                        Select(CreateEntry)
+                        Select(CreateEntry).ToArray(),
                   }
                });
          }
@@ -79,7 +103,7 @@ namespace MxA.ViewModels {
       }
 
       private Task OnExitCommand() {
-         return Shell.Current.GoToAsync("..");
+         return Shell.Current.GoToAsync($"//{nameof(ActivityLogsPage)}");
       }
 
       private async Task OnDeleteActivityLogCommand() {
