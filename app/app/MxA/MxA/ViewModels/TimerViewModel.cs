@@ -17,6 +17,7 @@ using MxA.Models;
 using System.Collections.Concurrent;
 using System.Linq;
 using Newtonsoft.Json;
+using MxA.Helpers;
 
 namespace MxA.ViewModels {
 
@@ -24,9 +25,7 @@ namespace MxA.ViewModels {
    public class TimerViewModel : BaseViewModel {
 
       #region members
-      private static ISimpleAudioPlayer _tone1;
-      private static ISimpleAudioPlayer _tone2;
-      private static ISimpleAudioPlayer _tone3;
+      private static Dictionary<string, ISimpleAudioPlayer> _tones = new Dictionary<string, ISimpleAudioPlayer>();
 
       private static ImageSource _btImage;
       private static ImageSource _btConnectedImage;
@@ -93,14 +92,28 @@ namespace MxA.ViewModels {
       }
       #endregion
 
-      private void PlayTones() {
-         if (Counter == 0) {
-            _tone3.Play();
-         } else if (Counter <= 3) {
-            _tone1.Play();
-         } else if (Counter <= 6) {
-            _tone2.Play();
+      private Task PlayTones() {
+         if (Counter == 0 && Settings.T0SoundEnabled) {
+            _tones[Settings.T0Sound].Play();
+         } else if (Counter == 1 && Settings.T_1SoundEnabled) {
+            _tones[Settings.T_1Sound].Play();
+         } else if (Counter == 2 && Settings.T_2SoundEnabled) {
+            _tones[Settings.T_2Sound].Play();
+         } else if (Counter == 3 && Settings.T_3SoundEnabled) {
+            _tones[Settings.T_3Sound].Play();
+         } else if (Counter == 4 && Settings.T_4SoundEnabled) {
+            _tones[Settings.T_4Sound].Play();
+         } else if (Counter == 5 && Settings.T_5SoundEnabled) {
+            _tones[Settings.T_5Sound].Play();
+         } else if (Counter == 10 && Settings.T_10SoundEnabled) {
+            _tones[Settings.T_10Sound].Play();
+         } else if (Counter == 30 && Settings.T_30SoundEnabled) {
+            _tones[Settings.T_30Sound].Play();
+         } else if (Counter == 60 && Settings.T_60SoundEnabled) {
+            _tones[Settings.T_60Sound].Play();
          }
+
+         return Task.CompletedTask;
       }
 
       public async void OnActivityIdChanged() {
@@ -175,17 +188,12 @@ namespace MxA.ViewModels {
          _btImage = ImageSource.FromResource("MxA.Resources.icons.bluetooth_FILL0_wght400_GRAD0_opsz48.png", typeof(TimerViewModel).GetTypeInfo().Assembly);
          _btConnectedImage = ImageSource.FromResource("MxA.Resources.icons.bluetooth_connected_FILL0_wght400_GRAD0_opsz48.png", typeof(TimerViewModel).GetTypeInfo().Assembly);
 
-         _tone1 = CrossSimpleAudioPlayer.CreateSimpleAudioPlayer();
-         _tone2 = CrossSimpleAudioPlayer.CreateSimpleAudioPlayer();
-         _tone3 = CrossSimpleAudioPlayer.CreateSimpleAudioPlayer();
+         foreach(var tone in Settings.ToneResources) {
+            var player = CrossSimpleAudioPlayer.CreateSimpleAudioPlayer();
+            player.Load(assembly.GetManifestResourceStream(tone.Value));
 
-         Stream tone1Stream = assembly.GetManifestResourceStream("MxA.Resources.sounds.countdown.wav");
-         Stream tone3Stream = assembly.GetManifestResourceStream("MxA.Resources.sounds.end_rep.mp3");
-         Stream tone2Stream = assembly.GetManifestResourceStream("MxA.Resources.sounds.Tones.ogg");
-
-         _tone1.Load(tone1Stream);
-         _tone2.Load(tone2Stream);
-         _tone3.Load(tone3Stream);
+            _tones.Add(tone.Key, player);
+         }
       }
 
       private void InitializeCommands() {
@@ -216,6 +224,8 @@ namespace MxA.ViewModels {
             _timerSM.StateChanged -= _timerSM_StateChanged;
             _timerSM = null;
          }
+
+         ActivityId = string.Empty;
          
          if (null == _activity) {
             await Shell.Current.Navigation.PopToRootAsync();
@@ -330,6 +340,9 @@ namespace MxA.ViewModels {
       }
 
       private async Task LoadActivity() {
+         if (string.IsNullOrEmpty(ActivityId))
+            return;
+
          try {
             _activity = await DataStore.Activities.GetItemAsync(ActivityId);
             _exercise = await DataStore.Exercises.GetItemAsync(_activity.ExerciseId);
@@ -441,12 +454,13 @@ namespace MxA.ViewModels {
       private Color StateToColor(TimerStateMachine.TimerState state) {
          switch (state) {
             case TimerStateMachine.TimerState.Preparation:
-               return Color.Orange;
+               return Settings.PreparationColor;
             case TimerStateMachine.TimerState.RepetitionRest:
+               return Settings.RepetitionRestColor;
             case TimerStateMachine.TimerState.SetRest:
-               return Color.Blue;
+               return Settings.SetRestColor;
             case TimerStateMachine.TimerState.Work:
-               return Color.Green;
+               return Settings.WorkColor;
             case TimerStateMachine.TimerState.Done:
                return Color.Gray;
             default:

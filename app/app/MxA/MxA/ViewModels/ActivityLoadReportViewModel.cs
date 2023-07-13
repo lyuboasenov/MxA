@@ -1,10 +1,12 @@
 ﻿using Microcharts;
 using MxA.Database.Models;
+using MxA.Helpers;
 using MxA.Helpers.ImportExport;
 using MxA.Models;
 using MxA.Views;
 using Newtonsoft.Json;
 using SkiaSharp;
+using SkiaSharp.Views.Forms;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -175,12 +177,13 @@ namespace MxA.ViewModels {
       private SKColor GetColor(TimerState state) {
          switch (state) {
             case TimerState.Preparation:
-               return SKColors.Orange;
+               return Settings.PreparationColor.ToSKColor();
             case TimerState.Work:
-               return SKColors.Green;
+               return Settings.WorkColor.ToSKColor();
             case TimerState.RepetitionRest:
+               return Settings.RepetitionRestColor.ToSKColor();
             case TimerState.SetRest:
-               return SKColors.Blue;
+               return Settings.SetRestColor.ToSKColor();
             default:
                return SKColors.Transparent;
          }

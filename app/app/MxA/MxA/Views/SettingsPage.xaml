@@ -3,6 +3,7 @@
     x:Class="MxA.Views.SettingsPage"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:icons="clr-namespace:MxA.Icons.Material"
     xmlns:vm="clr-namespace:MxA.ViewModels"
     Title="{Binding Title}"
     BackgroundColor="{DynamicResource PageBackgroundColor}"
@@ -12,17 +13,244 @@
         <vm:SettingsViewModel />
     </ContentPage.BindingContext>
 
-    <StackLayout Padding="15" Spacing="3">
+    <ScrollView>
+        <StackLayout Padding="15" Spacing="3">
 
-        <Label FontSize="Medium" Text="Theme" />
-        <Picker SelectedItem="{Binding Theme}">
-            <Picker.Items>
-                <x:String>Device default</x:String>
-                <x:String>Light</x:String>
-                <x:String>Dark</x:String>
-            </Picker.Items>
-        </Picker>
 
-    </StackLayout>
+            <Picker Title="Theme" SelectedItem="{Binding Theme}">
+                <Picker.Items>
+                    <x:String>Device default</x:String>
+                    <x:String>Light</x:String>
+                    <x:String>Dark</x:String>
+                </Picker.Items>
+            </Picker>
 
+            <StackLayout Orientation="Horizontal">
+                <Picker
+                    Title="Preparation color"
+                    HorizontalOptions="FillAndExpand"
+                    ItemDisplayBinding="{Binding Name}"
+                    ItemsSource="{Binding Colors}"
+                    SelectedItem="{Binding PreparationColor}" />
+                <BoxView
+                    BackgroundColor="{Binding PreparationColor.Color}"
+                    HeightRequest="45"
+                    VerticalOptions="Center"
+                    WidthRequest="45" />
+            </StackLayout>
+
+            <StackLayout Orientation="Horizontal">
+                <Picker
+                    Title="Work color"
+                    HorizontalOptions="FillAndExpand"
+                    ItemDisplayBinding="{Binding Name}"
+                    ItemsSource="{Binding Colors}"
+                    SelectedItem="{Binding WorkColor}" />
+                <BoxView
+                    BackgroundColor="{Binding WorkColor.Color}"
+                    HeightRequest="45"
+                    VerticalOptions="Center"
+                    WidthRequest="45" />
+            </StackLayout>
+
+            <StackLayout Orientation="Horizontal">
+                <Picker
+                    Title="Repetition rest color"
+                    HorizontalOptions="FillAndExpand"
+                    ItemDisplayBinding="{Binding Name}"
+                    ItemsSource="{Binding Colors}"
+                    SelectedItem="{Binding RepetitionRestColor}" />
+                <BoxView
+                    BackgroundColor="{Binding RepetitionRestColor.Color}"
+                    HeightRequest="45"
+                    VerticalOptions="Center"
+                    WidthRequest="45" />
+            </StackLayout>
+
+            <StackLayout Orientation="Horizontal">
+                <Picker
+                    Title="Set rest color"
+                    HorizontalOptions="FillAndExpand"
+                    ItemDisplayBinding="{Binding Name}"
+                    ItemsSource="{Binding Colors}"
+                    SelectedItem="{Binding SetRestColor}" />
+                <BoxView
+                    BackgroundColor="{Binding SetRestColor.Color}"
+                    HeightRequest="45"
+                    VerticalOptions="Center"
+                    WidthRequest="45" />
+            </StackLayout>
+
+            <StackLayout Orientation="Horizontal">
+                <CheckBox x:Name="t0Enabled" IsChecked="{Binding T0SoundEnabled}" />
+                <Picker
+                    Title="T0 sound"
+                    HorizontalOptions="FillAndExpand"
+                    IsEnabled="{Binding IsChecked, Source={Reference t0Enabled}}"
+                    ItemDisplayBinding="{Binding Name}"
+                    ItemsSource="{Binding Sounds}"
+                    SelectedItem="{Binding T0Sound}" />
+                <ImageButton
+                    Command="{Binding PlaySoundCommand}"
+                    CommandParameter="{Binding T0Sound}"
+                    IsEnabled="{Binding IsChecked, Source={Reference t0Enabled}}">
+                    <ImageButton.Source>
+                        <FontImageSource FontFamily="MD" Glyph="{Static icons:IconFont.Play_arrow}" />
+                    </ImageButton.Source>
+                </ImageButton>
+            </StackLayout>
+
+            <StackLayout Orientation="Horizontal">
+                <CheckBox x:Name="t_1Enabled" IsChecked="{Binding T_1SoundEnabled}" />
+                <Picker
+                    Title="T-1 sound"
+                    HorizontalOptions="FillAndExpand"
+                    IsEnabled="{Binding IsChecked, Source={Reference t_1Enabled}}"
+                    ItemDisplayBinding="{Binding Name}"
+                    ItemsSource="{Binding Sounds}"
+                    SelectedItem="{Binding T_1Sound}" />
+                <ImageButton
+                    Command="{Binding PlaySoundCommand}"
+                    CommandParameter="{Binding T_1Sound}"
+                    IsEnabled="{Binding IsChecked, Source={Reference t_1Enabled}}">
+                    <ImageButton.Source>
+                        <FontImageSource FontFamily="MD" Glyph="{Static icons:IconFont.Play_arrow}" />
+                    </ImageButton.Source>
+                </ImageButton>
+            </StackLayout>
+
+            <StackLayout Orientation="Horizontal">
+                <CheckBox x:Name="t_2Enabled" IsChecked="{Binding T_2SoundEnabled}" />
+                <Picker
+                    Title="T-2 sound"
+                    HorizontalOptions="FillAndExpand"
+                    IsEnabled="{Binding IsChecked, Source={Reference t_2Enabled}}"
+                    ItemDisplayBinding="{Binding Name}"
+                    ItemsSource="{Binding Sounds}"
+                    SelectedItem="{Binding T_2Sound}" />
+                <ImageButton
+                    Command="{Binding PlaySoundCommand}"
+                    CommandParameter="{Binding T_2Sound}"
+                    IsEnabled="{Binding IsChecked, Source={Reference t_2Enabled}}">
+                    <ImageButton.Source>
+                        <FontImageSource FontFamily="MD" Glyph="{Static icons:IconFont.Play_arrow}" />
+                    </ImageButton.Source>
+                </ImageButton>
+            </StackLayout>
+
+            <StackLayout Orientation="Horizontal">
+                <CheckBox x:Name="t_3Enabled" IsChecked="{Binding T_3SoundEnabled}" />
+                <Picker
+                    Title="T-3 sound"
+                    HorizontalOptions="FillAndExpand"
+                    IsEnabled="{Binding IsChecked, Source={Reference t_3Enabled}}"
+                    ItemDisplayBinding="{Binding Name}"
+                    ItemsSource="{Binding Sounds}"
+                    SelectedItem="{Binding T_3Sound}" />
+                <ImageButton
+                    Command="{Binding PlaySoundCommand}"
+                    CommandParameter="{Binding T_3Sound}"
+                    IsEnabled="{Binding IsChecked, Source={Reference t_3Enabled}}">
+                    <ImageButton.Source>
+                        <FontImageSource FontFamily="MD" Glyph="{Static icons:IconFont.Play_arrow}" />
+                    </ImageButton.Source>
+                </ImageButton>
+            </StackLayout>
+
+            <StackLayout Orientation="Horizontal">
+                <CheckBox x:Name="t_4Enabled" IsChecked="{Binding T_4SoundEnabled}" />
+                <Picker
+                    Title="T-4 sound"
+                    HorizontalOptions="FillAndExpand"
+                    IsEnabled="{Binding IsChecked, Source={Reference t_4Enabled}}"
+                    ItemDisplayBinding="{Binding Name}"
+                    ItemsSource="{Binding Sounds}"
+                    SelectedItem="{Binding T_4Sound}" />
+                <ImageButton
+                    Command="{Binding PlaySoundCommand}"
+                    CommandParameter="{Binding T_4Sound}"
+                    IsEnabled="{Binding IsChecked, Source={Reference t_4Enabled}}">
+                    <ImageButton.Source>
+                        <FontImageSource FontFamily="MD" Glyph="{Static icons:IconFont.Play_arrow}" />
+                    </ImageButton.Source>
+                </ImageButton>
+            </StackLayout>
+
+            <StackLayout Orientation="Horizontal">
+                <CheckBox x:Name="t_5Enabled" IsChecked="{Binding T_5SoundEnabled}" />
+                <Picker
+                    Title="T-5 sound"
+                    HorizontalOptions="FillAndExpand"
+                    IsEnabled="{Binding IsChecked, Source={Reference t_5Enabled}}"
+                    ItemDisplayBinding="{Binding Name}"
+                    ItemsSource="{Binding Sounds}"
+                    SelectedItem="{Binding T_5Sound}" />
+                <ImageButton
+                    Command="{Binding PlaySoundCommand}"
+                    CommandParameter="{Binding T_5Sound}"
+                    IsEnabled="{Binding IsChecked, Source={Reference t_5Enabled}}">
+                    <ImageButton.Source>
+                        <FontImageSource FontFamily="MD" Glyph="{Static icons:IconFont.Play_arrow}" />
+                    </ImageButton.Source>
+                </ImageButton>
+            </StackLayout>
+
+            <StackLayout Orientation="Horizontal">
+                <CheckBox x:Name="t_10Enabled" IsChecked="{Binding T_10SoundEnabled}" />
+                <Picker
+                    Title="T-10 sound"
+                    HorizontalOptions="FillAndExpand"
+                    IsEnabled="{Binding IsChecked, Source={Reference t_10Enabled}}"
+                    ItemDisplayBinding="{Binding Name}"
+                    ItemsSource="{Binding Sounds}"
+                    SelectedItem="{Binding T_10Sound}" />
+                <ImageButton
+                    Command="{Binding PlaySoundCommand}"
+                    CommandParameter="{Binding T_10Sound}"
+                    IsEnabled="{Binding IsChecked, Source={Reference t_10Enabled}}">
+                    <ImageButton.Source>
+                        <FontImageSource FontFamily="MD" Glyph="{Static icons:IconFont.Play_arrow}" />
+                    </ImageButton.Source>
+                </ImageButton>
+            </StackLayout>
+
+            <StackLayout Orientation="Horizontal">
+                <CheckBox x:Name="t_30Enabled" IsChecked="{Binding T_30SoundEnabled}" />
+                <Picker
+                    Title="T-30 sound"
+                    HorizontalOptions="FillAndExpand"
+                    IsEnabled="{Binding IsChecked, Source={Reference t_30Enabled}}"
+                    ItemDisplayBinding="{Binding Name}"
+                    ItemsSource="{Binding Sounds}"
+                    SelectedItem="{Binding T_30Sound}" />
+                <ImageButton
+                    Command="{Binding PlaySoundCommand}"
+                    CommandParameter="{Binding T_30Sound}"
+                    IsEnabled="{Binding IsChecked, Source={Reference t_30Enabled}}">
+                    <ImageButton.Source>
+                        <FontImageSource FontFamily="MD" Glyph="{Static icons:IconFont.Play_arrow}" />
+                    </ImageButton.Source>
+                </ImageButton>
+            </StackLayout>
+
+            <StackLayout Orientation="Horizontal">
+                <CheckBox x:Name="t_60Enabled" IsChecked="{Binding T_60SoundEnabled}" />
+                <Picker
+                    Title="T-60 sound"
+                    HorizontalOptions="FillAndExpand"
+                    IsEnabled="{Binding IsChecked, Source={Reference t_60Enabled}}"
+                    ItemDisplayBinding="{Binding Name}"
+                    ItemsSource="{Binding Sounds}"
+                    SelectedItem="{Binding T_60Sound}" />
+                <ImageButton
+                    Command="{Binding PlaySoundCommand}"
+                    CommandParameter="{Binding T_60Sound}"
+                    IsEnabled="{Binding IsChecked, Source={Reference t_60Enabled}}">
+                    <ImageButton.Source>
+                        <FontImageSource FontFamily="MD" Glyph="{Static icons:IconFont.Play_arrow}" />
+                    </ImageButton.Source>
+                </ImageButton>
+            </StackLayout>
+        </StackLayout>
+    </ScrollView>
 </ContentPage>
