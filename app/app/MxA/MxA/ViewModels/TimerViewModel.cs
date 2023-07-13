@@ -211,13 +211,16 @@ namespace MxA.ViewModels {
 
       private async void OnExitCommand(object obj) {
          // Prefixing with `//` switches to a different navigation stack instead of pushing to the active one
-         _timerSM.Dispose();
-         _timerSM.StateChanged -= _timerSM_StateChanged;
-         _timerSM = null;
+         if (null != _timerSM) {
+            _timerSM.Dispose();
+            _timerSM.StateChanged -= _timerSM_StateChanged;
+            _timerSM = null;
+         }
+         
          if (null == _activity) {
             await Shell.Current.Navigation.PopToRootAsync();
          } else {
-            await Shell.Current.GoToAsync($"{nameof(WorkoutPage)}?{nameof(WorkoutViewModel.WorkoutId)}={_activity.WorkoutId}");
+            await Shell.Current.GoToAsync($"//{nameof(TrainingsPage)}/{nameof(WorkoutPage)}?{nameof(WorkoutViewModel.WorkoutId)}={_activity.WorkoutId}");
          }
       }
 
@@ -310,6 +313,8 @@ namespace MxA.ViewModels {
                }
 
                ExitCommand?.Execute(null);
+            } else {
+               _timerDoneExecuted = false;
             }
          }
       }
