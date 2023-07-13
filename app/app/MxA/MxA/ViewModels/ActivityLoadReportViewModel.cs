@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
@@ -35,11 +36,13 @@ namespace MxA.ViewModels {
       public ICommand DeleteActivityLogCommand { get; }
       public ICommand ExitCommand { get; }
       public ICommand ExportCommand { get; }
+      public ICommand CopyCommand { get; }
 
       public ActivityLoadReportViewModel() {
          DeleteActivityLogCommand = new Command(async () => await OnDeleteActivityLogCommand());
          ExitCommand = new Command(async () => await OnExitCommand());
          ExportCommand = new Command(async () => await OnExportCommand());
+         CopyCommand = new Command(async () => await OnCopyCommand());
       }
 
       public async void OnActivityLogIdChanged() {
@@ -89,6 +92,8 @@ namespace MxA.ViewModels {
                   Repetition = g.Key.Repetition + 1,
                   Set = g.Key.Set + 1,
                   AverageLoad = g.Value.Where(w => w.State == TimerState.Work).Sum(s => s.Load) / g.Value.Where(w => w.State == TimerState.Work).Count(),
+                  MinLoad = g.Value.Where(w => w.State == TimerState.Work).Min(s => s.Load),
+                  MaxLoad = g.Value.Where(w => w.State == TimerState.Work).Max(s => s.Load),
                   Chart = new LineChart() {
                      Entries = g.Value.
                         OrderBy(o => o.Order).
@@ -96,6 +101,38 @@ namespace MxA.ViewModels {
                   }
                });
          }
+      }
+
+      private Task OnCopyCommand() {
+         StringBuilder sb = new StringBuilder();
+         sb.AppendLine(ActivityLog.ActivityName);
+         sb.AppendLine("------------------");
+         sb.AppendLine($"Notes: {ActivityLog.Note}");
+         sb.AppendLine("------------------");
+         sb.AppendLine($"Total:");
+         sb.AppendLine($"  Avg Load: {TotalAverageLoad:0.00}");
+         sb.AppendLine($"  Reps/Sets: {TotalRepetitions}/{TotalSets}");
+         sb.AppendLine("------------------");
+
+         var sets = _timerEvents.
+            Where(w => w.State == TimerState.Work).
+            OrderBy(o => o.Set).
+            ThenBy(oo => oo.Repetition).
+            GroupBy(e => e.Set);
+            //GroupBy(e => new { Repetition = e.Repetition, Set = e.Set });
+
+         foreach (var s in sets) {
+            sb.Append($"Set {s.Key + 1}: ");
+            var reps = s.GroupBy(g => g.Repetition);
+
+            foreach (var r in reps) {
+               sb.Append($"{r.Average(a => a.Load):0.00}/");
+            }
+            sb.Remove(sb.Length - 1, 1);
+            sb.AppendLine();
+         }
+
+         return Xamarin.Essentials.Clipboard.SetTextAsync( sb.ToString() );
       }
 
       private Task OnExportCommand() {

@@ -12,6 +12,14 @@
 
     <ContentPage.ToolbarItems>
         <ToolbarItem
+            Command="{Binding CopyCommand}"
+            Order="Primary"
+            Text="">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource FontFamily="MD" Glyph="{Static icons:IconFont.Content_copy}" />
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+        <ToolbarItem
             Command="{Binding ExportCommand}"
             Order="Primary"
             Text="">
@@ -134,6 +142,12 @@
 
                                     <Label Text="Average load:" TextColor="{DynamicResource PrimaryTextColor}" />
                                     <Label Text="{Binding AverageLoad, StringFormat='{0:0.00}'}" TextColor="{DynamicResource PrimaryTextColor}" />
+
+                                    <Label Text="Min load:" TextColor="{DynamicResource PrimaryTextColor}" />
+                                    <Label Text="{Binding MinLoad, StringFormat='{0:0.00}'}" TextColor="{DynamicResource PrimaryTextColor}" />
+
+                                    <Label Text="Max load:" TextColor="{DynamicResource PrimaryTextColor}" />
+                                    <Label Text="{Binding MaxLoad, StringFormat='{0:0.00}'}" TextColor="{DynamicResource PrimaryTextColor}" />
                                 </StackLayout>
                             </xct:Expander.Header>
                             <StackLayout>
