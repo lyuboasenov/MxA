@@ -16,17 +16,23 @@ using Xamarin.Forms.Shapes;
 namespace MxA.ViewModels {
    public class ActivityLogsViewModel : BaseViewModel {
       public ObservableCollection<ActivityLogGroup> LogEntries { get; }
-      public Command LoadItemsCommand { get; }
+      public Command LoadLogEntriesCommand { get; }
       public ICommand ExportCommand { get; }
+      public Command<ActivityActivityLog> ItemTappedCommand { get; }
 
       public ActivityLogsViewModel() {
          Title = "Activity logs";
          LogEntries = new ObservableCollection<ActivityLogGroup>();
-         LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
+         LoadLogEntriesCommand = new Command(async () => await OnLoadLogEntriesCommand());
          ExportCommand = new Command(async () => await OnExportCommand());
+         ItemTappedCommand = new Command<ActivityActivityLog>(OnItemTappedCommand);
       }
 
-      async Task ExecuteLoadItemsCommand() {
+      private void OnItemTappedCommand(ActivityActivityLog l) {
+         SelectedItem  = l;
+      }
+
+      async Task OnLoadLogEntriesCommand() {
          IsRefreshingData = true;
 
          try {
@@ -36,7 +42,7 @@ namespace MxA.ViewModels {
                Year = i.Created.Year,
                Month = i.Created.Month,
                Day = i.Created.Day
-            });
+            }).OrderByDescending(o => new DateTime(o.Key.Year, o.Key.Month, o.Key.Day));
 
 
             foreach (var item in groups) {
@@ -65,7 +71,6 @@ namespace MxA.ViewModels {
       public void OnAppearing() {
          IsRefreshingData = true;
          SelectedItem = null;
-         LoadItemsCommand.Execute(true);
       }
 
       public ActivityActivityLog SelectedItem { get; set; }
