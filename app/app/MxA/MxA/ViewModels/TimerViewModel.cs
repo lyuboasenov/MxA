@@ -323,6 +323,7 @@ namespace MxA.ViewModels {
                }
 
                ExitCommand?.Execute(null);
+               _timerDoneExecuted = false;
             } else {
                _timerDoneExecuted = false;
             }
