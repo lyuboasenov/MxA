@@ -2,27 +2,30 @@
 
 MxA is a portable BLE-enabled strain gauge that can be used for weight-free training as well as testing/assessment.
 
-![In action](https://photos.app.goo.gl/x6TdUL75U8ag6pPD7)
+![In action](docs/IMG_20230711_073946.jpg)
 
 ## Hardware technical specification
 
 *TBA*
 
-![Assembled device](https://photos.app.goo.gl/9Nr8CReEukr5eooMA)
-![Assembled device 2](https://photos.app.goo.gl/9Nr8CReEukr5eooMA)
-![Size reference](https://photos.app.goo.gl/r4w58SzJeT953jyx8)
-![Opened](https://photos.app.goo.gl/5uyH5zxX2TDV2cDNA)
-![Opened 2](https://photos.app.goo.gl/b9Wwf3YJQpqdFnuz5)
-![Opened 3](https://photos.app.goo.gl/pMNJhAvRCrXfRyWU7)
-![PCB old - white + new - green](https://photos.app.goo.gl/GBSueT7cVH3MMX5s5)
+![Assembled device](docs/IMG_20230630_155637.jpg)
+![Assembled device 2](docs/IMG_20230630_155627.jpg)
+![Size reference](docs/IMG_20230630_155656.jpg)
+![Opened](docs/IMG_20230630_155356.jpg)
+![Opened 2](docs/IMG_20230630_151658.jpg)
+![Opened 3](docs/IMG_20230616_162633.jpg)
+![Opened 3](docs/IMG_20230616_162623.jpg)
+![Opened 3](docs/IMG_20230615_183809.jpg)
+![Opened 3](docs/IMG_20230615_183801.jpg)
+![PCB old - white + new - green](docs/IMG_20230630_125604.jpg)
 
 
 ## Mobile application
 
 *TBA*
 
-![Timer](https://photos.app.goo.gl/85Gr1W94dPVSgTfs6)
-![Menu](https://photos.app.goo.gl/pT85HLvFu57b9gZh6)
-![Log](https://photos.app.goo.gl/JixGcatXTseCDPRj9)
-![Activity record](https://photos.app.goo.gl/xT7jEEU41KbGep1E8)
-![Repetition diagram](https://photos.app.goo.gl/RUsR4RdGCnpEYQw6A)
+![Timer](docs/Screenshot_20230919_112019_com.lyuboasenov.m_x_a.jpg)
+![Menu](docs/Screenshot_20230919_111330_com.lyuboasenov.m_x_a.jpg)
+![Log](docs/Screenshot_20230919_111353_com.lyuboasenov.m_x_a.jpg)
+![Activity record](docs/Screenshot_20230919_111416_com.lyuboasenov.m_x_a.jpg)
+![Repetition diagram](docs/Screenshot_20230919_111432_com.lyuboasenov.m_x_a.jpg)
