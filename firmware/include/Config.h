@@ -38,3 +38,23 @@
 #ifndef BATTERY_LEVEL_CHECK_INTERVAL_MILLIS
 #define BATTERY_LEVEL_CHECK_INTERVAL_MILLIS 2000
 #endif
+
+#ifndef LED_RED_PIN
+#define LED_RED_PIN 23
+#endif
+
+#ifndef LED_GREEN_PIN
+#define LED_GREEN_PIN 22
+#endif
+
+#ifndef LED_RED_BLINK_PERIOD_MS
+#define LED_RED_BLINK_PERIOD_MS 2000
+#endif
+
+#ifndef LED_GREEN_BLINK_PERIOD_MS
+#define LED_GREEN_BLINK_PERIOD_MS 2000
+#endif
+
+#ifndef LED_FADE_AMOUNT
+#define LED_FADE_AMOUNT 5
+#endif

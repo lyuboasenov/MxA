@@ -3,11 +3,13 @@
 #include "Ble.h"
 #include "LoadCell.h"
 #include "BatteryLevel.h"
+#include "Led.h"
 #include "debug_print.h"
 
 Ble _ble;
 LoadCell _load_cell;
 BatteryLevel _battery;
+Led _led;
 
 void setup() {
    #ifdef DEBUG_OUTPUT_ENABLED
@@ -23,6 +25,9 @@ void setup() {
    _load_cell.begin();
    _ble.begin();
    _battery.begin();
+   _led.begin();
+
+   _led.blink_red();
 }
 
 uint32_t last_battery_checked_at = 0;
@@ -46,7 +51,12 @@ void loop() {
       }
 
       DEBUG_OUTPUT(verbosity_t::debug, "MAIN", "%d %d", millis(), units);
+
+      _led.turn_off_red();
+      _led.blink_green();
    } else {
       DEBUG_OUTPUT(verbosity_t::debug, "MAIN", "Waiting for client");
+      _led.blink_red();
+      _led.turn_off_green();
    }
 }
