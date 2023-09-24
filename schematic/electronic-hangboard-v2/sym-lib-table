@@ -1,0 +1,4 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "ncp1400a")(type "Legacy")(uri "C:/.projects/portable_load_cell/schematic/lib/ncp1400a.lib")(options "")(descr ""))
+)
