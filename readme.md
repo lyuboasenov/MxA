@@ -11,12 +11,12 @@ The hardware is based on ESP32-WROOM module, HX711 amplifier and S-type strain g
 ![Assembled device](docs/imgs/IMG_20230630_155637.jpg)
 ![Opened](docs/imgs/IMG_20230630_155356.jpg)
 
-[Read more...](hardware.md)
+[Read more...](docs/hardware.md)
 
 
 ## Firmware
 
-[Read more...](firmware.md)
+[Read more...](docs/firmware.md)
 
 ## Mobile application
 
@@ -25,4 +25,4 @@ The hardware is based on ESP32-WROOM module, HX711 amplifier and S-type strain g
 ![Timer](docs/imgs/Screenshot_20230919_112019_com.lyuboasenov.m_x_a.jpg)
 ![Repetition diagram](docs/imgs/Screenshot_20230919_111432_com.lyuboasenov.m_x_a.jpg)
 
-[Read more...](mobile-app.md)
+[Read more...](docs/mobile-app.md)
