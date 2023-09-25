@@ -1,18 +1,21 @@
 # MxA
 
-<link rel="stylesheet" href="docs/docs.css" />
-
+<style>
+   img {
+      width:500px;
+   }
+</style>
 
 MxA is a portable BLE-enabled strain gauge that can be used for weight-free training as well as testing/assessment.
 
-![In action](docs/imgs/IMG_20230711_073946.jpg){.img}
+![In action](docs/imgs/IMG_20230711_073946.jpg)
 
 ## Hardware technical specification
 
 *TBA*
 
 ![Assembled device](docs/imgs/IMG_20230630_155637.jpg)
-![Opened](docs/imgs/IMG_20230630_155356.jpg){width:40px;}
+![Opened](docs/imgs/IMG_20230630_155356.jpg)
 
 [Read more...](hardware.md)
 
