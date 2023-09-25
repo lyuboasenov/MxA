@@ -6,8 +6,6 @@ bool _red_led_on = false;
 bool _red_led_blink = false;
 bool _green_led_on = false;
 bool _green_led_blink = false;
-uint64_t _red_toggled = 0;
-uint64_t _green_toggled = 0;
 
 int _red_fade_amount = LED_FADE_AMOUNT;
 int _green_fade_amount = LED_FADE_AMOUNT;
@@ -64,10 +62,6 @@ void led_task_handler(void *arg) {
          if (_red_brightness <= 0 || _red_brightness >= 255) {
             _red_fade_amount = -_red_fade_amount;
          }
-         // if (millis() - _red_toggled > LED_RED_BLINK_PERIOD_MS) {
-         //    digitalWrite(LED_RED_PIN, !digitalRead(LED_RED_PIN));
-         //    _red_toggled = millis();
-         // }
       } else {
          analogWrite(LED_RED_PIN, 0);
          digitalWrite(LED_RED_PIN, LOW);
@@ -81,10 +75,6 @@ void led_task_handler(void *arg) {
          if (_green_brightness <= 0 || _green_brightness >= 255) {
             _green_fade_amount = -_green_fade_amount;
          }
-         // if (millis() - _green_toggled > LED_GREEN_BLINK_PERIOD_MS) {
-         //    digitalWrite(LED_GREEN_PIN, !digitalRead(LED_GREEN_PIN));
-         //    _green_toggled = millis();
-         // }
       } else {
          analogWrite(LED_GREEN_PIN, 0);
          digitalWrite(LED_GREEN_PIN, LOW);
