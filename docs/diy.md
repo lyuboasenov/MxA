@@ -26,3 +26,11 @@ You can assemble the device from pre-built modules. This build would be bulkier.
 ### other
 
 [Switch SPST](https://www.aliexpress.com/item/4001165826718.html)
+
+## Images
+
+![MCU](imgs/IMG_20230521_112751.jpg)
+![HX711 fix top](imgs/IMG_20230521_112800.jpg)
+![HX711](imgs/IMG_20230708_224314.jpg)
+![MCU](imgs/IMG_20230708_224322.jpg)
+![HX711 bottom](imgs/IMG_20230708_224328.jpg)
