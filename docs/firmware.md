@@ -91,3 +91,17 @@ The ESP32 pin connected to the green led.
 ### LED_FADE_AMOUNT
 
 The value by which led intensity is altered when fading.
+
+## Flashing firmware
+
+The firmware can be flashed to the ESP32-WROOM module either through serial port (UART) or JTAG.
+
+**Note** The first firmware flashing on a ESP32-WROOM module can only be done using the serial port [espressif docs](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-guides/jtag-debugging/tips-and-quirks.html#jtag-and-esp32-wroom-32-at-firmware-compatibility-issue).
+
+There is a point called:
+**JTAG and ESP32-WROOM-32 AT firmware Compatibility Issue**
+
+With this text:
+**The ESP32-WROOM series of modules come pre-flashed with AT firmware. This firmware configures the pins GPIO12 to GPIO15 as SPI slave interface, which makes using JTAG impossible.**
+
+**To make JTAG available, build new firmware that is not using pins GPIO12 to GPIO15 dedicated to JTAG communication. After that, flash the firmware onto your module.**

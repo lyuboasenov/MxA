@@ -13,6 +13,9 @@ The hardware is based on ESP32-WROOM module, HX711 amplifier and S-type strain g
 
 [Read more...](docs/hardware.md)
 
+**DIY** You can assemble the device from pre-built modules
+[DIY](docs/diy.md)
+
 
 ## Firmware
 
