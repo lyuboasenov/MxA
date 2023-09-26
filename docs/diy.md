@@ -5,6 +5,7 @@ You can assemble the device from pre-built modules. This build would be bulkier.
 ## Schematic
 
 ![Schematic](imgs/diy-modules_bb.png)
+![Schematic](imgs/diy-modules_schem.png)
 
 ## BOM
 
