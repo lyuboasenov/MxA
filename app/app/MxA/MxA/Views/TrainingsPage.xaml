@@ -53,14 +53,10 @@
             Command="{Binding AddItemCommand}"
             Order="Secondary"
             Text="Add workout" />
-        <ToolbarItem
-            Command="{Binding AddItemCommand}"
-            Order="Secondary"
-            Text="Add exercise" />
-        <ToolbarItem
+        <!--<ToolbarItem
             Command="{Binding ImportWorkoutsCommand}"
             Order="Secondary"
-            Text="Import" />
+            Text="Import"  />-->
     </ContentPage.ToolbarItems>
 
     <StackLayout>
@@ -80,22 +76,6 @@
             </StackLayout>
         </Frame>
 
-        <xct:TabView Style="{StaticResource CustomTabStyle}">
-            <xct:TabView.TabStripBackgroundView>
-                <BoxView CornerRadius="15, 15, 0, 0" Color="{DynamicResource Primary}" />
-            </xct:TabView.TabStripBackgroundView>
-            <xct:TabViewItem
-                ControlTemplate="{StaticResource TabItemTemplate}"
-                Style="{DynamicResource TabItemStyle}"
-                Text="Workouts">
-                <views:WorkoutsView Margin="0,0,0,50" BindingContext="{Binding Path=BindingContext.WorkoutsViewModel, Source={Reference page}}" />
-            </xct:TabViewItem>
-            <xct:TabViewItem
-                ControlTemplate="{StaticResource TabItemTemplate}"
-                Style="{DynamicResource TabItemStyle}"
-                Text="Exercises">
-                <views:ExercisesView Margin="0,0,0,50" BindingContext="{Binding Path=BindingContext.ExercisesViewModel, Source={Reference page}}" />
-            </xct:TabViewItem>
-        </xct:TabView>
+        <views:WorkoutsView Margin="0,0,0,50" BindingContext="{Binding Path=BindingContext.WorkoutsViewModel, Source={Reference page}}" />
     </StackLayout>
 </ContentPage>

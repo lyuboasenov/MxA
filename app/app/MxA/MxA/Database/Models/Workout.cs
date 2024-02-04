@@ -2,23 +2,17 @@
 using SQLite;
 
 namespace MxA.Database.Models {
-   public class Workout : IModel, IVersion {
+   public class Workout : IModel {
       [PrimaryKey]
       public string Id { get; set; }
-      public string ParentId { get; set; }
       public string Name { get; set; }
-      public Category Category { get; set; }
-      public uint Duration { get; set; }
-      public string Notes { get; set; }
-      public string Summary { get; set; }
-      public string Thumbnail { get; set; }
-      public string TypeId { get; set; }
-      public string TargetId { get; set; }
-      public string ProgressionId { get; set; }
-      public uint Version { get; set; }
-      public System.DateTime? Updated { get; set; }
-      public System.DateTime Created { get; set; }
-      public bool Active { get; set; }
-      public bool WorkoutList { get; set; }
+      public string Note { get; set; }
+      public uint Prep { get; set; }
+      public uint Work { get; set; }
+      public uint RepRest { get; set; }
+      public uint SetRest { get; set; }
+      public uint CoolDown { get; set; }
+      public uint Reps { get; set; }
+      public uint Sets { get; set; }
    }
 }

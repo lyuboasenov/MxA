@@ -12,8 +12,6 @@ namespace MxA {
          Routing.RegisterRoute(nameof(TrainingsPage), typeof(TrainingsPage));
          Routing.RegisterRoute(nameof(WorkoutPage), typeof(WorkoutPage));
          Routing.RegisterRoute(nameof(WorkoutEditPage), typeof(WorkoutEditPage));
-         Routing.RegisterRoute(nameof(ExercisePage), typeof(ExercisePage));
-         Routing.RegisterRoute(nameof(ActivityEditPage), typeof(ActivityEditPage));
          Routing.RegisterRoute(nameof(ActivityLogsPage), typeof(ActivityLogsPage));
          Routing.RegisterRoute(nameof(ActivityLoadReportPage), typeof(ActivityLoadReportPage));
       }

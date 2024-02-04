@@ -5,7 +5,6 @@ namespace MxA.Helpers.Import.Models {
       public string Parent { get; set; }
       public string Id { get; set; }
       public string Name { get; set; }
-      public Category Category { get; set; }
       public string[] Equipment { get; set; }
       public uint Duration { get; set; }
       public uint WorkDuration { get; set; }

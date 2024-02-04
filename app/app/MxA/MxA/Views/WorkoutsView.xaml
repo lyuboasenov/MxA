@@ -3,6 +3,7 @@
     x:Class="MxA.Views.WorkoutsView"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:icons="clr-namespace:MxA.Icons.Material"
     xmlns:local="clr-namespace:MxA.ViewModels"
     xmlns:model="clr-namespace:MxA.Models"
     xmlns:models="clr-namespace:MxA.Database.Models"
@@ -12,17 +13,8 @@
 
     <ContentView.Resources>
         <ColorTypeConverter x:Key="colorTypeConverter" />
-        <!--<local:WorkoutsViewModel x:Key="viewModel" />-->
     </ContentView.Resources>
 
-    <!--<ContentView.BindingContext>
-        <StaticResource Key="viewModel" />
-    </ContentView.BindingContext>-->
-
-    <!--
-        x:DataType enables compiled bindings for better performance and compile time validation of binding expressions.
-        https://docs.microsoft.com/xamarin/xamarin-forms/app-fundamentals/data-binding/compiled-bindings
-    -->
     <RefreshView
         Padding="5"
         x:DataType="local:WorkoutsViewModel"
@@ -30,115 +22,32 @@
         IsRefreshing="{Binding IsRefreshingData, Mode=TwoWay}">
         <CollectionView ItemsSource="{Binding Items}" SelectionMode="None">
             <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="model:WorkoutType">
-                    <xct:Expander>
-                        <xct:Expander.Header>
-                            <Grid xct:CornerRadiusEffect.CornerRadius="10">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="*" />
-                                </Grid.RowDefinitions>
-
-                                <BoxView
-                                    Grid.Row="0"
-                                    xct:CornerRadiusEffect.CornerRadius="10, 10, 0, 0"
-                                    BackgroundColor="{Binding Color}"
-                                    HeightRequest="10" />
-
-                                <StackLayout
-                                    Grid.RowSpan="2"
-                                    Orientation="Horizontal"
-                                    VerticalOptions="CenterAndExpand">
-
-                                    <Grid
-                                        xct:CornerRadiusEffect.CornerRadius="10"
-                                        HeightRequest="105"
-                                        HorizontalOptions="Start"
-                                        VerticalOptions="Center"
-                                        WidthRequest="105">
-                                        <Image
-                                            Margin="10"
-                                            HeightRequest="100"
-                                            Source="{Binding Thumbnail}"
-                                            WidthRequest="100" />
-                                    </Grid>
-
-                                    <Label
-                                        FontAttributes="Bold"
-                                        FontSize="25"
-                                        LineBreakMode="NoWrap"
-                                        Style="{DynamicResource ListItemTextStyle}"
-                                        Text="{Binding Name}"
-                                        VerticalOptions="CenterAndExpand" />
-                                </StackLayout>
-
-                            </Grid>
-                        </xct:Expander.Header>
-
-                        <StackLayout>
-                            <StackLayout BindableLayout.ItemsSource="{Binding}">
-                                <BindableLayout.ItemTemplate>
-                                    <DataTemplate x:DataType="model:WorkoutTarget">
-                                        <xct:Expander Padding="10">
-                                            <xct:Expander.Header>
-                                                <StackLayout Padding="0,20,0,0" Orientation="Horizontal">
-                                                    <Image
-                                                        Margin="10"
-                                                        HeightRequest="100"
-                                                        Source="{Binding Thumbnail}"
-                                                        WidthRequest="100" />
-
-                                                    <StackLayout>
-                                                        <Label
-                                                            FontAttributes="Bold"
-                                                            FontSize="20"
-                                                            LineBreakMode="NoWrap"
-                                                            Style="{DynamicResource ListItemTextStyle}"
-                                                            Text="{Binding Name}"
-                                                            VerticalOptions="Start" />
-
-                                                        <Label
-                                                            FontSize="16"
-                                                            LineBreakMode="WordWrap"
-                                                            Style="{DynamicResource ListItemTextStyle}"
-                                                            Text="{Binding Description}"
-                                                            VerticalOptions="StartAndExpand" />
-                                                    </StackLayout>
-
-                                                </StackLayout>
-                                            </xct:Expander.Header>
-                                            <StackLayout BindableLayout.ItemsSource="{Binding}">
-                                                <BindableLayout.ItemTemplate>
-                                                    <DataTemplate x:DataType="models:Workout">
-                                                        <StackLayout Padding="10">
-                                                            <Label
-                                                                FontSize="16"
-                                                                LineBreakMode="NoWrap"
-                                                                Style="{DynamicResource ListItemTextStyle}"
-                                                                Text="{Binding Name}" />
-                                                            <StackLayout.GestureRecognizers>
-                                                                <TapGestureRecognizer
-                                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type local:WorkoutsViewModel}}, Path=ItemTapped}"
-                                                                    CommandParameter="{Binding .}"
-                                                                    NumberOfTapsRequired="1" />
-                                                            </StackLayout.GestureRecognizers>
-                                                        </StackLayout>
-                                                    </DataTemplate>
-                                                </BindableLayout.ItemTemplate>
-                                            </StackLayout>
-
-                                        </xct:Expander>
-
-                                    </DataTemplate>
-                                </BindableLayout.ItemTemplate>
-                            </StackLayout>
-                            <BoxView
-                                Grid.Row="0"
-                                xct:CornerRadiusEffect.CornerRadius="0, 0, 10, 10"
-                                BackgroundColor="{Binding Color}"
-                                HeightRequest="10" />
-                        </StackLayout>
-                    </xct:Expander>
+                <DataTemplate x:DataType="models:Workout">
+                    <StackLayout Padding="10" Orientation="Horizontal">
+                        <Label
+                            FontSize="16"
+                            HorizontalOptions="StartAndExpand"
+                            LineBreakMode="NoWrap"
+                            Style="{DynamicResource ListItemTextStyle}"
+                            Text="{Binding Name}"
+                            VerticalOptions="CenterAndExpand" />
+                        <ImageButton
+                            BackgroundColor="{StaticResource PrimaryTextColor}"
+                            Command="{Binding Source={RelativeSource AncestorType={x:Type local:WorkoutsViewModel}}, Path=StartWorkoutCommand}"
+                            CommandParameter="{Binding .}"
+                            HorizontalOptions="End"
+                            VerticalOptions="CenterAndExpand">
+                            <ImageButton.Source>
+                                <FontImageSource FontFamily="MD" Glyph="{Static icons:IconFont.Play_arrow}" />
+                            </ImageButton.Source>
+                        </ImageButton>
+                        <StackLayout.GestureRecognizers>
+                            <TapGestureRecognizer
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type local:WorkoutsViewModel}}, Path=ItemTapped}"
+                                CommandParameter="{Binding .}"
+                                NumberOfTapsRequired="1" />
+                        </StackLayout.GestureRecognizers>
+                    </StackLayout>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>

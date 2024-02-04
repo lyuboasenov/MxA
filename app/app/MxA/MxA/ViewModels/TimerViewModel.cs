@@ -21,7 +21,7 @@ using MxA.Helpers;
 
 namespace MxA.ViewModels {
 
-   [QueryProperty(nameof(ActivityId), nameof(ActivityId))]
+   [QueryProperty(nameof(WorkoutId), nameof(WorkoutId))]
    public class TimerViewModel : BaseViewModel {
 
       #region members
@@ -33,8 +33,7 @@ namespace MxA.ViewModels {
       private IDevice _ble;
       private TimerStateMachine _timerSM;
       private bool _playSound;
-      private Activity _activity;
-      private Exercise _exercise;
+      private Workout _workout;
       private ConcurrentBag<TimerEvent> _timerEvents = new ConcurrentBag<TimerEvent>();
       private bool _timerDoneExecuted = false;
       private uint _timerEventCounter;
@@ -70,7 +69,7 @@ namespace MxA.ViewModels {
       public Color Color { get; set; }
       public Color NextColor { get; set; }
       public bool ISNextVisible { get; set; }
-      public string ActivityId { get; set; }
+      public string WorkoutId { get; set; }
       public string TrainingName { get; set; }
       public string NextPeriod { get; set; }
       public uint NextPeriodTime { get; set; }
@@ -116,8 +115,8 @@ namespace MxA.ViewModels {
          return Task.CompletedTask;
       }
 
-      public async void OnActivityIdChanged() {
-         await LoadActivity();
+      public async void OnWorkoutIdChanged() {
+         await LoadWorkout();
       }
 
       public void OnIsRunningChanged() {
@@ -225,12 +224,12 @@ namespace MxA.ViewModels {
             _timerSM = null;
          }
 
-         ActivityId = string.Empty;
-         
-         if (null == _activity) {
+         WorkoutId = string.Empty;
+
+         if (null == _workout) {
             await Shell.Current.Navigation.PopToRootAsync();
          } else {
-            await Shell.Current.GoToAsync($"//{nameof(TrainingsPage)}/{nameof(WorkoutPage)}?{nameof(WorkoutViewModel.WorkoutId)}={_activity.WorkoutId}");
+            await Shell.Current.GoToAsync($"//{nameof(TrainingsPage)}/{nameof(WorkoutPage)}?{nameof(WorkoutViewModel.WorkoutId)}={_workout.Id}");
          }
       }
 
@@ -300,25 +299,25 @@ namespace MxA.ViewModels {
             }
 
             var note = await DisplayPromptAsync("Save log", "Note");
-            
+
             if (note != null) {
                var dict = new Dictionary<string, object>();
-               dict.Add("work", _activity.Work);
-               dict.Add("rep_rest", _activity.RestBWReps);
-               dict.Add("set_rest", _activity.RestBWSets);
-               dict.Add("reps", _activity.Reps);
-               dict.Add("sets", _activity.Sets);
+               dict.Add("work", _workout.Work);
+               dict.Add("rep_rest", _workout.RepRest);
+               dict.Add("set_rest", _workout.SetRest);
+               dict.Add("reps", _workout.Reps);
+               dict.Add("sets", _workout.Sets);
 
-               var added = await DataStore.ActivityLogs.AddItemAsync(new ActivityLog() {
-                  ActivityId = _activity.Id,
-                  ActivityName = _exercise.Name,
+               var added = await DataStore.WorkoutLogs.AddItemAsync(new WorkoutLog() {
+                  WorkoutId = _workout.Id,
+                  WorkoutName = _workout.Name,
                   ActivityDetailsJson = JsonConvert.SerializeObject(dict),
                   Note = note,
                   Created = DateTime.Now
                });
 
                foreach (var e in _timerEvents) {
-                  e.ActivityLogId = added.Id;
+                  e.WorkoutLogId = added.Id;
                   await DataStore.TimerEvents.AddItemAsync(e);
                }
 
@@ -340,30 +339,29 @@ namespace MxA.ViewModels {
          }
       }
 
-      private async Task LoadActivity() {
-         if (string.IsNullOrEmpty(ActivityId))
+      private async Task LoadWorkout() {
+         if (string.IsNullOrEmpty(WorkoutId))
             return;
 
          try {
-            _activity = await DataStore.Activities.GetItemAsync(ActivityId);
-            _exercise = await DataStore.Exercises.GetItemAsync(_activity.ExerciseId);
+            _workout = await DataStore.Workouts.GetItemAsync(WorkoutId);
 
             _timerSM = new TimerStateMachine(
-               _activity.Prep,
-               _activity.Work,
-               _activity.RestBWReps,
-               _activity.RestBWSets,
-               _activity.Reps,
-               _activity.Sets,
-               _activity.SkipLastRepRest,
+               _workout.Prep,
+               _workout.Work,
+               _workout.RepRest,
+               _workout.SetRest,
+               _workout.Reps,
+               _workout.Sets,
+               true,
                true);
             _timerSM.StateChanged += _timerSM_StateChanged;
             _timerSM_StateChanged(this, EventArgs.Empty);
 
-            TotalReps = _activity.Reps;
-            TotalSets = _activity.Sets;
-            TrainingName = _exercise.Name;
-            Title = _exercise.Name;
+            TotalReps = _workout.Reps;
+            TotalSets = _workout.Sets;
+            TrainingName = _workout.Name;
+            Title = _workout.Name;
 
             SetCurrentPeriod();
             UpdateCommands();
@@ -377,7 +375,10 @@ namespace MxA.ViewModels {
          if (_playSound) {
             PlayTones();
          }
-         UpdateCommands();
+         MainThread.BeginInvokeOnMainThread(() =>
+         {
+            UpdateCommands();
+         });
          if (_currentState != _timerSM.State) {
             _previousState = _currentState;
             _currentState = _timerSM.State;

@@ -11,13 +11,11 @@ using static Xamarin.Essentials.Permissions;
 namespace MxA.ViewModels {
    public class TrainingsViewModel : BaseViewModel {
       private Lazy<WorkoutsViewModel> _workoutsViewModel = new Lazy<WorkoutsViewModel>(() => new WorkoutsViewModel());
-      private Lazy<ExercisesViewModel> _exercisesViewModel = new Lazy<ExercisesViewModel>(() => new ExercisesViewModel());
       public bool IsSearchBoxVisible { get; set; }
       public string SearchTerm { get; set; }
       public string SearchGlyph { get; set; }
 
       public WorkoutsViewModel WorkoutsViewModel { get { return _workoutsViewModel.Value; } }
-      public ExercisesViewModel ExercisesViewModel { get { return _exercisesViewModel.Value; } }
 
       public Command AddItemCommand { get; }
       public Command ToggleSearchBoxCommand { get; }
@@ -44,9 +42,6 @@ namespace MxA.ViewModels {
          SearchTerm = s;
          if (_workoutsViewModel.IsValueCreated) {
             _workoutsViewModel.Value.SearchTerm = SearchTerm;
-         }
-         if (_exercisesViewModel.IsValueCreated) {
-            _exercisesViewModel.Value.SearchTerm = SearchTerm;
          }
 
          return Task.CompletedTask;
@@ -83,7 +78,7 @@ namespace MxA.ViewModels {
             var result = await FilePicker.PickAsync();
             if (result != null && result.FileName.EndsWith("json", StringComparison.OrdinalIgnoreCase)) {
                using (var stream = await result.OpenReadAsync()) {
-                  await WorkoutImporter.Import(stream, DataStore);
+                  // await WorkoutImporter.Import(stream, DataStore);
                }
             }
          } catch (Exception ex) {
@@ -96,7 +91,7 @@ namespace MxA.ViewModels {
       }
 
       private async void OnAddItem(object obj) {
-         await Shell.Current.GoToAsync(nameof(NewItemPage));
+         await Shell.Current.GoToAsync(nameof(WorkoutEditPage));
       }
    }
 }

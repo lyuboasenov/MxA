@@ -20,16 +20,15 @@ using static MxA.Services.TimerStateMachine;
 
 namespace MxA.ViewModels {
 
-   [QueryProperty(nameof(ActivityLogId), nameof(ActivityLogId))]
+   [QueryProperty(nameof(WorkoutLogId), nameof(WorkoutLogId))]
    public class ActivityLoadReportViewModel : BaseViewModel {
 
       private IEnumerable<TimerEvent> _timerEvents;
       public ObservableCollection<RepetitionReport> Repetitions { get; } = new ObservableCollection<RepetitionReport>();
 
-      public string ActivityLogId { get; set; }
-      public ActivityLog ActivityLog { get; set; }
-      public Activity Activity { get; set; }
-      public Exercise Exercise { get; set; }
+      public string WorkoutLogId { get; set; }
+      public WorkoutLog WorkoutLog { get; set; }
+      public Workout Workout { get; set; }
 
       public uint TotalRepetitions { get; set; }
       public uint TotalSets { get; set; }
@@ -48,12 +47,11 @@ namespace MxA.ViewModels {
       }
 
       public async void OnActivityLogIdChanged() {
-         ActivityLog = await DataStore.ActivityLogs.GetItemAsync(ActivityLogId);
-         Activity = await DataStore.Activities.GetItemAsync(ActivityLog.ActivityId);
-         Exercise = await DataStore.Exercises.GetItemAsync(Activity.ExerciseId);
-         _timerEvents = await DataStore.TimerEvents.GetItemsAsync(e => e.ActivityLogId == ActivityLogId);
+         WorkoutLog = await DataStore.WorkoutLogs.GetItemAsync(WorkoutLogId);
+         Workout = await DataStore.Workouts.GetItemAsync(WorkoutLog.WorkoutId);
+         _timerEvents = await DataStore.TimerEvents.GetItemsAsync(e => e.WorkoutLogId == WorkoutLogId);
 
-         Title = $"{Exercise.Name} on {ActivityLog.Created.ToString("yyyy/MM/dd")}";
+         Title = $"{Workout.Name} on {WorkoutLog.Created.ToString("yyyy/MM/dd")}";
 
          var workEvents = _timerEvents.Where(w => w.State == TimerState.Work);
          TotalRepetitions = (uint) workEvents.Select(s => s.Repetition).Distinct().Count();
@@ -73,7 +71,7 @@ namespace MxA.ViewModels {
             var elementsToMove = new List<TimerEvent>();
             foreach (var item in kvp.Value) {
                if ((item.State == TimerState.RepetitionRest || item.State == TimerState.SetRest)
-                  && item.Counter < 2 
+                  && item.Counter < 2
                   && item.Order > maxOrder) {
                   elementsToMove.Add(item);
                }
@@ -107,9 +105,9 @@ namespace MxA.ViewModels {
 
       private Task OnCopyCommand() {
          StringBuilder sb = new StringBuilder();
-         sb.AppendLine(ActivityLog.ActivityName);
+         sb.AppendLine(WorkoutLog.WorkoutName);
          sb.AppendLine("------------------");
-         sb.AppendLine($"Notes: {ActivityLog.Note}");
+         sb.AppendLine($"Notes: {WorkoutLog.Note}");
          sb.AppendLine("------------------");
          sb.AppendLine($"Total:");
          sb.AppendLine($"  Avg Load: {TotalAverageLoad:0.00}");
@@ -138,7 +136,7 @@ namespace MxA.ViewModels {
       }
 
       private Task OnExportCommand() {
-         return LogbookExporter.ExportAsync(ActivityLog, _timerEvents);
+         return LogbookExporter.ExportAsync(WorkoutLog, _timerEvents);
       }
 
       private Task OnExitCommand() {
@@ -152,7 +150,7 @@ namespace MxA.ViewModels {
                tasks.Add(DataStore.TimerEvents.DeleteItemAsync(e.Id));
             }
 
-            tasks.Add(DataStore.ActivityLogs.DeleteItemAsync(ActivityLog.Id));
+            tasks.Add(DataStore.WorkoutLogs.DeleteItemAsync(WorkoutLog.Id));
 
             await Task.WhenAll(tasks);
          }

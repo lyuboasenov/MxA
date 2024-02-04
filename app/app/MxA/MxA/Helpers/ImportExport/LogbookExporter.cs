@@ -8,10 +8,10 @@ using Xamarin.Forms;
 
 namespace MxA.Helpers.ImportExport {
    internal class LogbookExporter {
-      public static Task ExportAsync(ActivityLog log, IEnumerable<TimerEvent> events) {
+      public static Task ExportAsync(WorkoutLog log, IEnumerable<TimerEvent> events) {
          return ExportAsync(new[] { log }, events);
       }
-      public static async Task ExportAsync(IEnumerable<ActivityLog> logs, IEnumerable<TimerEvent> events) {
+      public static async Task ExportAsync(IEnumerable<WorkoutLog> logs, IEnumerable<TimerEvent> events) {
          var exportBundle = new {
             LogEntries = logs,
             Events = events,

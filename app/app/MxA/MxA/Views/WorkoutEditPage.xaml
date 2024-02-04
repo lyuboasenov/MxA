@@ -5,8 +5,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:converters="clr-namespace:MxA.Converters"
     xmlns:icons="clr-namespace:MxA.Icons.Material"
-    xmlns:local="clr-namespace:MxA.ViewModels"
-    xmlns:models="clr-namespace:MxA.Models"
     Title="{Binding Title}"
     BackgroundColor="{DynamicResource PageBackgroundColor}"
     Visual="Material">
@@ -19,6 +17,8 @@
         <ResourceDictionary>
             <x:Boolean x:Key="true">True</x:Boolean>
             <converters:SecondsToStringConverter x:Key="secondsConverter" />
+            <converters:MinutesToSecondsConverter x:Key="minutesToSecondsConverter" />
+            <converters:AddValueConverter x:Key="addValueConverter" />
         </ResourceDictionary>
     </ContentPage.Resources>
 
@@ -42,152 +42,211 @@
     </ContentPage.ToolbarItems>
 
     <ContentPage.Content>
-        <ScrollView>
-            <StackLayout>
+        <StackLayout>
+            <ScrollView>
+                <StackLayout Padding="15" Spacing="3">
 
-                <Label
-                    FontAttributes="Bold"
-                    FontSize="Header"
-                    Text="Name" />
+                    <Label FontSize="Medium" Text="Name" />
+                    <Entry Text="{Binding Workout.Name, Mode=TwoWay}" VerticalTextAlignment="Center" />
 
-                <Entry Text="{Binding Workout.Name}" />
+                    <Label FontSize="Medium" Text="Prep time" />
+                    <StackLayout Orientation="Horizontal">
+                        <Stepper
+                            HorizontalOptions="Center"
+                            Increment="1"
+                            Maximum="59"
+                            Minimum="0"
+                            Value="{Binding PrepMinutes, Mode=TwoWay}" />
+                        <Entry
+                            HorizontalTextAlignment="Center"
+                            Keyboard="Numeric"
+                            MaxLength="2"
+                            Text="{Binding PrepMinutes, Mode=TwoWay}"
+                            VerticalTextAlignment="Center" />
 
-                <BoxView
-                    Margin="2,0,2,0"
-                    BackgroundColor="{DynamicResource PrimaryTextColor}"
-                    HeightRequest="1" />
+                        <Label Text=":" VerticalOptions="CenterAndExpand" />
 
-                <Label
-                    FontAttributes="Bold"
-                    FontSize="Header"
-                    Text="Thumbnail" />
+                        <Entry
+                            HorizontalTextAlignment="Center"
+                            Keyboard="Numeric"
+                            MaxLength="2"
+                            Text="{Binding PrepSeconds, Mode=TwoWay}"
+                            VerticalTextAlignment="Center" />
 
-                <Entry Text="{Binding Workout.Thumbnail}" />
+                        <Stepper
+                            HorizontalOptions="Center"
+                            Increment="1"
+                            Maximum="59"
+                            Minimum="0"
+                            Value="{Binding PrepSeconds, Mode=TwoWay}" />
+                    </StackLayout>
 
-                <BoxView
-                    Margin="2,0,2,0"
-                    BackgroundColor="{DynamicResource PrimaryTextColor}"
-                    HeightRequest="1" />
+                    <Label FontSize="Medium" Text="Work time" />
+                    <StackLayout Orientation="Horizontal">
+                        <Stepper
+                            HorizontalOptions="Center"
+                            Increment="1"
+                            Maximum="59"
+                            Minimum="0"
+                            Value="{Binding WorkMinutes, Mode=TwoWay}" />
+                        <Entry
+                            HorizontalTextAlignment="Center"
+                            Keyboard="Numeric"
+                            MaxLength="2"
+                            Text="{Binding WorkMinutes, Mode=TwoWay}"
+                            VerticalTextAlignment="Center" />
 
+                        <Label Text=":" VerticalOptions="CenterAndExpand" />
 
-                <StackLayout BindableLayout.ItemsSource="{Binding WorkoutRefs}" Orientation="Horizontal">
-                    <BindableLayout.ItemTemplate>
-                        <DataTemplate>
-                            <Button
-                                Command="{Binding Source={RelativeSource AncestorType={x:Type local:WorkoutViewModel}}, Path=SelectProgressionCommand}"
-                                CommandParameter="{Binding}"
-                                HorizontalOptions="CenterAndExpand"
-                                Text="{Binding Label}" />
-                        </DataTemplate>
-                    </BindableLayout.ItemTemplate>
+                        <Entry
+                            HorizontalTextAlignment="Center"
+                            Keyboard="Numeric"
+                            MaxLength="2"
+                            Text="{Binding WorkSeconds, Mode=TwoWay}"
+                            VerticalTextAlignment="Center" />
+
+                        <Stepper
+                            HorizontalOptions="Center"
+                            Increment="1"
+                            Maximum="59"
+                            Minimum="0"
+                            Value="{Binding WorkSeconds, Mode=TwoWay}" />
+                    </StackLayout>
+
+                    <Label FontSize="Medium" Text="Rest time" />
+                    <StackLayout Orientation="Horizontal">
+                        <Stepper
+                            HorizontalOptions="Center"
+                            Increment="1"
+                            Maximum="59"
+                            Minimum="0"
+                            Value="{Binding RestMinutes, Mode=TwoWay}" />
+                        <Entry
+                            HorizontalTextAlignment="Center"
+                            Keyboard="Numeric"
+                            MaxLength="2"
+                            Text="{Binding RestMinutes, Mode=TwoWay}"
+                            VerticalTextAlignment="Center" />
+
+                        <Label Text=":" VerticalOptions="CenterAndExpand" />
+
+                        <Entry
+                            HorizontalTextAlignment="Center"
+                            Keyboard="Numeric"
+                            MaxLength="2"
+                            Text="{Binding RestSeconds, Mode=TwoWay}"
+                            VerticalTextAlignment="Center" />
+
+                        <Stepper
+                            HorizontalOptions="Center"
+                            Increment="1"
+                            Maximum="59"
+                            Minimum="0"
+                            Value="{Binding RestSeconds, Mode=TwoWay}" />
+                    </StackLayout>
+
+                    <Label FontSize="Medium" Text="Set rest time" />
+                    <StackLayout Orientation="Horizontal">
+                        <Stepper
+                            HorizontalOptions="Center"
+                            Increment="1"
+                            Maximum="59"
+                            Minimum="0"
+                            Value="{Binding SetRestMinutes, Mode=TwoWay}" />
+                        <Entry
+                            HorizontalTextAlignment="Center"
+                            Keyboard="Numeric"
+                            MaxLength="2"
+                            Text="{Binding SetRestMinutes, Mode=TwoWay}"
+                            VerticalTextAlignment="Center" />
+
+                        <Label Text=":" VerticalOptions="CenterAndExpand" />
+
+                        <Entry
+                            HorizontalTextAlignment="Center"
+                            Keyboard="Numeric"
+                            MaxLength="2"
+                            Text="{Binding SetRestSeconds, Mode=TwoWay}"
+                            VerticalTextAlignment="Center" />
+
+                        <Stepper
+                            HorizontalOptions="Center"
+                            Increment="1"
+                            Maximum="59"
+                            Minimum="0"
+                            Value="{Binding SetRestSeconds, Mode=TwoWay}" />
+                    </StackLayout>
+
+                    <Label FontSize="Medium" Text="Cool down time" />
+                    <StackLayout Orientation="Horizontal">
+                        <Stepper
+                            HorizontalOptions="Center"
+                            Increment="1"
+                            Maximum="59"
+                            Minimum="0"
+                            Value="{Binding CoolDownMinutes, Mode=TwoWay}" />
+                        <Entry
+                            HorizontalTextAlignment="Center"
+                            Keyboard="Numeric"
+                            MaxLength="2"
+                            Text="{Binding CoolDownMinutes, Mode=TwoWay}"
+                            VerticalTextAlignment="Center" />
+
+                        <Label Text=":" VerticalOptions="CenterAndExpand" />
+
+                        <Entry
+                            HorizontalTextAlignment="Center"
+                            Keyboard="Numeric"
+                            MaxLength="2"
+                            Text="{Binding CoolDownSeconds, Mode=TwoWay}"
+                            VerticalTextAlignment="Center" />
+
+                        <Stepper
+                            HorizontalOptions="Center"
+                            Increment="1"
+                            Maximum="59"
+                            Minimum="0"
+                            Value="{Binding CoolDownSeconds, Mode=TwoWay}" />
+                    </StackLayout>
+
+                    <Label FontSize="Medium" Text="Reps" />
+                    <StackLayout Orientation="Horizontal">
+                        <Stepper
+                            HorizontalOptions="Center"
+                            Increment="1"
+                            Maximum="100"
+                            Minimum="0"
+                            Value="{Binding Reps, Mode=TwoWay}" />
+                        <Entry
+                            HorizontalTextAlignment="Center"
+                            Keyboard="Numeric"
+                            MaxLength="2"
+                            Text="{Binding Reps, Mode=TwoWay}"
+                            VerticalTextAlignment="Center" />
+                    </StackLayout>
+
+                    <Label FontSize="Medium" Text="Sets" />
+                    <StackLayout Orientation="Horizontal">
+                        <Stepper
+                            BackgroundColor="{DynamicResource EntryBackgroundColor}"
+                            HorizontalOptions="Center"
+                            Increment="1"
+                            Maximum="100"
+                            Minimum="0"
+                            Value="{Binding Sets, Mode=TwoWay}" />
+                        <Entry
+                            HorizontalTextAlignment="Center"
+                            Keyboard="Numeric"
+                            MaxLength="2"
+                            Text="{Binding Sets, Mode=TwoWay}"
+                            VerticalTextAlignment="Center" />
+                    </StackLayout>
+
+                    <Label FontSize="Medium" Text="Note" />
+                    <Editor HeightRequest="100" Text="{Binding Workout.Note, Mode=TwoWay}" />
+
                 </StackLayout>
-
-                <BoxView
-                    Margin="2,0,2,0"
-                    BackgroundColor="{DynamicResource PrimaryTextColor}"
-                    HeightRequest="1" />
-
-                <StackLayout Orientation="Horizontal">
-                    <Label
-                        FontAttributes="Bold"
-                        FontSize="Header"
-                        HorizontalOptions="StartAndExpand"
-                        Text="Exercises" />
-
-                    <ImageButton Command="{Binding AddActivityCommand}" HorizontalOptions="End">
-                        <ImageButton.Source>
-                            <FontImageSource
-                                FontFamily="MD"
-                                Glyph="{Static icons:IconFont.Add}"
-                                Color="{DynamicResource Primary}" />
-                        </ImageButton.Source>
-                    </ImageButton>
-                </StackLayout>
-
-
-                <BoxView
-                    Margin="2,0,2,0"
-                    BackgroundColor="{DynamicResource PrimaryTextColor}"
-                    HeightRequest="1" />
-
-                <StackLayout BindableLayout.ItemsSource="{Binding Activities}">
-                    <BindableLayout.ItemTemplate>
-                        <DataTemplate x:DataType="models:ActivityExercise">
-                            <Frame
-                                Margin="10"
-                                BackgroundColor="{DynamicResource PageBackgroundColor}"
-                                OutlineColor="{DynamicResource Primary}">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="Auto" />
-                                    </Grid.ColumnDefinitions>
-                                    <StackLayout>
-                                        <Label FontAttributes="Bold" Text="{Binding Exercise.Name}" />
-                                        <StackLayout Orientation="Horizontal">
-                                            <Label Text="{Binding Activity.Sets, StringFormat='{0} sets'}" />
-                                            <Label Text="x" />
-                                            <Label Text="{Binding Activity.Reps, StringFormat='{0} reps'}" />
-                                            <Label Text="x" />
-                                            <Label Text="{Binding Activity.Work, Converter={StaticResource secondsConverter}, ConverterParameter={StaticResource true}}" />
-                                        </StackLayout>
-                                        <StackLayout Orientation="Horizontal">
-                                            <Label Text="Rest " />
-                                            <Label Text="{Binding Activity.RestBWReps, Converter={StaticResource secondsConverter}, ConverterParameter={StaticResource true}, StringFormat='{0} per rep'}" />
-                                            <Label Text="&amp;" />
-                                            <Label Text="{Binding Activity.RestBWSets, Converter={StaticResource secondsConverter}, ConverterParameter={StaticResource true}, StringFormat='{0} per set'}" />
-                                        </StackLayout>
-                                    </StackLayout>
-
-                                    <ImageButton
-                                        Grid.Column="1"
-                                        Command="{Binding Source={RelativeSource AncestorType={x:Type local:WorkoutEditViewModel}}, Path=EditActivityCommand}"
-                                        CommandParameter="{Binding .}"
-                                        VerticalOptions="CenterAndExpand">
-                                        <ImageButton.Source>
-                                            <FontImageSource
-                                                FontFamily="MD"
-                                                Glyph="{Static icons:IconFont.Edit}"
-                                                Color="{DynamicResource Primary}" />
-                                        </ImageButton.Source>
-                                    </ImageButton>
-
-                                    <ImageButton
-                                        Grid.Column="2"
-                                        Command="{Binding Source={RelativeSource AncestorType={x:Type local:WorkoutEditViewModel}}, Path=DeleteActivityCommand}"
-                                        CommandParameter="{Binding .}"
-                                        VerticalOptions="CenterAndExpand">
-                                        <ImageButton.Source>
-                                            <FontImageSource
-                                                FontFamily="MD"
-                                                Glyph="{Static icons:IconFont.Delete}"
-                                                Color="{DynamicResource Primary}" />
-                                        </ImageButton.Source>
-                                    </ImageButton>
-                                </Grid>
-                            </Frame>
-                        </DataTemplate>
-                    </BindableLayout.ItemTemplate>
-                </StackLayout>
-
-                <BoxView
-                    Margin="2,0,2,0"
-                    BackgroundColor="{DynamicResource PrimaryTextColor}"
-                    HeightRequest="1" />
-
-                <Label
-                    FontAttributes="Bold"
-                    FontSize="Header"
-                    Text="Description" />
-
-                <BoxView
-                    Margin="2,0,2,0"
-                    BackgroundColor="{DynamicResource PrimaryTextColor}"
-                    HeightRequest="1" />
-
-                <Editor AutoSize="TextChanges" Text="{Binding Workout.Notes}" />
-            </StackLayout>
-        </ScrollView>
+            </ScrollView>
+        </StackLayout>
     </ContentPage.Content>
 </ContentPage>

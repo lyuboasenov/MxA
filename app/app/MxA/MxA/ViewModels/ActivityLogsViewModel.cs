@@ -1,17 +1,12 @@
-﻿using MxA.Database.Services;
-using MxA.Helpers.ImportExport;
+﻿using MxA.Helpers.ImportExport;
 using MxA.Models;
 using MxA.Views;
-using Newtonsoft.Json;
 using System;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
-using Xamarin.Forms.PlatformConfiguration;
-using Xamarin.Forms.Shapes;
 
 namespace MxA.ViewModels {
    public class ActivityLogsViewModel : BaseViewModel {
@@ -37,7 +32,7 @@ namespace MxA.ViewModels {
 
          try {
             LogEntries.Clear();
-            var allItems = await DataStore.ActivityLogs.GetItemsAsync(true);
+            var allItems = await DataStore.WorkoutLogs.GetItemsAsync(true);
             var groups = allItems.GroupBy(i => new {
                Year = i.Created.Year,
                Month = i.Created.Month,
@@ -51,12 +46,10 @@ namespace MxA.ViewModels {
                };
 
                foreach(var l in item) {
-                  var activity = await DataStore.Activities.GetItemAsync(l.ActivityId);
-                  var exercise = await DataStore.Exercises.GetItemAsync(activity.ExerciseId);
+                  var workout = await DataStore.Workouts.GetItemAsync(l.WorkoutId);
                   g.Add(new ActivityActivityLog() {
-                     Activity = activity,
-                     Exercise = exercise,
-                     ActivityLog = l
+                     Workout = workout,
+                     WorkoutLog = l
                   });
                }
                LogEntries.Add(g);
@@ -84,13 +77,13 @@ namespace MxA.ViewModels {
             return;
 
          // This will push the ItemDetailPage onto the navigation stack
-         await Shell.Current.GoToAsync($"//{nameof(ActivityLogsPage)}/{nameof(ActivityLoadReportPage)}?{nameof(ActivityLoadReportViewModel.ActivityLogId)}={item.ActivityLog.Id}");
+         await Shell.Current.GoToAsync($"//{nameof(ActivityLogsPage)}/{nameof(ActivityLoadReportPage)}?{nameof(ActivityLoadReportViewModel.WorkoutLogId)}={item.WorkoutLog.Id}");
 
       }
 
       private async Task OnExportCommand() {
          await LogbookExporter.ExportAsync(
-            await DataStore.ActivityLogs.GetItemsAsync(),
+            await DataStore.WorkoutLogs.GetItemsAsync(),
             await DataStore.TimerEvents.GetItemsAsync());
       }
    }

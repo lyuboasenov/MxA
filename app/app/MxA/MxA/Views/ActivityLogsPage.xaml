@@ -80,7 +80,7 @@
                                             FontSize="15"
                                             LineBreakMode="NoWrap"
                                             Style="{DynamicResource ListItemTextStyle}"
-                                            Text="{Binding Exercise.Name}"
+                                            Text="{Binding Workout.Name}"
                                             VerticalOptions="Start" />
                                         <StackLayout.GestureRecognizers>
                                             <!--  Command="{Binding Source={Reference page}, Path=BindingContext.ItemTappedCommand}"  -->
