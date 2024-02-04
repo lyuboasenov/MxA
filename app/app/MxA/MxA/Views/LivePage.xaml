@@ -1,0 +1,152 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="MxA.Views.LivePage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:converters="clr-namespace:MxA.Converters"
+    xmlns:icons="clr-namespace:MxA.Icons.Material"
+    xmlns:microcharts="clr-namespace:Microcharts.Forms;assembly=Microcharts.Forms"
+    xmlns:progressbar="clr-namespace:Com.Igniscor.Controls.ProgressBar;assembly=Com.Igniscor.Controls"
+    xmlns:vm="clr-namespace:MxA.ViewModels"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+    x:Name="page"
+    Title="Live"
+    BackgroundColor="{DynamicResource PageBackgroundColor}"
+    Visual="Material">
+
+    <ContentPage.BindingContext>
+        <vm:TimerViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <x:Boolean x:Key="true">True</x:Boolean>
+            <converters:SecondsToStringConverter x:Key="secondsConverter" />
+            <converters:SecondsToFontSizeConverter x:Key="secondsToFontSizeConverter" />
+            <converters:BatterLevelToGlyphConverter x:Key="batterLevelToImageConverter" />
+            <xct:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+            <converters:LoadToPercentageConverter x:Key="loadToPercentageConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Command="{Binding ConnectHangboardCommand}">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource
+                    FontFamily="MD"
+                    Glyph="{Binding BindingContext.ConnectHangboardGlyph, Source={Reference page}}"
+                    Color="{DynamicResource PrimaryTextColor}" />
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+        <ToolbarItem Command="{Binding CancelTimerCommand}">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource
+                    FontFamily="MD"
+                    Glyph="{Static icons:IconFont.Close}"
+                    Color="{DynamicResource PrimaryTextColor}" />
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+    </ContentPage.ToolbarItems>
+
+    <StackLayout>
+        <StackLayout
+            x:Name="leftRightContainer"
+            Orientation="Horizontal"
+            VerticalOptions="Start">
+            <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="Start">
+                <!--  load cell value  -->
+                <Grid IsVisible="{Binding BleConnected}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <Label
+                        Margin="5"
+                        FontSize="20"
+                        Text="Load:"
+                        VerticalOptions="CenterAndExpand" />
+
+                    <Label
+                        Grid.Column="1"
+                        FontSize="80"
+                        HorizontalOptions="Center"
+                        Text="{Binding Path=Load, StringFormat='{0:0}'}"
+                        TextColor="{Binding Color}" />
+
+                    <Label
+                        Grid.Column="2"
+                        FontFamily="MD"
+                        FontSize="44"
+                        HeightRequest="44"
+                        Text="{Binding BatteryLevel, Converter={StaticResource batterLevelToImageConverter}}"
+                        TextColor="{DynamicResource Primary}"
+                        VerticalOptions="CenterAndExpand"
+                        WidthRequest="44" />
+
+                    <BoxView
+                        Grid.Row="1"
+                        Grid.ColumnSpan="3"
+                        Margin="5,0,5,0"
+                        HeightRequest="1"
+                        Color="{DynamicResource Primary}" />
+                </Grid>
+            </StackLayout>
+        </StackLayout>
+
+        <Grid
+            BackgroundColor="{DynamicResource PageBackgroundColor}"
+            HorizontalOptions="Fill"
+            VerticalOptions="FillAndExpand">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <progressbar:DetailedProgressBar
+                Grid.Column="1"
+                EndBackgroundColor="{DynamicResource PageBackgroundColor}"
+                EndProgressColor="{DynamicResource Primary}"
+                FontSize="0"
+                HorizontalOptions="Fill"
+                InnerCornerRadius="0"
+                Orientation="Vertical"
+                OuterCornerRadius="2"
+                PercentageValue="{Binding Path=Load, Converter={StaticResource loadToPercentageConverter}}"
+                StartBackgroundColor="{DynamicResource PageBackgroundColor}"
+                StartProgressColor="{DynamicResource Primary}"
+                VerticalOptions="FillAndExpand" />
+        </Grid>
+
+        <BoxView
+            Margin="5,0,5,0"
+            HeightRequest="1"
+            IsVisible="false"
+            Color="{DynamicResource Primary}" />
+
+        <!--  Buttons  -->
+        <StackLayout
+            Margin="10"
+            IsVisible="false"
+            Orientation="Horizontal">
+            <ImageButton
+                BackgroundColor="{DynamicResource Triadic2}"
+                Command="{Binding RecordCommand}"
+                CornerRadius="30"
+                HeightRequest="60"
+                HorizontalOptions="CenterAndExpand"
+                WidthRequest="60">
+                <ImageButton.Source>
+                    <FontImageSource FontFamily="MD" Glyph="{Binding RecordGlyph}" />
+                </ImageButton.Source>
+            </ImageButton>
+        </StackLayout>
+
+    </StackLayout>
+
+</ContentPage>

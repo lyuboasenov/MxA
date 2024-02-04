@@ -12,7 +12,7 @@
 #define BLE_DEBUG(x, y,...)                                              //!< DEBUG null
 #endif
 
-#define DEVICE_NAME "[MxA] Portable"
+#define DEVICE_NAME "[MxA] Portable v3"
 
 #define WEIGHT_SERVICE_UUID 0x181D                           // Weight Scale
 #define WEIGHT_CHARACTERISTIC_UUID 0x2A98

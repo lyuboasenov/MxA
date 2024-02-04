@@ -37,6 +37,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Com.Igniscor.Progressbar" Version="1.0.0" />
     <PackageReference Include="Fody" Version="6.7.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -74,6 +75,9 @@
     </Compile>
     <Compile Update="Views\ActivityLogsPage.xaml.cs">
       <DependentUpon>ActivityLogsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\LivePage.xaml.cs">
+      <DependentUpon>LivePage.xaml</DependentUpon>
     </Compile>
     <Compile Update="Views\TrainingsPage.xaml.cs">
       <DependentUpon>TrainingsPage.xaml</DependentUpon>

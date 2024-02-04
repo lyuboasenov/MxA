@@ -30,6 +30,13 @@
                 Color="Black" />
 
             <FontImage
+                x:Key="IconStream"
+                FontFamily="MD"
+                Glyph="{Static icons:IconFont.Stream}"
+                Size="50"
+                Color="Black" />
+
+            <FontImage
                 x:Key="IconSettings"
                 FontFamily="MD"
                 Glyph="{Static icons:IconFont.Settings}"
@@ -60,6 +67,9 @@
 
     <FlyoutItem Title="Training" Icon="{StaticResource IconList}">
         <ShellContent ContentTemplate="{DataTemplate local:TrainingsPage}" Route="TrainingsPage" />
+    </FlyoutItem>
+    <FlyoutItem Title="Live" Icon="{StaticResource IconStream}">
+        <ShellContent ContentTemplate="{DataTemplate local:LivePage}" Route="LivePage" />
     </FlyoutItem>
     <FlyoutItem Title="Logbook" Icon="{StaticResource IconLogbook}">
         <ShellContent ContentTemplate="{DataTemplate local:ActivityLogsPage}" Route="ActivityLogsPage" />
