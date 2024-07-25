@@ -49,6 +49,7 @@ namespace MxA.ViewModels {
       public string ConnectHangboardGlyph { get; set; }
       public ObservableCollection<double> LoadHistory { get; } = new ObservableCollection<double>();
       public LineChart Chart { get; }
+      public ObservableCollection<double> LoadValues { get; set; } = new ObservableCollection<double>();
       #endregion
 
       #region constructors
@@ -114,8 +115,9 @@ namespace MxA.ViewModels {
 
       private void Load_ValueUpdated(object sender, Plugin.BLE.Abstractions.EventArgs.CharacteristicUpdatedEventArgs e) {
          var doubleValue = BitConverter.ToDouble(e.Characteristic.Value, 0);
-         Debug.Write($"Value: {doubleValue}");
          Load = doubleValue >= 0 ? doubleValue : 0;
+         LoadValues.Add(Load);
+         if (LoadValues.Count > 300) { LoadValues.RemoveAt(0); }
       }
 
       public void OnAppearing() {

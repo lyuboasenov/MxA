@@ -8,7 +8,7 @@
     xmlns:microcharts="clr-namespace:Microcharts.Forms;assembly=Microcharts.Forms"
     xmlns:progressbar="clr-namespace:Com.Igniscor.Controls.ProgressBar;assembly=Com.Igniscor.Controls"
     xmlns:vm="clr-namespace:MxA.ViewModels"
-    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit" xmlns:views="clr-namespace:MxA.Views"
     x:Name="page"
     Title="Live"
     BackgroundColor="{DynamicResource PageBackgroundColor}"
@@ -121,6 +121,13 @@
                 StartBackgroundColor="{DynamicResource PageBackgroundColor}"
                 StartProgressColor="{DynamicResource Primary}"
                 VerticalOptions="FillAndExpand" />
+
+            <views:LoadViewControl 
+                        LoadValues="{Binding LoadValues}"
+                        Foreground="Green"
+                        VerticalOptions="FillAndExpand"
+                Grid.ColumnSpan="3"
+                        />
         </Grid>
 
         <BoxView

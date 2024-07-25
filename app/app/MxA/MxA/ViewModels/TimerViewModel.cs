@@ -18,6 +18,7 @@ using System.Collections.Concurrent;
 using System.Linq;
 using Newtonsoft.Json;
 using MxA.Helpers;
+using System.Collections.ObjectModel;
 
 namespace MxA.ViewModels {
 
@@ -75,6 +76,8 @@ namespace MxA.ViewModels {
       public uint NextPeriodTime { get; set; }
       public string PlayPauseGlyph { get; set; }
       public string ConnectHangboardGlyph { get; set; }
+
+      public ObservableCollection<double> LoadValues { get; set; } = new ObservableCollection<double>();
       #endregion
 
       #region constructors
@@ -170,6 +173,7 @@ namespace MxA.ViewModels {
          var doubleValue = BitConverter.ToDouble(e.Characteristic.Value, 0);
          Debug.Write($"Value: {doubleValue}");
          Load = doubleValue >= 0 ? doubleValue : 0;
+         LoadValues.Add(Load);
       }
 
       public void OnAppearing() {
@@ -412,6 +416,7 @@ namespace MxA.ViewModels {
       }
 
       private void SetCurrentPeriod() {
+         LoadValues.Clear();
          IsRunning = _timerSM.IsRunning;
          Rep = _timerSM.CurrentRepetition + 1;
          Set = _timerSM.CurrentSet + 1;

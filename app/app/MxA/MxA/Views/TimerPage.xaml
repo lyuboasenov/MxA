@@ -6,7 +6,7 @@
     xmlns:converters="clr-namespace:MxA.Converters"
     xmlns:icons="clr-namespace:MxA.Icons.Material"
     xmlns:vm="clr-namespace:MxA.ViewModels"
-    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit" xmlns:views="clr-namespace:MxA.Views"
     x:Name="page"
     Title="{Binding TrainingName}"
     BackgroundColor="{DynamicResource PageBackgroundColor}"
@@ -158,14 +158,21 @@
             <!--  Counter & next  -->
             <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="FillAndExpand">
                 <!--  Counter  -->
-                <Grid VerticalOptions="CenterAndExpand">
+                <Grid VerticalOptions="FillAndExpand">
+
+                    <views:LoadViewControl 
+                        LoadValues="{Binding LoadValues}"
+                        Foreground="{Binding Color}"
+                        VerticalOptions="Fill"
+                        />
+                    
                     <Label
                         Margin="0"
                         FontSize="{Binding Counter, Converter={x:StaticResource secondsToFontSizeConverter}, ConverterParameter={StaticResource true}}"
                         HorizontalOptions="Center"
                         Text="{Binding Counter, Converter={x:StaticResource secondsConverter}, ConverterParameter={StaticResource true}}"
                         TextColor="{Binding Color}"
-                        VerticalOptions="FillAndExpand" />
+                        VerticalOptions="CenterAndExpand" />
                 </Grid>
 
                 <BoxView
