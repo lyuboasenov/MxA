@@ -24,14 +24,14 @@ typedef enum {
 #define DEBUG_OUTPUT(lvl, pref, fmt, ...)                       debug_print_ln(lvl, pref, fmt, ##__VA_ARGS__) //!< DEBUG
 #define DEBUG_OUTPUT_F(lvl, pref, fmt, ...)                     debug_print(lvl, pref, fmt, ##__VA_ARGS__)    //!< DEBUG
 #else
-#define DEBUG_OUTPUT(lvl, pref, fmt, ...)                                                        //!< DEBUG null
-#define DEBUG_OUTPUT_F(lvl, pref, fmt, ...)                                                      //!< DEBUG null
+#define DEBUG_OUTPUT(lvl, pref, fmt, ...)                                                                     //!< DEBUG null
+#define DEBUG_OUTPUT_F(lvl, pref, fmt, ...)                                                                   //!< DEBUG null
 #endif
 
 #ifdef DUMP_BUFFER_ENABLED
-#define DUMP_BUFFER(lvl, pref, buffer, size)                 dump_buffer(lvl, pref, buffer, size)        //!< DEBUG
+#define DUMP_BUFFER(lvl, pref, buffer, size)                 dump_buffer(lvl, pref, buffer, size)             //!< DEBUG
 #else
-#define DUMP_BUFFER(lvl, pref, buffer, size)                                                  //!< DEBUG null
+#define DUMP_BUFFER(lvl, pref, buffer, size)                                                                  //!< DEBUG null
 #endif
 
 #ifdef ESP32

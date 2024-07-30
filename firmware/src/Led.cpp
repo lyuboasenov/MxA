@@ -19,7 +19,7 @@ void Led::begin() {
    pinMode(LED_RED_PIN, OUTPUT);
    pinMode(LED_GREEN_PIN, OUTPUT);
 
-   xTaskCreate(led_task_handler, "LED_Task", 4096, NULL, 10, &task_handle);
+   xTaskCreate(led_task_handler, "LED_Task", 4096, NULL, 100, &task_handle);
 }
 
 void Led::blink_red() {

@@ -1,3 +1,53 @@
+#pragma once
+
+/**
+ * @def SOFTWARE_VERSION_MAJOR
+ * @brief Software version major number - year
+ */
+#ifndef SOFTWARE_VERSION_MAJOR
+#define SOFTWARE_VERSION_MAJOR 24
+#endif
+
+/**
+ * @def SOFTWARE_VERSION_MINOR
+ * @brief Software version minor number - month
+ */
+#ifndef SOFTWARE_VERSION_MINOR
+#define SOFTWARE_VERSION_MINOR 7
+#endif
+
+/**
+ * @def SOFTWARE_VERSION_PATCH
+ * @brief Software version patch number - day
+ */
+#ifndef SOFTWARE_VERSION_PATCH
+#define SOFTWARE_VERSION_PATCH 30
+#endif
+
+/**
+ * @def SOFTWARE_VERSION_BUILD
+ * @brief Software version build number
+ */
+#ifndef SOFTWARE_VERSION_BUILD
+#define SOFTWARE_VERSION_BUILD 1
+#endif
+
+/**
+ * @def HARDWARE_VERSION_MAJOR
+ * @brief Hardware version major number - electronics revision
+ */
+#ifndef HARDWARE_VERSION_MAJOR
+#define HARDWARE_VERSION_MAJOR 2
+#endif
+
+/**
+ * @def HARDWARE_VERSION_MINOR
+ * @brief Hardware version major number - load cell index
+ */
+#ifndef HARDWARE_VERSION_MINOR
+#define HARDWARE_VERSION_MINOR 100
+#endif
+
 /**
  * @def LOAD_CELL_DOUT_PIN
  * @brief The ESP32 pin connected to HX711 DOUT pin.

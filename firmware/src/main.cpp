@@ -48,6 +48,7 @@ void loop() {
 
       if (millis() - last_battery_checked_at > BATTERY_LEVEL_CHECK_INTERVAL_MILLIS) {
          _ble.battery_notify(_battery.get_level());
+         last_battery_checked_at = millis();
       }
 
       DEBUG_OUTPUT(verbosity_t::debug, "MAIN", "%d %d", millis(), units);

@@ -1,5 +1,11 @@
 #include "Ble.h"
 
+/**
+ * @def DEVICE_NAME
+ * @brief The name of this device.
+ */
+const char * DEVICE_NAME = "[MxA]";
+
 Ble::Ble() :
    _device_name_descriptor(BLEUUID((uint16_t)0x2901)),
    _device_name_characteristics(
@@ -15,7 +21,17 @@ Ble::Ble() :
    _battery_level_characteristics(
       BLEUUID((uint16_t) BATTERY_CHARACTERISTIC_UUID),
       BLECharacteristic::PROPERTY_NOTIFY |
-      BLECharacteristic::PROPERTY_READ)
+      BLECharacteristic::PROPERTY_READ),
+   _model_number_descriptor(BLEUUID((uint16_t)0x2901)),
+   _model_number_characteristics(
+      BLEUUID((uint16_t) MODEL_NUMBER_STR_CHARACTERISTIC_UUID),
+      BLECharacteristic::PROPERTY_NOTIFY |
+      BLECharacteristic::PROPERTY_READ),
+   _firmware_revision_descriptor(BLEUUID((uint16_t)0x2901)),
+   _firmware_revision_characteristics(
+      BLEUUID((uint16_t) FIRMWARE_REVISION_STR_CHARACTERISTIC_UUID),
+      BLECharacteristic::PROPERTY_NOTIFY |
+      BLECharacteristic::PROPERTY_WRITE)
     {}
 
 void Ble::begin() {
@@ -23,6 +39,19 @@ void Ble::begin() {
    BLEDevice::init(DEVICE_NAME);
    _server = BLEDevice::createServer();
    _server->setCallbacks(new MyServerCallbacks(this));
+
+  uint8_t model_number[6] = { HARDWARE_VERSION_MAJOR, HARDWARE_VERSION_MINOR, SOFTWARE_VERSION_MAJOR, SOFTWARE_VERSION_MINOR, SOFTWARE_VERSION_PATCH, SOFTWARE_VERSION_BUILD };
+
+   BLEService *deviceInfoService = _server->createService(BLEUUID((uint16_t) DEVICE_INFO_SERVICE_UUID));
+   deviceInfoService->addCharacteristic(&_device_name_characteristics);
+   _device_name_descriptor.setValue(DEVICE_NAME);
+   _device_name_characteristics.addDescriptor(&_device_name_descriptor);
+   deviceInfoService->addCharacteristic(&_model_number_characteristics);
+   _model_number_descriptor.setValue((uint8_t*)model_number, 6);
+   _model_number_characteristics.addDescriptor(&_model_number_descriptor);
+   deviceInfoService->addCharacteristic(&_firmware_revision_characteristics);
+   _firmware_revision_characteristics.addDescriptor(&_firmware_revision_descriptor);
+   _firmware_revision_characteristics.setCallbacks(new FirmwareRevisionCallback(this));
 
    BLEService *weightService = _server->createService(BLEUUID((uint16_t) WEIGHT_SERVICE_UUID));
    weightService->addCharacteristic(&_weight_characteristics);
@@ -35,11 +64,7 @@ void Ble::begin() {
    _battery_level_descriptor.setValue("Device battery level measured in per cent");
    _battery_level_characteristics.addDescriptor(&_weight_descriptor);
 
-   weightService->addCharacteristic(&_device_name_characteristics);
-   batteryService->addCharacteristic(&_device_name_characteristics);
-   _device_name_descriptor.setValue(DEVICE_NAME);
-   _device_name_characteristics.addDescriptor(&_device_name_descriptor);
-
+   deviceInfoService->start();
    weightService->start();
    batteryService->start();
 
