@@ -18,7 +18,7 @@ void setup() {
 
    DEBUG_OUTPUT(verbosity_t::info, "MAIN", "  _________________________________");
    DEBUG_OUTPUT(verbosity_t::info, "MAIN", "((                                  ))");
-   DEBUG_OUTPUT(verbosity_t::info, "MAIN", " ))       MxA v. %s (( ", VERSION);
+   DEBUG_OUTPUT(verbosity_t::info, "MAIN", " ))       MxA v.%d.%d.%d.%d (( ", SOFTWARE_VERSION_MAJOR, SOFTWARE_VERSION_MINOR, SOFTWARE_VERSION_PATCH, SOFTWARE_VERSION_BUILD);
    DEBUG_OUTPUT(verbosity_t::info, "MAIN", "((                                  ))");
    DEBUG_OUTPUT(verbosity_t::info, "MAIN", "  ----------------------------------  ");
 

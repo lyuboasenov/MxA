@@ -13,7 +13,7 @@
  * @brief Software version minor number - month
  */
 #ifndef SOFTWARE_VERSION_MINOR
-#define SOFTWARE_VERSION_MINOR 7
+#define SOFTWARE_VERSION_MINOR 8
 #endif
 
 /**
@@ -21,7 +21,7 @@
  * @brief Software version patch number - day
  */
 #ifndef SOFTWARE_VERSION_PATCH
-#define SOFTWARE_VERSION_PATCH 30
+#define SOFTWARE_VERSION_PATCH 15
 #endif
 
 /**
