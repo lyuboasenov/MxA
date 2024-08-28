@@ -11,6 +11,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
 using Xamarin.Forms;
+using MxA.Helpers.Permissions;
 
 namespace MxA.ViewModels {
    public class BleDevicesViewModel : BaseViewModel {
@@ -60,6 +61,22 @@ namespace MxA.ViewModels {
 
             if (status != Plugin.Permissions.Abstractions.PermissionStatus.Granted) {
                await DisplayAlertAsync("Need location", "App need location permission", "OK");
+               return;
+            }
+
+            var blePermission = DependencyService.Get<IBLEPermission>();
+            Xamarin.Essentials.PermissionStatus bleStatus = await blePermission.CheckStatusAsync();
+
+            if (bleStatus != Xamarin.Essentials.PermissionStatus.Granted) {
+               if (await blePermission.RequestAsync() != Xamarin.Essentials.PermissionStatus.Granted) {
+                  await DisplayAlertAsync("Nearby devices permission", "The app needs Nearby devices permission", "OK");
+               }
+
+               bleStatus = await blePermission.CheckStatusAsync();
+            }
+
+            if (bleStatus != Xamarin.Essentials.PermissionStatus.Granted) {
+               await DisplayAlertAsync("Nearby devices permission", "The app need Nearby devices permission", "OK");
                return;
             }
 
