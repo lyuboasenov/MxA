@@ -96,14 +96,14 @@ namespace MxA.ViewModels {
                      var characteristic = await batteryService.GetCharacteristicAsync(Guid.Parse("00002a19-0000-1000-8000-00805f9b34fb"));
                      if (characteristic != null) {
                         var batteryLevel = await characteristic.ReadAsync();
+                        if (batteryLevel?.Length > 0) {
+                           var uIntValue = BitConverter.ToUInt16(batteryLevel, 0);
+                           BatteryLevel = (uint) uIntValue;
+                        }
 
-                        var uIntValue = BitConverter.ToUInt16(batteryLevel, 0);
-                        Debug.Write($"Value: {uIntValue}");
-                        BatteryLevel = (uint) uIntValue;
                         BleConnected = true;
                      }
                   }
-
 
                   ConnectHangboardGlyph = Icons.Material.IconFont.Bluetooth_connected;
                }
@@ -114,10 +114,12 @@ namespace MxA.ViewModels {
       }
 
       private void Load_ValueUpdated(object sender, Plugin.BLE.Abstractions.EventArgs.CharacteristicUpdatedEventArgs e) {
-         var doubleValue = BitConverter.ToDouble(e.Characteristic.Value, 0);
-         Load = doubleValue >= 0 ? doubleValue : 0;
-         LoadValues.Add(Load);
-         if (LoadValues.Count > 300) { LoadValues.RemoveAt(0); }
+         if (e.Characteristic.Value?.Length > 0) {
+            var doubleValue = BitConverter.ToDouble(e.Characteristic.Value, 0);
+            Load = doubleValue >= 0 ? doubleValue : 0;
+            LoadValues.Add(Load);
+            if (LoadValues.Count > 300) { LoadValues.RemoveAt(0); }
+         }
       }
 
       public void OnAppearing() {

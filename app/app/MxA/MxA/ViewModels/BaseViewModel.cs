@@ -1,6 +1,4 @@
 ﻿using MxA.Database.Services;
-using MxA.Models;
-using MxA.Services;
 using PropertyChanged;
 using System;
 using System.ComponentModel;

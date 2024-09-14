@@ -5,11 +5,13 @@ using MxA.Helpers.ImportExport;
 using MxA.Models;
 using MxA.Views;
 using Newtonsoft.Json;
+using PropertyChanged;
 using SkiaSharp;
 using SkiaSharp.Views.Forms;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -46,7 +48,7 @@ namespace MxA.ViewModels {
          CopyCommand = new Command(async () => await OnCopyCommand());
       }
 
-      public async void OnActivityLogIdChanged() {
+      public async void OnWorkoutLogIdChanged() {
          WorkoutLog = await DataStore.WorkoutLogs.GetItemAsync(WorkoutLogId);
          Workout = await DataStore.Workouts.GetItemAsync(WorkoutLog.WorkoutId);
          _timerEvents = await DataStore.TimerEvents.GetItemsAsync(e => e.WorkoutLogId == WorkoutLogId);

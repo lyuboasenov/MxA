@@ -78,7 +78,6 @@ namespace MxA.ViewModels {
 
          // This will push the ItemDetailPage onto the navigation stack
          await Shell.Current.GoToAsync($"//{nameof(ActivityLogsPage)}/{nameof(ActivityLoadReportPage)}?{nameof(ActivityLoadReportViewModel.WorkoutLogId)}={item.WorkoutLog.Id}");
-
       }
 
       private async Task OnExportCommand() {

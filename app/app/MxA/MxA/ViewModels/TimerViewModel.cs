@@ -4,8 +4,6 @@ using Plugin.SimpleAudioPlayer;
 using MxA.Services;
 using MxA.Views;
 using System;
-using System.Diagnostics;
-using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -13,9 +11,7 @@ using Xamarin.Essentials;
 using Xamarin.Forms;
 using MxA.Database.Models;
 using System.Collections.Generic;
-using MxA.Models;
 using System.Collections.Concurrent;
-using System.Linq;
 using Newtonsoft.Json;
 using MxA.Helpers;
 using System.Collections.ObjectModel;
@@ -153,13 +149,13 @@ namespace MxA.ViewModels {
                      if (characteristic != null) {
                         var batteryLevel = await characteristic.ReadAsync();
 
-                        var uIntValue = BitConverter.ToUInt16(batteryLevel, 0);
-                        Debug.Write($"Value: {uIntValue}");
-                        BatteryLevel = (uint) uIntValue;
+                        if (batteryLevel?.Length > 0) {
+                           var uIntValue = BitConverter.ToUInt16(batteryLevel, 0);
+                           BatteryLevel = (uint) uIntValue;
+                        }
                         BleConnected = true;
                      }
                   }
-
 
                   ConnectHangboardGlyph = Icons.Material.IconFont.Bluetooth_connected;
                }
@@ -170,10 +166,11 @@ namespace MxA.ViewModels {
       }
 
       private void Load_ValueUpdated(object sender, Plugin.BLE.Abstractions.EventArgs.CharacteristicUpdatedEventArgs e) {
-         var doubleValue = BitConverter.ToDouble(e.Characteristic.Value, 0);
-         Debug.Write($"Value: {doubleValue}");
-         Load = doubleValue >= 0 ? doubleValue : 0;
-         LoadValues.Add(Load);
+         if (e.Characteristic.Value?.Length > 0) {
+            var doubleValue = BitConverter.ToDouble(e.Characteristic.Value, 0);
+            Load = doubleValue >= 0 ? doubleValue : 0;
+            LoadValues.Add(Load);
+         }
       }
 
       public void OnAppearing() {
@@ -295,41 +292,36 @@ namespace MxA.ViewModels {
       }
 
       private async Task OnCompleteTimerCommand() {
-         if (!_timerDoneExecuted) {
-            _timerDoneExecuted = true;
 
-            if (IsRunning) {
-               PlayPauseCommand?.Execute(null);
+         if (IsRunning) {
+            PlayPauseCommand?.Execute(null);
+         }
+
+         var note = await DisplayPromptAsync("Save log", "Note");
+
+         if (note != null) {
+            var dict = new Dictionary<string, object> {
+               { "work", _workout.Work },
+               { "rep_rest", _workout.RepRest },
+               { "set_rest", _workout.SetRest },
+               { "reps", _workout.Reps },
+               { "sets", _workout.Sets }
+            };
+
+            var added = await DataStore.WorkoutLogs.AddItemAsync(new WorkoutLog() {
+               WorkoutId = _workout.Id,
+               WorkoutName = _workout.Name,
+               ActivityDetailsJson = JsonConvert.SerializeObject(dict),
+               Note = note,
+               Created = DateTime.Now
+            });
+
+            foreach (var e in _timerEvents) {
+               e.WorkoutLogId = added.Id;
+               await DataStore.TimerEvents.AddItemAsync(e);
             }
 
-            var note = await DisplayPromptAsync("Save log", "Note");
-
-            if (note != null) {
-               var dict = new Dictionary<string, object>();
-               dict.Add("work", _workout.Work);
-               dict.Add("rep_rest", _workout.RepRest);
-               dict.Add("set_rest", _workout.SetRest);
-               dict.Add("reps", _workout.Reps);
-               dict.Add("sets", _workout.Sets);
-
-               var added = await DataStore.WorkoutLogs.AddItemAsync(new WorkoutLog() {
-                  WorkoutId = _workout.Id,
-                  WorkoutName = _workout.Name,
-                  ActivityDetailsJson = JsonConvert.SerializeObject(dict),
-                  Note = note,
-                  Created = DateTime.Now
-               });
-
-               foreach (var e in _timerEvents) {
-                  e.WorkoutLogId = added.Id;
-                  await DataStore.TimerEvents.AddItemAsync(e);
-               }
-
-               ExitCommand?.Execute(null);
-               _timerDoneExecuted = false;
-            } else {
-               _timerDoneExecuted = false;
-            }
+            ExitCommand?.Execute(null);
          }
       }
 
@@ -416,7 +408,7 @@ namespace MxA.ViewModels {
       }
 
       private void SetCurrentPeriod() {
-         LoadValues.Clear();
+         // LoadValues.Clear();
          IsRunning = _timerSM.IsRunning;
          Rep = _timerSM.CurrentRepetition + 1;
          Set = _timerSM.CurrentSet + 1;

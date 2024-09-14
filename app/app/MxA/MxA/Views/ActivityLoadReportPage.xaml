@@ -82,7 +82,7 @@
                     <Label
                         Margin="20,0,0,0"
                         HorizontalOptions="StartAndExpand"
-                        Text="{Binding ActivityLog.Note}"
+                        Text="{Binding Workout.Note}"
                         TextColor="{DynamicResource PrimaryTextColor}"
                         VerticalOptions="StartAndExpand" />
 
