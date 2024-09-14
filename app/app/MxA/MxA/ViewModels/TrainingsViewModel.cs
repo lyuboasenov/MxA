@@ -49,8 +49,6 @@ namespace MxA.ViewModels {
 
       private async Task OnCheckPermissionsCommand() {
          await CheckAndRequestPermission<Permissions.LocationWhenInUse>();
-         await CheckAndRequestPermission<Permissions.StorageRead>();
-         await CheckAndRequestPermission<Permissions.StorageWrite>();
       }
 
       private async Task<PermissionStatus> CheckAndRequestPermission<T>() where T : BasePermission, new() {
