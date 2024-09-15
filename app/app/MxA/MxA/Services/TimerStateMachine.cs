@@ -376,6 +376,7 @@ namespace MxA.Services {
       protected virtual void Dispose(bool disposing) {
          if (!disposedValue) {
             if (disposing) {
+               _timer.Elapsed -= Timer_Elapsed;
                _timer.Stop();
                _timer.Dispose();
             }

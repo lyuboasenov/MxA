@@ -3,11 +3,9 @@ using Plugin.BLE.Abstractions.Contracts;
 using Plugin.Permissions;
 using Plugin.Permissions.Abstractions;
 using MxA.Models;
-using MxA.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -53,7 +51,6 @@ namespace MxA.ViewModels {
                }
 
                var status1 = await CrossPermissions.Current.RequestPermissionAsync<LocationPermission>();
-
 
                if (status1 == Plugin.Permissions.Abstractions.PermissionStatus.Granted)
                   status = status1;

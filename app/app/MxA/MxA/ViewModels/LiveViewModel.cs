@@ -14,20 +14,14 @@ using System.Collections.ObjectModel;
 using Microcharts;
 using SkiaSharp;
 using System.Collections.Generic;
+using MxA.Helpers;
 
 namespace MxA.ViewModels {
-   public class LiveViewModel : BaseViewModel {
+   public class LiveViewModel : BaseViewModel, IDisposable {
 
       #region members
       private static ImageSource _btImage;
       private static ImageSource _btConnectedImage;
-
-      private ConcurrentBag<TimerEvent> _timerEvents = new ConcurrentBag<TimerEvent>();
-
-      private IDevice _ble;
-      //private readonly System.Timers.Timer _timer;
-
-      //private List<ChartEntry> _entries;
 
       #endregion
 
@@ -76,54 +70,36 @@ namespace MxA.ViewModels {
 
       public async void ConnectBleDevice() {
          try {
-            if (Preferences.ContainsKey("BLE_ADDRESS")) {
-               var bleAddress = Preferences.Get("BLE_ADDRESS", "");
-               if (!string.IsNullOrEmpty(bleAddress)) {
-                  _ble = await CrossBluetoothLE.Current.Adapter.
-                     ConnectToKnownDeviceAsync(Guid.Parse(bleAddress));
-
-                  var loadService = await _ble.GetServiceAsync(Guid.Parse("0000181d-0000-1000-8000-00805f9b34fb"));
-                  if (loadService != null) {
-                     var characteristic = await loadService.GetCharacteristicAsync(Guid.Parse("00002a98-0000-1000-8000-00805f9b34fb"));
-                     if (characteristic != null) {
-                        characteristic.ValueUpdated += Load_ValueUpdated;
-                        await characteristic.StartUpdatesAsync();
-                     }
-                  }
-
-                  var batteryService = await _ble.GetServiceAsync(Guid.Parse("0000180f-0000-1000-8000-00805f9b34fb"));
-                  if (batteryService != null) {
-                     var characteristic = await batteryService.GetCharacteristicAsync(Guid.Parse("00002a19-0000-1000-8000-00805f9b34fb"));
-                     if (characteristic != null) {
-                        var batteryLevel = await characteristic.ReadAsync();
-                        if (batteryLevel?.Length > 0) {
-                           var uIntValue = BitConverter.ToUInt16(batteryLevel, 0);
-                           BatteryLevel = (uint) uIntValue;
-                        }
-
-                        BleConnected = true;
-                     }
-                  }
-
-                  ConnectHangboardGlyph = Icons.Material.IconFont.Bluetooth_connected;
-               }
+            BLEHelper.Instance.LoadValueEvent += Instance_LoadValueEvent;
+            BLEHelper.Instance.BatteryLevelEvent += Instance_BatteryLevelEvent;
+            await BLEHelper.Instance.ConnectBleDevice();
+            BleConnected = BLEHelper.Instance.IsConnected;
+            if (BleConnected) {
+               ConnectHangboardGlyph = Icons.Material.IconFont.Bluetooth_connected;
             }
          } catch (Exception ex) {
             await HandleExceptionAsync("Connect ble device", ex);
          }
       }
 
-      private void Load_ValueUpdated(object sender, Plugin.BLE.Abstractions.EventArgs.CharacteristicUpdatedEventArgs e) {
-         if (e.Characteristic.Value?.Length > 0) {
-            var doubleValue = BitConverter.ToDouble(e.Characteristic.Value, 0);
-            Load = doubleValue >= 0 ? doubleValue : 0;
-            LoadValues.Add(Load);
-            if (LoadValues.Count > 300) { LoadValues.RemoveAt(0); }
-         }
+      private void Instance_BatteryLevelEvent(object sender, BLEHelper.BatteryLevelEventArgs e) {
+         BatteryLevel = e.BatteryLevel;
+      }
+
+      private void Instance_LoadValueEvent(object sender, BLEHelper.LoadValueEventArgs e) {
+         Load = e.Value;
+         LoadValues.Add(e.Value);
       }
 
       public void OnAppearing() {
          DeviceDisplay.KeepScreenOn = true;
+
+         InitializeCommands();
+
+         Title = "Live";
+         RecordGlyph = Icons.Material.IconFont.Fiber_manual_record;
+         ConnectHangboardGlyph = Icons.Material.IconFont.Bluetooth;
+
          ConnectBleDevice();
       }
 
@@ -143,6 +119,27 @@ namespace MxA.ViewModels {
       private async void OnConnectHangboardCommand(object obj) {
          // Prefixing with `//` switches to a different navigation stack instead of pushing to the active one
          await Shell.Current.GoToAsync($"{nameof(BleDevicesPage)}");
+      }
+
+      private bool disposedValue;
+
+      protected virtual void Dispose(bool disposing) {
+         if (!disposedValue) {
+            if (disposing) {
+               // TODO: dispose managed state (managed objects)
+            }
+
+            BLEHelper.Instance.LoadValueEvent -= Instance_LoadValueEvent;
+            BLEHelper.Instance.BatteryLevelEvent -= Instance_BatteryLevelEvent;
+
+            disposedValue = true;
+         }
+      }
+
+      public void Dispose() {
+         // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+         Dispose(disposing: true);
+         GC.SuppressFinalize(this);
       }
    }
 }
