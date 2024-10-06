@@ -6,6 +6,7 @@
     xmlns:extensions="clr-namespace:MxA.Extensions"
     xmlns:svg="clr-namespace:Xamarin.Forms.Svg;assembly=SvgImageSource"
     xmlns:vm="clr-namespace:MxA.ViewModels"
+    xmlns:essetials="clr-namespace:Xamarin.Essentials;assembly=Xamarin.Essentials"
     Title="{Binding Title}"
     BackgroundColor="{DynamicResource PageBackgroundColor}"
     Visual="Material">
@@ -58,6 +59,19 @@
                     Command="{Binding OpenWebCommand}"
                     Text="Learn more"
                     TextColor="White" />
+                <StackLayout Orientation="Horizontal">
+                    <Label Text="Name: " />
+                    <Label Text="{Binding Source={x:Static essetials:AppInfo.Name}}" />
+                </StackLayout>
+                <StackLayout Orientation="Horizontal">
+                    <Label Text="Package: " />
+                    <Label Text="{Binding Source={x:Static essetials:AppInfo.PackageName}}" />
+                </StackLayout>
+                <StackLayout Orientation="Horizontal">
+                    <Label Text="Version: " />
+                    <Label Text="{Binding Source={x:Static essetials:AppInfo.VersionString}}" />
+                    <Label Text="{Binding Source={x:Static essetials:AppInfo.BuildString}}" />
+                </StackLayout>
             </StackLayout>
         </ScrollView>
     </Grid>

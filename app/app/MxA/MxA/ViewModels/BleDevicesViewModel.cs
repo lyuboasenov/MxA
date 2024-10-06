@@ -24,7 +24,7 @@ namespace MxA.ViewModels {
       public BleDevicesViewModel() {
          Title = "Browse";
          Items = new ObservableCollection<BleDevice>();
-         ScanCommand = new Command(async () => await ExecuteScanCommand());
+         ScanCommand = new Command(ExecuteScanCommand);
 
          ItemTapped = new Command<BleDevice>(OnItemSelected);
 
@@ -39,43 +39,17 @@ namespace MxA.ViewModels {
          };
       }
 
-      async Task ExecuteScanCommand() {
+      void ExecuteScanCommand() {
+         MainThread.BeginInvokeOnMainThread(async () => {
+            await StartScanningForBLEDevices();
+         });
+      }
+
+      private async Task StartScanningForBLEDevices() {
          IsRefreshingData = true;
 
          try {
-            var status = await CrossPermissions.Current.CheckPermissionStatusAsync<LocationPermission>();
-
-            if (status != Plugin.Permissions.Abstractions.PermissionStatus.Granted) {
-               if (await CrossPermissions.Current.ShouldShowRequestPermissionRationaleAsync(Permission.Location)) {
-                  await DisplayAlertAsync("Need location", "App needs location permission", "OK");
-               }
-
-               var status1 = await CrossPermissions.Current.RequestPermissionAsync<LocationPermission>();
-
-               if (status1 == Plugin.Permissions.Abstractions.PermissionStatus.Granted)
-                  status = status1;
-            }
-
-            if (status != Plugin.Permissions.Abstractions.PermissionStatus.Granted) {
-               await DisplayAlertAsync("Need location", "App need location permission", "OK");
-               return;
-            }
-
-            var blePermission = DependencyService.Get<IBLEPermission>();
-            Xamarin.Essentials.PermissionStatus bleStatus = await blePermission.CheckStatusAsync();
-
-            if (bleStatus != Xamarin.Essentials.PermissionStatus.Granted) {
-               if (await blePermission.RequestAsync() != Xamarin.Essentials.PermissionStatus.Granted) {
-                  await DisplayAlertAsync("Nearby devices permission", "The app needs Nearby devices permission", "OK");
-               }
-
-               bleStatus = await blePermission.CheckStatusAsync();
-            }
-
-            if (bleStatus != Xamarin.Essentials.PermissionStatus.Granted) {
-               await DisplayAlertAsync("Nearby devices permission", "The app need Nearby devices permission", "OK");
-               return;
-            }
+            await RequestPermissions();
 
             Items.Clear();
             _gattDevices.Clear();
@@ -98,12 +72,48 @@ namespace MxA.ViewModels {
          OnItemSelected(SelectedItem);
       }
 
-      async void OnItemSelected(BleDevice item) {
+      private async Task RequestPermissions() {
+         if (DeviceInfo.Platform == DevicePlatform.Android) {
+
+            if (DeviceInfo.Version.Major < 12) {
+               var status = await CrossPermissions.Current.CheckPermissionStatusAsync<LocationPermission>();
+
+               if (status != Plugin.Permissions.Abstractions.PermissionStatus.Granted) {
+                  if (await CrossPermissions.Current.ShouldShowRequestPermissionRationaleAsync(Permission.Location)) {
+                     await DisplayAlertAsync("Need location", "App needs location permission", "OK");
+                  }
+
+                  var status1 = await CrossPermissions.Current.RequestPermissionAsync<LocationPermission>();
+
+                  if (status1 == Plugin.Permissions.Abstractions.PermissionStatus.Granted)
+                     status = status1;
+               }
+
+               if (status != Plugin.Permissions.Abstractions.PermissionStatus.Granted) {
+                  await DisplayAlertAsync("Need location permission", "App need location permission to connect to MxA device. Re-scan to grant the permission", "OK");
+               }
+            }
+
+            var blePermission = DependencyService.Get<IBLEPermission>();
+            Xamarin.Essentials.PermissionStatus bleStatus = await blePermission.CheckStatusAsync();
+
+            if (bleStatus != Xamarin.Essentials.PermissionStatus.Granted) {
+               if (await blePermission.RequestAsync() != Xamarin.Essentials.PermissionStatus.Granted) {
+                  await DisplayAlertAsync(
+                     "Nearby devices permission",
+                     "The app needs Nearby devices permission to connect to MxA device. Re-scan to grant the permission", "OK");
+               }
+            }
+         } else {
+            throw new NotSupportedException("This device platform is not supported. Contact developer team.");
+         }
+      }
+
+      private async void OnItemSelected(BleDevice item) {
          if (item != null) {
             Preferences.Set("BLE_ADDRESS", item.Address);
             await Shell.Current.GoToAsync("..");
          }
-
       }
    }
 }

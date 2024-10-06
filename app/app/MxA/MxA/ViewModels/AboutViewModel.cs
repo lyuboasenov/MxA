@@ -6,7 +6,6 @@ using Xamarin.Forms.Svg;
 
 namespace MxA.ViewModels {
    public class AboutViewModel : BaseViewModel {
-
       public ImageSource Logo { get; set; }
       public AboutViewModel() {
          Title = "About";
